@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs"; // For password hashing
 
-const adminSchema = new mongoose.Schema(
+const adminSchema =  mongoose.Schema(
       {
             name: {
                   type: String,
@@ -20,16 +20,14 @@ const adminSchema = new mongoose.Schema(
             password: {
                   type: String,
                   required: true,
-            },
+            }
 
-            role: {
-                  type: String,
-                  enum: ["superadmin", "moderator", "editor"], // Example roles
-                  default: "moderator",
-            },
       },
-      { timestamps: true }
-);
+
+      {
+            timestamps: true 
+      }
+)
 
 // Hash password before saving
 adminSchema.pre("save", async function (next) {
