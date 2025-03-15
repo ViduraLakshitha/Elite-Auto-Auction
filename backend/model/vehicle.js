@@ -58,7 +58,6 @@ const vehicleSchema = new mongoose.Schema(
 
             documents: {
                   type: [String], // Allows multiple documents
-                  
             },
       },
       { timestamps: true }
