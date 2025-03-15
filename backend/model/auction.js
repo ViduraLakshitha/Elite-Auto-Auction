@@ -2,13 +2,23 @@ import mongoose from "mongoose";
 
 const auctionSchema = new mongoose.Schema(
       {
+
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User", // Reference the Vehicle collection
+                required: true,
+            },
+
+
+
             vehicleId: {
                   type: mongoose.Schema.Types.ObjectId,
                   ref: "Vehicle", // Reference the Vehicle collection
                   required: true,
             },
 
-            startDate: {
+
+            startDateTime: {
                   type: Date,
                   required: true,
                   validate: {
@@ -19,7 +29,8 @@ const auctionSchema = new mongoose.Schema(
                   },
             },
 
-            endDate: {
+
+            endDateTime: {
                   type: Date,
                   required: true,
                   validate: {
@@ -38,15 +49,13 @@ const auctionSchema = new mongoose.Schema(
 
             currentBid: {
                   type: Number,
-                  required: true,
                   default: 0, // Starts at 0 if no bids yet
             },
 
-            auctionStates: {
+            auctionStatus: {
                   type: String,
-                  enum: ["pending", "active", "completed", "cancelled"], // Restrict valid states
+                  enum: ["pending", "active", "end", "completed", "cancelled"], // Restrict valid states
                   default: "pending",
-                  required: true,
             },
       },
       { timestamps: true } // Adds createdAt and updatedAt fields
