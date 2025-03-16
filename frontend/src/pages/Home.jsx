@@ -1,3 +1,6 @@
+import React from "react";
+import Header from "../component/common/Header";
+import Footer from "../component/common/Footer";
 import React, { useEffect, useState } from 'react';
 import AuctionCard from '../component/auction/AuctionCard';
 
@@ -29,6 +32,7 @@ const Home = () => {
 
     return (
         <div>
+            <Header />
             <h1>Auctions</h1>
             {auctions && auctions.length > 0 ? (
                 auctions.map((auction) => (
@@ -37,6 +41,7 @@ const Home = () => {
             ) : (
                 <p>No active auctions found.</p>
             )}
+            <Footer />
         </div>
     );
 };
