@@ -2,8 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { HiOutlineUser, HiBars3BottomRight } from "react-icons/hi2";
 import SearchBar from "./SearchBar";
+import { useState } from "react";
+import { IoMdClose } from "react-icons/io";
 
 const Navbar = () => {
+  const [navDrawerOpen, setNavDrawerOpen] = useState(false);
+  const toggleNavDrawer = () => {
+    setNavDrawerOpen(!navDrawerOpen);
+  };
   return (
     <>
       <nav
@@ -55,19 +61,76 @@ const Navbar = () => {
 
         {/* Right Icons */}
         <div className="flex ml-40 space-x-10">
-
-          <button className="md:hidden">
-            <HiBars3BottomRight className="h-6 w-6" />
-          </button>
-
           <Link to="/profile" className="hover:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700 flex mt-2" />
           </Link>
 
           <SearchBar />
+
+          <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
+            <HiBars3BottomRight className="h-6 w-6" />
+          </button>
         </div>
       </nav>
-      <hr />
+
+      {/* Mobile Navigation */}
+
+      <div
+        className={`fixed top-0 left-0 w-3/4 sm:w-1/2 md:w-1/3 h-full bg-white shadow-lg transform transition-transform duration-300 z-50 ${
+          navDrawerOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex justify-end p-4">
+          <button onClick={toggleNavDrawer}>
+            <IoMdClose className="h-6 w-6 text-gray-600" />
+          </button>
+        </div>
+
+        <div className="p-4">
+          <h2 className="text-xl font-semibold mb-4"> Menu </h2>
+          <nav className="space-y-4">
+            <Link
+              to="#"
+              onClick={toggleNavDrawer}
+              className="block text-gray-600 hover:text-black"
+            >
+              Auctions
+            </Link>
+
+            <Link
+              to="#"
+              onClick={toggleNavDrawer}
+              className="block text-gray-600 hover:text-black"
+            >
+              Submit a Vehicle
+            </Link>
+
+            <Link
+              to="#"
+              onClick={toggleNavDrawer}
+              className="block text-gray-600 hover:text-black"
+            >
+              Score Board
+            </Link>
+
+            <Link
+              to="#"
+              onClick={toggleNavDrawer}
+              className="block text-gray-600 hover:text-black"
+            >
+              About Us
+            </Link>
+
+            <Link
+              to="#"
+              onClick={toggleNavDrawer}
+              className="block text-gray-600 hover:text-black"
+            >
+              Contact Us
+            </Link>
+          </nav>
+        </div>
+      </div>
     </>
   );
 };
