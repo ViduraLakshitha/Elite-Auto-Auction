@@ -57,6 +57,11 @@ const auctionSchema = new mongoose.Schema(
                   enum: ["pending", "active", "end", "completed", "cancelled"], // Restrict valid states
                   default: "pending",
             },
+
+            remainingTime: {  
+                  type: Number,
+                  default: 0,
+            },
       },
       { timestamps: true } // Adds createdAt and updatedAt fields
 );
