@@ -47,7 +47,7 @@ const vehicleSchema = new mongoose.Schema(
 
             description: {
                   type: String,
-                  required: true,
+                  required: true,  //This is a test comment
                   trim: true,
             },
 

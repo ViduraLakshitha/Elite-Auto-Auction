@@ -5,13 +5,15 @@ import adminRoute from "./routes/adminRoute.js";
 import userRoute from "./routes/userRoute.js";
 import vehicleRoute from "./routes/vehicleRoute.js";
 import auctionRoute from "./routes/auctionRoute.js";
+import cron from "node-cron";
+import { updateAuctionStatuses, updateRemainingTime } from "./controllers/auctionController.js";
 import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
 
-//app.use(cors())
+app.use(cors())
 
 app.use('/admin',adminRoute);
 app.use('/user', userRoute);
@@ -27,6 +29,15 @@ mongoose
             console.log(`app is listening on port ${PORT}`);
             
         })
+
+        // Schedule status updates every minute
+        cron.schedule("*/1 * * * *", async () => {
+            console.log("Running auction status update task...");
+            await updateAuctionStatuses();
+        });
+
+        updateRemainingTime();
+        setInterval(updateRemainingTime, 60000);  //call function every minute
     })
     .catch((error)=>{
         console.log(error);
