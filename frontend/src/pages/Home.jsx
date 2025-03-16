@@ -1,22 +1,20 @@
-// components/ActiveAuctions.js
-
 import React, { useEffect, useState } from 'react';
-import AuctionCard from './auction/AuctionCard';
+import AuctionCard from '../component/auction/AuctionCard';
 
-const Test = () => {
+const Home = () => {
     const [auctions, setAuctions] = useState([]);
 
     useEffect(() => {
         const fetchAuctions = async () => {
             try {
-                const response = await fetch('http://localhost:5555/auction/details'); // Your backend URL
+                const response = await fetch('http://localhost:5555/auction/details'); 
                 //console.log("Response",response);
                 
                 const data = await response.json();
                 //console.log("data",data);
                 
                 setAuctions(data.auctions);
-                console.log("Fetched data from backend:", data);
+                //console.log("Fetched data from backend:", data);
                 //console.log("auctions",auctions.length);
                 
             } catch (error) {
@@ -31,7 +29,7 @@ const Test = () => {
 
     return (
         <div>
-            <h1>Active Auctions</h1>
+            <h1>Auctions</h1>
             {auctions && auctions.length > 0 ? (
                 auctions.map((auction) => (
                     <AuctionCard key={auction._id} auction={auction} />
@@ -43,4 +41,4 @@ const Test = () => {
     );
 };
 
-export default Test;
+export default Home;

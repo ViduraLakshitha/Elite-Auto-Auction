@@ -1,12 +1,15 @@
 import React from "react";
-import CountdownTimer from "./component/auction/CountdownTimer";
-import AuctionCard from "./component/auction/AuctionCard";
-import Test from "./component/Test";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Home from "./pages/Home";
 
 const App = () => {
-  return <div>
-    <Test/>
-  </div>;
+  return (
+    <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Home/>}></Route>
+        </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default App;
