@@ -7,15 +7,16 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="container mx-auto flex iterms-center justify-between py-4 px-6"
+        className="container mx-auto flex iterms-center  py-6 px-6"
         id="navBar"
       >
-        <div>
+        <div className="flex mt-1.5">
           <Link to="/" className="text-2xl font-medium ">
             Elite Auto Auction
           </Link>
         </div>
-        <div className="hidden md:flex space-x-6">
+
+        <div className="hidden md:flex ml-38 mt-3 space-x-10">
           <Link
             to="#"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
@@ -53,10 +54,17 @@ const Navbar = () => {
         </div>
 
         {/* Right Icons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex ml-40 space-x-10">
+
+          <button className="md:hidden">
+            <HiBars3BottomRight className="h-6 w-6" />
+          </button>
+
           <Link to="/profile" className="hover:text-black">
-            <HiOutlineUser className="h-6 w-6 text-gray-700" />
+            <HiOutlineUser className="h-6 w-6 text-gray-700 flex mt-2" />
           </Link>
+
+          <SearchBar />
         </div>
       </nav>
       <hr />
