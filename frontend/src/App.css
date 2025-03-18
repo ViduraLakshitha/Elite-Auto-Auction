@@ -1,0 +1,59 @@
+.App {
+    text-align: center;
+    padding: 20px;
+    
+  }
+  .h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .scoreboards {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .scoreboard {
+    width: 100%;
+    border: 1px solid #c3a5a5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff09c;
+  }
+
+  .scoreboard h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .scoreboard table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #9edbeb;
+  }
+  
+  .scoreboard th, .scoreboard td {
+    padding: 10px;
+    border: 1px solid #070707;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #9edbeb;
+  }
+  
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #070707;
+  }
+  
+  th {
+    background-color: #e4df7e;
+  }
+

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";// For password hashing
 
 const userSchema = new mongoose.Schema(
       {
@@ -55,6 +55,17 @@ const userSchema = new mongoose.Schema(
                   enum: ["active", "suspended", "pending"],
                   default: "pending",
             },
+
+            successfulCompletedAuctions: { 
+                  type: Number, 
+                  default: 0,
+            }, // For sellers
+
+            winningBids: { 
+                  type: Number, 
+                  default: 0,
+            }, // For buyers
+            
       },
       { timestamps: true }
 );
@@ -68,4 +79,6 @@ userSchema.pre("save", async function (next) {
       next();
 });
 
-export const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export default User;
