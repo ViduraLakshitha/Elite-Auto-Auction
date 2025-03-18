@@ -14,7 +14,7 @@ const sellerScoreSchema = new mongoose.Schema(
                   trim: true,
             },
 
-            noOfCompletedAuctions: {
+            successfulCompletedAuctions: {
                   type: Number,
                   required: true,
                   min: [0, "Number of completed auctions cannot be negative"],
@@ -22,9 +22,7 @@ const sellerScoreSchema = new mongoose.Schema(
 
             rank: {
                   type: Number,
-                  default: function () {
-                        return Math.max(1, Math.floor(this.noOfCompletedAuctions / 5)); // Example rank logic
-                  },
+                  required: true,
             },
 
             award: {
@@ -35,5 +33,29 @@ const sellerScoreSchema = new mongoose.Schema(
       },
       { timestamps: true }
 );
+// Pre-save hook to update rank based on completed auctions
+sellerScoreSchema.pre("save", function (next) {
+      this.rank = Math.max(1, Math.floor(this.successfulCompletedAuctions / 5));
+      next();
+});
 
-export const SellerScore = mongoose.model("SellerScore", sellerScoreSchema);
+sellerScoreSchema.pre("save", function (next) {
+      this.rank = Math.max(1, Math.floor(this.successfulCompletedAuctions / 5));
+
+      if (this.successfulCompletedAuctions >= 20) {
+            this.award = "Gold";
+      } else if (this.successfulCompletedAuctions >= 10) {
+            this.award = "Silver";
+      } else if (this.successfulCompletedAuctions >= 5) {
+            this.award = "Bronze";
+      } else {
+            this.award = "None";
+      }
+
+      next();
+});
+
+
+
+const SellerScore = mongoose.model('SellerScore', sellerScoreSchema);
+export default SellerScore;
