@@ -1,5 +1,5 @@
 import express from "express";
-import {mongoDBURL, PORT} from "./config.js";
+import { mongoDBURL, PORT } from "./config.js";
 import mongoose from "mongoose";
 import adminRoute from "./routes/adminRoute.js";
 import userRoute from "./routes/userRoute.js";
@@ -8,9 +8,12 @@ import auctionRoute from "./routes/auctionRoute.js";
 import cron from "node-cron";
 import { updateAuctionStatuses, updateRemainingTime } from "./controllers/auctionController.js";
 import cors from 'cors';
+import sellerScoreboardRoutes from './routes/sellerScoreboardRoutes.js';
+import buyerScoreboardRoutes from './routes/buyerScoreboardRoutes.js';
 
 const app = express();
 
+//Middleware
 app.use(express.json());
 
 app.use(cors())
@@ -19,6 +22,8 @@ app.use('/admin',adminRoute);
 app.use('/user', userRoute);
 app.use('/vehicle', vehicleRoute);
 app.use('/auction', auctionRoute);
+app.use('/sellers', sellerScoreboardRoutes);
+app.use('/buyers', buyerScoreboardRoutes);
 
 mongoose
     .connect(mongoDBURL)
