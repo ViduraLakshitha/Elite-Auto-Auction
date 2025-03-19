@@ -10,6 +10,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+
 // Delete a user (admin only)
 export const deleteUser = async (req, res) => {
   try {

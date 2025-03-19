@@ -2,7 +2,7 @@
     max-width: 800px;
     margin: 2rem auto;
     padding: 2rem;
-    background-color: #f9f9f9;
+    background-color: #b0d9f9;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
@@ -16,7 +16,7 @@
     cursor: pointer;
     padding: 0.5rem;
     margin: 0.5rem 0;
-    background-color: #fff;
+    background-color: #bcf5b9;
     border: 1px solid #ddd;
     border-radius: 8px;
     transition: background-color 0.3s ease;

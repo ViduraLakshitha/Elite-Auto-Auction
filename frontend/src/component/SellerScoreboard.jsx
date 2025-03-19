@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { fetchTopSellers } from "../api/api";
 
 const SellerScoreboard = () => {
   const [sellers, setSellers] = useState([]);

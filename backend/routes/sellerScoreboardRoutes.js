@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import SellerScore from '../model/sellerScore.js';
 import { getTopSellers } from '../controllers/sellerScoreboardController.js';
 
 

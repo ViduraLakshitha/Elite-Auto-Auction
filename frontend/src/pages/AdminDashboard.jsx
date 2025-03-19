@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllUsers, deleteUser } from "../api/api";
+import { getAllUsers, deleteUserAdmin } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 // import "./AdminDashboard.css"; // Import the CSS file
@@ -22,7 +22,7 @@ const AdminDashboard = () => {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await deleteUser(userId);
+      await deleteUserAdmin(userId);
       setUsers(users.filter((user) => user._id !== userId)); // Remove deleted user from the list
       alert("User deleted successfully!");
     } catch (error) {
@@ -46,20 +46,27 @@ const AdminDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user._id}>
-              <td>{user.fullName}</td>
-              <td>{user.email}</td>
-              <td>{user.address}</td>
-              <td>{user.country}</td>
-              <td>{user.mobileNo}</td>
-              <td>{user.accountState}</td>
-              <td>
-                <button onClick={() => handleDeleteUser(user._id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+            {Array.isArray(users) && users.length > 0 ? (
+              users.map((user, index) => (
+                <tr key={user._id || index}> {/* Use index as a fallback key */}
+                  <td>{index + 1}</td>
+                  <td>{user.fullName}</td>
+                  <td>{user.email}</td>
+                  <td>{user.address}</td>
+                  <td>{user.country}</td>
+                  <td>{user.mobileNo}</td>
+                  <td>{user.accountState}</td>
+                  <td>
+                    <button onClick={() => handleDeleteUser(user._id)}>Delete</button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7">No users found</td>
+              </tr>
+            )}
+          </tbody>
       </table>
     </div>
   );
