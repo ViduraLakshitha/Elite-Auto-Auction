@@ -58,7 +58,12 @@ const auctionSchema = new mongoose.Schema(
                   default: "pending",
             },
 
-            remainingTime: {  
+            // remainingTime: {  
+            //       type: Number,
+            //       default: 0,
+            // },
+
+            winningBid: {
                   type: Number,
                   default: 0,
             },

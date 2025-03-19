@@ -5,8 +5,9 @@ import adminRoute from "./routes/adminRoute.js";
 import userRoute from "./routes/userRoute.js";
 import vehicleRoute from "./routes/vehicleRoute.js";
 import auctionRoute from "./routes/auctionRoute.js";
+import bidRoute from "./routes/bidRoute.js";
 import cron from "node-cron";
-import { updateAuctionStatuses, updateRemainingTime } from "./controllers/auctionController.js";
+import { updateAuctionStatuses } from "./controllers/auctionController.js";   //removed auction remaining time update function
 import cors from 'cors';
 
 const app = express();
@@ -19,6 +20,7 @@ app.use('/admin',adminRoute);
 app.use('/user', userRoute);
 app.use('/vehicle', vehicleRoute);
 app.use('/auction', auctionRoute);
+app.use('/bid', bidRoute);
 
 mongoose
     .connect(mongoDBURL)
@@ -30,14 +32,11 @@ mongoose
             
         })
 
-        // Schedule status updates every minute
-        cron.schedule("*/1 * * * *", async () => {
-            console.log("Running auction status update task...");
+        // Schedule status updates every second
+        cron.schedule("* * * * * *", async () => {
+            //console.log("Running auction status update task...");
             await updateAuctionStatuses();
         });
-
-        updateRemainingTime();
-        setInterval(updateRemainingTime, 60000);  //call function every minute
     })
     .catch((error)=>{
         console.log(error);

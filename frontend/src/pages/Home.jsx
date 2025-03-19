@@ -1,11 +1,19 @@
 import React from "react";
 import Header from "../component/common/Header";
 import Footer from "../component/common/Footer";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AuctionCard from '../component/auction/AuctionCard';
+import { useNavigate } from "react-router";
 
 const Home = () => {
     const [auctions, setAuctions] = useState([]);
+    const navigate = useNavigate();
+
+    const handleAuctionCardClick = (auctionId) => {
+        navigate(`/auction-details/${auctionId}`);
+        console.log(auctionId);
+        
+    }
 
     useEffect(() => {
         const fetchAuctions = async () => {
@@ -36,7 +44,7 @@ const Home = () => {
             <h1>Auctions</h1>
             {auctions && auctions.length > 0 ? (
                 auctions.map((auction) => (
-                    <AuctionCard key={auction._id} auction={auction} />
+                    <AuctionCard key={auction._id} auction={auction} onClick={()=> handleAuctionCardClick(auction._id)} />  //added onclick attribute
                 ))
             ) : (
                 <p>No active auctions found.</p>
