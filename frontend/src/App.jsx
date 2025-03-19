@@ -7,22 +7,16 @@ import "./App.css";
 import "./UserProfile.css";
 import "./AdminDashboard.css";
 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+
 const App = () => {
   return (
-    <div className="App">
-      <h1>Classic & Luxurious Vehicle Auction System</h1>
-      <div className="scoreboard">
-      <SellerScoreboard />
-      <BuyerScoreboard />
-    </div> 
-    <div className="user-profile-container">  
-      <UserProfile />
-    </div>
-    <div className="admin-dashboard-container">
-      <AdminDashboard />
-    </div>
-     
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

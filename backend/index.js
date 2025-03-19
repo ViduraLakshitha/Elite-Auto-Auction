@@ -3,32 +3,48 @@ import { mongoDBURL, PORT } from "./config.js";
 import mongoose from "mongoose";
 import adminRoute from "./routes/adminRoute.js";
 import userRoute from "./routes/userRoute.js";
+import vehicleRoute from "./routes/vehicleRoute.js";
+import auctionRoute from "./routes/auctionRoute.js";
+import cron from "node-cron";
+import { updateAuctionStatuses, updateRemainingTime } from "./controllers/auctionController.js";
+import cors from 'cors';
 import sellerScoreboardRoutes from './routes/sellerScoreboardRoutes.js';
 import buyerScoreboardRoutes from './routes/buyerScoreboardRoutes.js';
-import cors from "cors";
 
 const app = express();
 
 //Middleware
 app.use(express.json());
 
-//app.use(cors())
+app.use(cors())
 
-app.use("/api/admin", adminRoute);
-app.use("/api/users", userRoute);
-app.use('/api/sellers', sellerScoreboardRoutes);
-app.use('/api/buyers', buyerScoreboardRoutes);
-
+app.use('/admin',adminRoute);
+app.use('/user', userRoute);
+app.use('/vehicle', vehicleRoute);
+app.use('/auction', auctionRoute);
+app.use('/sellers', sellerScoreboardRoutes);
+app.use('/buyers', buyerScoreboardRoutes);
 
 mongoose
-  .connect(mongoDBURL)
-  .then(() => {
-    console.log("App connected to database");
-    app.listen(PORT, () => {
-      console.log(`App is listening on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log("Error connecting to database:", error);
-  });
+    .connect(mongoDBURL)
+    .then(()=>{
+        console.log("App connected to databaase");
+        
+        app.listen(PORT,()=>{
+            console.log(`app is listening on port ${PORT}`);
+            
+        })
 
+        // Schedule status updates every minute
+        cron.schedule("*/1 * * * *", async () => {
+            console.log("Running auction status update task...");
+            await updateAuctionStatuses();
+        });
+
+        updateRemainingTime();
+        setInterval(updateRemainingTime, 60000);  //call function every minute
+    })
+    .catch((error)=>{
+        console.log(error);
+        
+    })

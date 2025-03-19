@@ -23,8 +23,8 @@ const vehicleSchema = new mongoose.Schema(
             year: {
                   type: Number,
                   required: true,
-                  min: [1886, "Invalid year. Cars didn't exist before 1886!"],
-                  max: [new Date().getFullYear() + 1, "Invalid year. Cannot be a future model!"],
+                  min: [1886, "Enter a valid year!"],
+                  max: [new Date().getFullYear() + 1, "Enter a valid year!"],
             },
 
             currentLocation: {
@@ -35,30 +35,29 @@ const vehicleSchema = new mongoose.Schema(
 
             vehicleType: {
                   type: String,
-                  enum: ["Sedan", "SUV", "Truck", "Coupe", "Convertible", "Electric", "Hybrid", "Classic", "Other"],
+                  enum: ["classic","luxury"],
                   required: true,
             },
 
             condition: {
                   type: String,
-                  enum: ["New", "Used", "Salvage"],
+                  enum: ["new", "used"],
                   required: true,
             },
 
             description: {
                   type: String,
-                  required: true,
+                  required: true,  //This is a test comment
                   trim: true,
             },
 
             images: {
                   type: [String], // Allows multiple images
-                  required: true,
+                  required: false,
             },
 
             documents: {
                   type: [String], // Allows multiple documents
-                  required: true,
             },
       },
       { timestamps: true }

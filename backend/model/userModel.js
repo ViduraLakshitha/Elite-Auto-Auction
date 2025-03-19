@@ -1,12 +1,19 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";// For password hashing
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
       {
-            fullName: {
+            fName: {
                   type: String,
                   required: true,
                   trim: true, // Removes extra spaces
+            },
+
+
+            lname: {
+                type: String,
+                required: true,
+                trim: true,
             },
 
             address: {
@@ -52,20 +59,24 @@ const userSchema = new mongoose.Schema(
 
             accountState: {
                   type: String,
-                  enum: ["active", "suspended", "pending"],
+                  enum: ["active", "suspended","pending"],
                   default: "pending",
+            },
+
+            isVerified: {
+                type: Boolean,
+                default: false,
             },
 
             successfulCompletedAuctions: { 
                   type: Number, 
                   default: 0,
             }, // For sellers
-
-            winningBids: { 
+            
+            winningBids: { //No.Of winning bids
                   type: Number, 
                   default: 0,
             }, // For buyers
-            
       },
       { timestamps: true }
 );
