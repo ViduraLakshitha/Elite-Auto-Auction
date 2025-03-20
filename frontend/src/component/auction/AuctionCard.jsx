@@ -1,5 +1,4 @@
 // components/VehicleAuctionCard.js
-
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import CountdownTimer from './CountdownTimer';
@@ -46,6 +45,6 @@ export default function  AuctionCard ({ auction, onClick }) {
                 <CountdownTimer endTime={endTime} onFinish={handleFinish} />
             )}
         </div>
-    );
+  );
 };
 

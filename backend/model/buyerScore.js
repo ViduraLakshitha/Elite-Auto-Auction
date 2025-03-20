@@ -14,7 +14,7 @@ const buyerScoreSchema = new mongoose.Schema(
                   trim: true,
             },
 
-            noOfWins: {
+            winningBids: {
                   type: Number,
                   required: true,
                   min: [0, "Number of wins cannot be negative"],
@@ -36,4 +36,5 @@ const buyerScoreSchema = new mongoose.Schema(
       { timestamps: true }
 );
 
-export const BuyerScore = mongoose.model("BuyerScore", buyerScoreSchema);
+const BuyerScore = mongoose.model('BuyerScore', buyerScoreSchema);
+export default BuyerScore;
