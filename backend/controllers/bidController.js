@@ -44,8 +44,16 @@ const handleBidPlacement = async (auction, userId, bidAmount) => {
 
         auction.endDateTime = new Date(extendedEndTime).toISOString();
         auction.currentBid = bidAmount;
+        console.log(auction.currentBid);
+        
         auction.winningBid = bidAmount;
+
     }
+
+        auction.currentBid = bidAmount;
+        console.log(auction.currentBid);
+        
+        auction.winningBid = bidAmount;
     
     await auction.save();
 
