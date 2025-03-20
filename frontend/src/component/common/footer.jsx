@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router";
-import { TbBrandMeta } from "react-icons/tb";
 import { IoLogoFacebook, IoLogoInstagram } from "react-icons/io";
 import { RiTwitterXLine } from "react-icons/ri";
 
