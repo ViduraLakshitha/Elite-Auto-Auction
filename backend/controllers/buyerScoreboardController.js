@@ -1,4 +1,4 @@
-import User from '../model/userModel.js';
+import {User} from '../model/userModel.js';
 import BuyerScore from '../model/buyerScore.js';
 
 // Get top 10 buyers
