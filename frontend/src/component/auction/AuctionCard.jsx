@@ -41,9 +41,7 @@ export default function  AuctionCard ({ auction, onClick }) {
             <p>Initial price: ${auction.initialVehiclePrice}</p>
             <p>start date time: {auction.startDateTime}</p>
             <p>end date time: {auction.endDateTime}</p>
-            {/* <p>Auction Id: ${auction._id}</p> */}
             <p>current bid: ${currentBid}</p>
-            <p>Status: {auction.auctionStatus}</p>
             {auction.auctionStatus === "active" && (
                 <CountdownTimer endTime={endTime} onFinish={handleFinish} />
             )}

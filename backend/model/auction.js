@@ -17,6 +17,11 @@ const auctionSchema = new mongoose.Schema(
                   required: true,
             },
 
+            auctionTitle: {
+                  type: String,
+                  required: true,
+            },
+
 
             startDateTime: {
                   type: Date,
@@ -57,11 +62,6 @@ const auctionSchema = new mongoose.Schema(
                   enum: ["pending", "active", "end", "completed", "cancelled"], // Restrict valid states
                   default: "pending",
             },
-
-            // remainingTime: {  
-            //       type: Number,
-            //       default: 0,
-            // },
 
             winningBid: {
                   type: Number,

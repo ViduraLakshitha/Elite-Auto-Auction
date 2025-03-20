@@ -33,9 +33,9 @@ const CountdownTimer = ({ endTime, onFinish }) => {
         const seconds = totalSeconds % 60;
 
         if (totalSeconds >= 86400) {
-            return `${days} Days Remaining`;
+            return `${days}D Remaining`;
         } else {
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} Remaining`;
+            return `Ends In ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} `;
         }
     };
 

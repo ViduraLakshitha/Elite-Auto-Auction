@@ -1,4 +1,5 @@
 import {Auction} from '../model/auction.js';
+import { io } from "../index.js";  // Import Socket.IO instance
 
 export const createAuction = async (req, res) => {
     try {
@@ -21,7 +22,11 @@ export const createAuction = async (req, res) => {
         };
 
         const auction = await Auction.create(newAuction);
+        console.log("New auction created:", auction);
 
+        io.emit("newAuctionCreated", auction);
+        
+        console.log("auctionCreated event emitted");
         return res.status(201).json({ message: 'Auction Created Successfully', subject: auction });
 
     } catch (error) {
@@ -46,12 +51,12 @@ export const updateAuctionStatuses = async () => {
         );
 
         await Auction.updateMany(
-            { 
-                startDateTime: { $lte: localDate },  
-                endDateTime: { $gt: localDate }      
-            },
-            { $set: { auctionStatus: "active" } }
-        );
+                { 
+                    startDateTime: { $lte: localDate },  
+                    endDateTime: { $gt: localDate }      
+                },
+                { $set: { auctionStatus: "active" } }
+            );
 
         await Auction.updateMany(
             { 
@@ -65,48 +70,6 @@ export const updateAuctionStatuses = async () => {
         console.error("Error updating auction statuses:", error.message);
     }
 };
-
-
-//find remaining time of an active auction and store
-// export const updateRemainingTime = async () => {
-//     try {
-//         const currentDate = new Date();
-//         console.log(currentDate);   //debug
-        
-        
-//         const activeAuctions = await Auction.find({ auctionStatus: "active" });
-
-//         const updates = activeAuctions.map(async(auction) => {
-
-//             //console.log(`end date ${auction.endDateTime}`); //debug
-//             //console.log(`current date ${currentDate}`);  //debug
-            
-//             //deduct 5 1/2 hrs because of the time zone differences
-//             const endTime = new Date (new Date(auction.endDateTime).getTime()-(5.5 * 60 * 60 * 1000));
-//             //console.log(`end time ${endTime}`);
-            
-            
-//             const remainingTime = new Date(endTime) - currentDate; // Time difference in milliseconds
-
-//             //console.log(`remaining time ${remainingTime}`); //debug
-            
-//             await Auction.findByIdAndUpdate(auction._id,{remainingTime});
-//             return { 
-//                 ...auction.toObject(), 
-//                 remainingTime // Attach remaining time in milliseconds
-//             };
-//         });
-
-//         const result = await Promise.all(updates);
-
-//         // console.log("Active Auctions with Updated Remaining Time:", result);
-
-//         console.log("get remaining time function executed!");
-//     } catch (error) {
-//         console.log("Error updating remaining time:", error.message); 
-//     }
-// };
-
 
 export const getAllAuctions = async (req, res) => {
     try{

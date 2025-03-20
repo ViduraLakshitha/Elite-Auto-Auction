@@ -7,7 +7,7 @@ import vehicleRoute from "./routes/vehicleRoute.js";
 import auctionRoute from "./routes/auctionRoute.js";
 import bidRoute from "./routes/bidRoute.js";
 import cron from "node-cron";
-import { updateAuctionStatuses } from "./controllers/auctionController.js";   //removed auction remaining time update function
+import { updateAuctionStatuses } from "./controllers/auctionController.js"; 
 import cors from 'cors';
 import { Server } from "socket.io";
 import http from "http";
@@ -31,11 +31,6 @@ mongoose
     .connect(mongoDBURL)
     .then(()=>{
         console.log("App connected to databaase");
-        
-        server.listen(PORT,()=>{
-            console.log(`app is listening on port ${PORT}`);
-            
-        })
 
         // Schedule status updates every second
         cron.schedule("* * * * * *", async () => {
@@ -48,13 +43,19 @@ mongoose
         
     })
 
-// Listen for new bid updates
+
+// Listen for new updates
 io.on("connection", (socket) => {
-    console.log("A user connected");
+    console.log("A user connected", socket?.id);
 
     socket.on("disconnect", () => {
         console.log("A user disconnected");
     });
 });
+
+server.listen(PORT,()=>{
+    console.log(`app is listening on port ${PORT}`);
+    
+})
 
 export { io };
