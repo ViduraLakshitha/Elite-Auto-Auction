@@ -17,6 +17,11 @@ const auctionSchema = new mongoose.Schema(
                   required: true,
             },
 
+            auctionTitle: {
+                  type: String,
+                  required: true,
+            },
+
 
             startDateTime: {
                   type: Date,
@@ -58,7 +63,7 @@ const auctionSchema = new mongoose.Schema(
                   default: "pending",
             },
 
-            remainingTime: {  
+            winningBid: {
                   type: Number,
                   default: 0,
             },
