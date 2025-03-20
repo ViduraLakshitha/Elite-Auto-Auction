@@ -1,19 +1,9 @@
 import { Auction } from "../model/auction.js";
 import { Bid } from "../model/bid.js";
+import { io } from "../index.js";  // Import Socket.IO instance
 
 const handleBidPlacement = async (auction, userId, bidAmount) => {
-    // const currentDate = new Date();
-    // const localOffset = currentDate.getTimezoneOffset() * 60000; // Get local timezone offset in milliseconds
-    // const localDate = new Date(currentDate.getTime() - localOffset);
-
-    // const currentTime = Date.now();
-
-    // console.log(`current date ${currentDate}`);
-    // console.log(`auction end date ${auction.endDateTime}`);
     
-    
-    // const auctionEndTime = currentTime + auction.remainingTime;
-
     // check if the bid is greater than the initial vehicle price
     if(auction.currentBid == 0){
         
@@ -43,16 +33,14 @@ const handleBidPlacement = async (auction, userId, bidAmount) => {
         console.log(new Date(extendedEndTime).toISOString());
 
         auction.endDateTime = new Date(extendedEndTime).toISOString();
-        auction.currentBid = bidAmount;
-        console.log(auction.currentBid);
-        
+        // Emit updated end time to clients
+        io.emit("auctionEndTimeUpdated", { auctionId: auction._id, endDateTime: auction.endDateTime });
+
+        auction.currentBid = bidAmount;        
         auction.winningBid = bidAmount;
 
     }
-
-        auction.currentBid = bidAmount;
-        console.log(auction.currentBid);
-        
+        auction.currentBid = bidAmount;   
         auction.winningBid = bidAmount;
     
     await auction.save();
@@ -72,6 +60,9 @@ export const ManageBid = async (req, res) => {
 
         if(!result.success)
             return res.status(400).json({error: result.message});
+
+        // Emit the updated bid to all connected clients
+        io.emit("bidUpdated", { auctionId, currentBid: auction.currentBid });
 
         return res.status(200).json({message: result.message});
         

@@ -9,8 +9,13 @@ import bidRoute from "./routes/bidRoute.js";
 import cron from "node-cron";
 import { updateAuctionStatuses } from "./controllers/auctionController.js";   //removed auction remaining time update function
 import cors from 'cors';
+import { Server } from "socket.io";
+import http from "http";
 
 const app = express();
+
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(express.json());
 
@@ -27,7 +32,7 @@ mongoose
     .then(()=>{
         console.log("App connected to databaase");
         
-        app.listen(PORT,()=>{
+        server.listen(PORT,()=>{
             console.log(`app is listening on port ${PORT}`);
             
         })
@@ -42,3 +47,14 @@ mongoose
         console.log(error);
         
     })
+
+// Listen for new bid updates
+io.on("connection", (socket) => {
+    console.log("A user connected");
+
+    socket.on("disconnect", () => {
+        console.log("A user disconnected");
+    });
+});
+
+export { io };
