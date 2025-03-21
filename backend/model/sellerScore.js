@@ -8,16 +8,23 @@ const sellerScoreSchema = new mongoose.Schema(
                   required: true,
             },
 
-            fullName: {
+            fName: {
                   type: String,
                   required: true,
-                  trim: true,
+                  trim: true, // Removes extra spaces
+            },
+
+
+            lname: {
+                type: String,
+                required: true,
+                trim: true,
             },
 
             successfulCompletedAuctions: {
                   type: Number,
                   required: true,
-                  min: [0, "Number of completed auctions cannot be negative"],
+                  // min: [0, "Number of completed auctions cannot be negative"],
             },
 
             rank: {
@@ -33,29 +40,26 @@ const sellerScoreSchema = new mongoose.Schema(
       },
       { timestamps: true }
 );
-// Pre-save hook to update rank based on completed auctions
-sellerScoreSchema.pre("save", function (next) {
-      this.rank = Math.max(1, Math.floor(this.successfulCompletedAuctions / 5));
-      next();
-});
 
 sellerScoreSchema.pre("save", function (next) {
+      // Rank logic
       this.rank = Math.max(1, Math.floor(this.successfulCompletedAuctions / 5));
-
+    
+      // Award logic based on completed auctions
       if (this.successfulCompletedAuctions >= 20) {
-            this.award = "Gold";
+        this.award = "Gold";
       } else if (this.successfulCompletedAuctions >= 10) {
-            this.award = "Silver";
+        this.award = "Silver";
       } else if (this.successfulCompletedAuctions >= 5) {
-            this.award = "Bronze";
+        this.award = "Bronze";
       } else {
-            this.award = "None";
+        this.award = "None";
       }
-
+    
       next();
-});
+    });
+    
 
 
 
-const SellerScore = mongoose.model('SellerScore', sellerScoreSchema);
-export default SellerScore;
+export const SellerScore = mongoose.model("SellerScore", sellerScoreSchema);

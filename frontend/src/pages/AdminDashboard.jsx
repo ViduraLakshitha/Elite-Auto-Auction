@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getAllUsers, deleteUserAdmin } from "../api/api";
-import { useNavigate } from "react-router-dom";
-
-// import "./AdminDashboard.css"; // Import the CSS file
+import axios from "axios";
+import Sidebar from "../component/admin/Sidebar.jsx"; // Import the Sidebar component
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
 
+  // Fetch all users on component mount
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await getAllUsers();
+        const response = await axios.get("http://localhost:5555/user/");
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -20,9 +19,10 @@ const AdminDashboard = () => {
     fetchUsers();
   }, []);
 
+  // Handle user deletion
   const handleDeleteUser = async (userId) => {
     try {
-      await deleteUserAdmin(userId);
+      await axios.delete(`http://localhost:5555/user/${userId}`);
       setUsers(users.filter((user) => user._id !== userId)); // Remove deleted user from the list
       alert("User deleted successfully!");
     } catch (error) {
@@ -31,43 +31,78 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <h2>Admin Dashboard</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Country</th>
-            <th>Mobile No</th>
-            <th>Account State</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-            {Array.isArray(users) && users.length > 0 ? (
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Main Content */}
+      <div className="flex-1 p-6">
+        <h2 className="text-2xl font-bold mb-6">User Profiles</h2>
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="p-3 text-left text-sm font-medium uppercase text-gray-700">
+                Number
+              </th>
+              <th className="p-3 text-left text-sm font-medium uppercase text-gray-700">
+                Full Name
+              </th>
+              <th className="p-3 text-left text-sm font-medium uppercase text-gray-700">
+                Email
+              </th>
+              <th className="p-3 text-left text-sm font-medium uppercase text-gray-700">
+                Address
+              </th>
+              <th className="p-3 text-left text-sm font-medium uppercase text-gray-700">
+                Country
+              </th>
+              <th className="p-3 text-left text-sm font-medium uppercase text-gray-700">
+                Mobile No
+              </th>
+              <th className="p-3 text-left text-sm font-medium uppercase text-gray-700">
+                Account State
+              </th>
+              <th className="p-3 text-left text-sm font-medium uppercase text-gray-700">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.length > 0 ? (
               users.map((user, index) => (
-                <tr key={user._id || index}> {/* Use index as a fallback key */}
-                  <td>{index + 1}</td>
-                  <td>{user.fullName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.address}</td>
-                  <td>{user.country}</td>
-                  <td>{user.mobileNo}</td>
-                  <td>{user.accountState}</td>
-                  <td>
-                    <button onClick={() => handleDeleteUser(user._id)}>Delete</button>
+                <tr
+                  key={user._id || index}
+                  className="border-b border-gray-200 hover:bg-gray-50"
+                >
+                  <td className="p-3 text-sm text-gray-700">{index + 1}</td>
+                  <td className="p-3 text-sm text-gray-700">{`${user.fName} ${user.lname}`}</td>
+                  <td className="p-3 text-sm text-gray-700">{user.email}</td>
+                  <td className="p-3 text-sm text-gray-700">{user.address}</td>
+                  <td className="p-3 text-sm text-gray-700">{user.country}</td>
+                  <td className="p-3 text-sm text-gray-700">{user.mobileNo}</td>
+                  <td className="p-3 text-sm text-gray-700">
+                    {user.accountState}
+                  </td>
+                  <td className="p-3 text-sm text-gray-700">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      onClick={() => handleDeleteUser(user._id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7">No users found</td>
+                <td colSpan="8" className="p-3 text-sm text-gray-700 text-center">
+                  No users found
+                </td>
               </tr>
             )}
           </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 };

@@ -8,10 +8,17 @@ const buyerScoreSchema = new mongoose.Schema(
                   required: true,
             },
 
-            fullName: {
+            fName: {
                   type: String,
                   required: true,
-                  trim: true,
+                  trim: true, // Removes extra spaces
+            },
+
+
+            lname: {
+                type: String,
+                required: true,
+                trim: true,
             },
 
             winningBids: {
@@ -35,6 +42,22 @@ const buyerScoreSchema = new mongoose.Schema(
       },
       { timestamps: true }
 );
+buyerScoreSchema.pre("save", function (next) {
+      // Rank logic
+      this.rank = Math.max(1, Math.floor(this.winningBids / 5));
+    
+      // Award logic based on completed auctions
+      if (this.winningBids >= 20) {
+        this.award = "Gold";
+      } else if (this.winningBids >= 10) {
+        this.award = "Silver";
+      } else if (this.winningBids >= 5) {
+        this.award = "Bronze";
+      } else {
+        this.award = "None";
+      }
+    
+      next();
+    });
 
-const BuyerScore = mongoose.model('BuyerScore', buyerScoreSchema);
-export default BuyerScore;
+export const BuyerScore = mongoose.model("BuyerScore", buyerScoreSchema);

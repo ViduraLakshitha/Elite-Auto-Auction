@@ -90,6 +90,10 @@ userSchema.pre("save", async function (next) {
       next();
 });
 
-const User = mongoose.model("User", userSchema);
+userSchema.index({ successfulCompletedAuctions: -1 });
+// Create an index on the `winningBids` field for better query performance
+userSchema.index({ winningBids: -1 });
 
-export default User;
+export const User = mongoose.model("User", userSchema);
+
+

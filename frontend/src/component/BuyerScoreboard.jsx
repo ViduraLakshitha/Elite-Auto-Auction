@@ -6,13 +6,16 @@ const BuyerScoreboard = () => {
 
   useEffect(() => {
     // Fetch top 10 buyers from the backend
-    axios.get("/api/buyers/top")
+    axios.get("http://localhost:5555/buyers/")
       .then((response) => {
+        // console.log(response);
         setBuyers(response.data);
       })
       .catch((error) => {
         console.error("Error fetching buyers:", error);
       });
+      // console.log(`hello ${buyers}`);
+      
   }, []);
 
   return (
@@ -21,7 +24,7 @@ const BuyerScoreboard = () => {
       <table>
         <thead>
           <tr>
-            <th>UserID</th>
+            {/* <th>UserID</th> */}
             <th>Buyer Name</th>
             <th>Winning Bids</th>
             <th>Rank</th>
@@ -32,16 +35,16 @@ const BuyerScoreboard = () => {
           {Array.isArray(buyers) && buyers.length > 0 ? (
             buyers.map((buyer, index) => (
               <tr key={buyer._id || index}>
-                <td>{index + 1}</td>
-                <td>{buyer.name}</td>
+                {/* <td>{index + 1}</td> */}
+                <td>{buyer.fName} {buyer.lname}</td>
                 <td>{buyer.winningBids}</td>
                 <td>{buyer.rank}</td>
-                <td>{buyer.awards}</td>
+                <td>{buyer.award}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="5">No buyers found</td>
+              <td colSpan="4">No buyers found</td>
             </tr>
           )}
         </tbody>

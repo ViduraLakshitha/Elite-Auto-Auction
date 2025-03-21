@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { getUsers, getUserById, updateUser, deleteUser } from '../api/api';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const UserProfile = () => {
   const [users, setUsers] = useState([]); // List of all users
   const [selectedUser, setSelectedUser] = useState(null); // Selected user data
   const [formData, setFormData] = useState({
-    fullName: '',
-    address: '',
-    mobileNo: '',
+    fullName: "",
+    address: "",
+    mobileNo: "",
   });
 
   // Fetch all users on component mount
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await getUsers();
+        const response = await axios.get("http://localhost:5555/user/");
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -26,12 +26,12 @@ const UserProfile = () => {
   // Fetch a specific user's details
   const handleSelectUser = async (id) => {
     try {
-      const response = await getUserById(id);
+      const response = await axios.get(`http://localhost:5555/user/${id}`);
       setSelectedUser(response.data);
       setFormData({
-        fullName: response.data.fullName || '',
-        address: response.data.address || '',
-        mobileNo: response.data.mobileNo || '',
+        fullName: response.data.fullName || "",
+        address: response.data.address || "",
+        mobileNo: response.data.mobileNo || "",
       });
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -49,9 +49,12 @@ const UserProfile = () => {
     e.preventDefault();
     if (selectedUser) {
       try {
-        const updatedUser = await updateUser(selectedUser._id, formData);
-        setSelectedUser(updatedUser.data);
-        alert('Profile updated successfully');
+        const response = await axios.put(
+          `http://localhost:5555/user/${selectedUser._id}`,
+          formData
+        );
+        setSelectedUser(response.data);
+        alert("Profile updated successfully");
       } catch (error) {
         console.error("Error updating profile:", error);
         alert("Failed to update profile.");
@@ -62,10 +65,10 @@ const UserProfile = () => {
   // Handle user deletion
   const handleDeleteUser = async (id) => {
     try {
-      await deleteUser(id);
+      await axios.delete(`http://localhost:5555/user/${id}`);
       setUsers(users.filter((user) => user._id !== id)); // Remove user from UI
       setSelectedUser(null); // Reset form
-      alert('User deleted successfully');
+      alert("User deleted successfully");
     } catch (error) {
       console.error("Error deleting user:", error);
       alert("Failed to delete user.");
@@ -74,8 +77,8 @@ const UserProfile = () => {
 
   return (
     <div className="user-profile-container">
-      <h2>User Profile </h2>
-      
+      <h2>User Profile</h2>
+
       {/* User List */}
       <div className="user-list">
         <h3>Select a User</h3>
@@ -120,7 +123,10 @@ const UserProfile = () => {
             />
           </label>
           <button type="submit">Save Changes</button>
-          <button type="button" onClick={() => handleDeleteUser(selectedUser._id)}>
+          <button
+            type="button"
+            onClick={() => handleDeleteUser(selectedUser._id)}
+          >
             Delete User
           </button>
         </form>

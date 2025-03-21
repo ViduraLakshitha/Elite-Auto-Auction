@@ -1,4 +1,4 @@
-import User from "../model/userModel.js"; 
+import {User} from "../model/userModel.js"; 
 
 
 // Get all users
@@ -27,7 +27,14 @@ export async function getUserById(req, res) {
 // Update a user's profile
 export async function updateUser(req, res) {
   try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Call on User model
+    const { password, ...updateData } = req.body;
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      updateData.password = await bcrypt.hash(password, salt);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: "Error updating user", error: err.message });

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { fetchTopSellers } from "../api/api";
+
 
 const SellerScoreboard = () => {
   const [sellers, setSellers] = useState([]);
 
   useEffect(() => {
     // Fetch top 10 sellers from the backend
-    axios.get("/api/sellers/top")
+    axios.get("http://localhost:5555/sellers/")
       .then((response) => {
         setSellers(response.data);
       })
@@ -22,7 +22,7 @@ const SellerScoreboard = () => {
       <table>
         <thead>
           <tr>
-            <th>UserID</th>
+            {/* <th>UserID</th> */}
             <th>Seller Name</th>
             <th>Successful Auctions</th>
             <th>Rank</th>
@@ -33,16 +33,16 @@ const SellerScoreboard = () => {
             {Array.isArray(sellers) && sellers.length > 0 ? (
               sellers.map((seller, index) => (
                 <tr key={seller._id || index}> {/* Use index as a fallback key */}
-                  <td>{index + 1}</td>
-                  <td>{seller.name}</td>
+                  {/* <td>{index + 1}</td> */}
+                  <td>{seller.fName} {seller.lname}</td>
                   <td>{seller.successfulCompletedAuctions}</td>
                   <td>{seller.rank}</td>
-                  <td>{seller.awards}</td>
+                  <td>{seller.award}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="5">No sellers found</td>
+                <td colSpan="4">No sellers found</td>
               </tr>
             )}
           </tbody>
