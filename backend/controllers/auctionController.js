@@ -6,7 +6,8 @@ export const createAuction = async (req, res) => {
         if (
             !req.body.userId||
             !req.body.vehicleId||
-            !req.body.startDateTime ||
+            !req.body.auctionTitle||
+            //!req.body.startDateTime ||
             !req.body.endDateTime ||
             !req.body.initialVehiclePrice
         ) {
@@ -16,6 +17,7 @@ export const createAuction = async (req, res) => {
         const newAuction = {
             userId:req.body.userId,
             vehicleId:req.body.vehicleId,
+            auctionTitle:req.body.auctionTitle,
             startDateTime: req.body.startDateTime,
             endDateTime: req.body.endDateTime,
             initialVehiclePrice: req.body.initialVehiclePrice,
@@ -24,7 +26,12 @@ export const createAuction = async (req, res) => {
         const auction = await Auction.create(newAuction);
         console.log("New auction created:", auction);
 
-        io.emit("newAuctionCreated", auction);
+        if(!auction.startDateTime){
+            auction.auctionStatus="active";
+            await auction.save();
+        }
+
+        //io.emit("newAuctionCreated", auction);
         
         console.log("auctionCreated event emitted");
         return res.status(201).json({ message: 'Auction Created Successfully', subject: auction });
@@ -79,3 +86,18 @@ export const getAllAuctions = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 }
+
+export const getAuctionById = async (req, res) => {
+    try {
+        const { id } = req.params; // Get the auction ID from URL parameters
+        const auction = await Auction.findById(id);//.populate("userId vehicleId"); // Populate related data if needed
+
+        if (!auction) {
+            return res.status(404).json({ message: "Auction not found" });
+        }
+
+        return res.status(200).json(auction);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
