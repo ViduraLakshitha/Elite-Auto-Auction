@@ -17,10 +17,15 @@ const auctionSchema = new mongoose.Schema(
                   required: true,
             },
 
+            auctionTitle: {
+                  type: String,
+                  required: true,
+            },
+
 
             startDateTime: {
                   type: Date,
-                  required: true,
+                  //required: true,
                   validate: {
                         validator: function (value) {
                               return this.endDate ? value < this.endDate : true;
@@ -58,7 +63,7 @@ const auctionSchema = new mongoose.Schema(
                   default: "pending",
             },
 
-            remainingTime: {  
+            winningBid: {
                   type: Number,
                   default: 0,
             },
