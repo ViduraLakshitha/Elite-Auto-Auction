@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
       {
-            firstName: {
+            fname: {
                   type: String,
                   required: true,
                   trim: true, // Removes extra spaces
             },
 
-            lastName: {
+            lname: {
                   type: String,
                   required: true,
                   trim: true,
@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema(
                   minlength: [6, "Password must be at least 6 characters long"],
             },
 
-            verified: {
+            isVerified: {
                   type: Boolean,
                   default: false, // User is not verified by default
             },

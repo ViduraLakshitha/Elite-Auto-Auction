@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { User } from "../model/userModel.js";
 import { sendVerificationEmail } from "../utils/sendEmail.js";
 import dotenv from "dotenv";
@@ -11,10 +11,10 @@ dotenv.config();
 // Signup
 export const signup = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, mobileNo, country, address } = req.body;
+        const { fname, lname, email, password, mobileNo, country, address } = req.body;
 
         // Validate input
-        if (!firstName || !lastName || !email || !password || !mobileNo || !country || !address) {
+        if (!fname || !lname || !email || !password || !mobileNo || !country || !address) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
@@ -25,7 +25,7 @@ export const signup = async (req, res) => {
         }
 
         // Create new user
-        const newUser = new User({ firstName, lastName, email, password, mobileNo, country, address });
+        const newUser = new User({ fname, lname, email, password, mobileNo, country, address });
         await newUser.save();
 
         // Generate email verification token
@@ -61,12 +61,12 @@ export const verifyEmail = async (req, res) => {
             return res.status(404).json({ error: "Invalid token or user not found" });
         }
 
-        if (user.verified) {
+        if (user.isVerified) {
             return res.status(400).json({ message: "Email is already verified." });
         }
 
         // Mark user as verified
-        user.verified = true;
+        user.isVerified = true;
         user.verificationToken = null;
         await user.save();
 
@@ -93,7 +93,7 @@ export const login = async (req, res) => {
         }
 
         // If the user's email is not verified, return an error
-        if (!user.verified) {
+        if (!user.isVerified) {
             return res.status(400).json({ message: "Please verify your email first" });
         }
 

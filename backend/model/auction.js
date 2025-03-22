@@ -1,55 +1,33 @@
-// import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-// const auctionSchema = new mongoose.Schema(
-//       {
-//             vehicleId: {
-//                   type: mongoose.Schema.Types.ObjectId,
-//                   ref: "Vehicle", // Reference the Vehicle collection
-//                   required: true,
-//             },
+const auctionSchema = new mongoose.Schema(
+  {
+    vehicleId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vehicle",
+      required: true,
+    },
+    initialVehiclePrice: {
+      type: Number,
+      required: true,
+      min: [0, "Starting bidding price cannot be negative!"],
+    },
+    startDateTime: {
+      type: Date,
+      required: false, // Optional
+    },
+    endDateTime: {
+      type: Date,
+      required: false, // Optional
+    },
 
-//             startDate: {
-//                   type: Date,
-//                   required: true,
-//                   validate: {
-//                         validator: function (value) {
-//                               return this.endDate ? value < this.endDate : true;
-//                         },
-//                         message: "Start date must be before the end date",
-//                   },
-//             },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
 
-//             endDate: {
-//                   type: Date,
-//                   required: true,
-//                   validate: {
-//                         validator: function (value) {
-//                               return this.startDate ? value > this.startDate : true;
-//                         },
-//                         message: "End date must be after the start date",
-//                   },
-//             },
-
-//             initialVehiclePrice: {
-//                   type: Number,
-//                   required: true,
-//                   min: [0, "Price cannot be negative"], // Ensures price is not negative
-//             },
-
-//             currentBid: {
-//                   type: Number,
-//                   required: true,
-//                   default: 0, // Starts at 0 if no bids yet
-//             },
-
-//             auctionStates: {
-//                   type: String,
-//                   enum: ["pending", "active", "completed", "cancelled"], // Restrict valid states
-//                   default: "pending",
-//                   required: true,
-//             },
-//       },
-//       { timestamps: true } // Adds createdAt and updatedAt fields
-// );
-
-// export const Auction = mongoose.model("Auction", auctionSchema);
+export const Auction = mongoose.model('Auction', auctionSchema);
+export default Auction;
