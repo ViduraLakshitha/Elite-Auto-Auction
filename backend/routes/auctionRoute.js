@@ -1,0 +1,10 @@
+import express from 'express';
+import { createAuction, getAllAuctions, getAuctionById } from '../controllers/auctionController.js';
+
+const router = express.Router();
+
+router.post('/register',createAuction);
+router.get('/details', getAllAuctions);
+router.get('/details/single-auction/:id',getAuctionById);
+
+export default router;

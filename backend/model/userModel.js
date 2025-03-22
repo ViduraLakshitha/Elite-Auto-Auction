@@ -1,71 +1,95 @@
-// import mongoose from "mongoose";
-// import bcrypt from "bcrypt";
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
-// const userSchema = new mongoose.Schema(
-//       {
-//             fullName: {
-//                   type: String,
-//                   required: true,
-//                   trim: true, // Removes extra spaces
-//             },
+const userSchema = new mongoose.Schema(
+      {
+            fName: {
+                  type: String,
+                  required: true,
+                  trim: true, // Removes extra spaces
+            },
 
-//             address: {
-//                   type: String,
-//                   required: true,
-//             },
 
-//             country: {
-//                   type: String,
-//                   required: true,
-//             },
+            lname: {
+                type: String,
+                required: true,
+                trim: true,
+            },
 
-//             email: {
-//                   type: String,
-//                   required: true,
-//                   unique: true, // Ensures no duplicate emails
-//                   lowercase: true,
-//                   trim: true,
-//                   validate: {
-//                         validator: function (value) {
-//                               return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value); // Valid email regex
-//                         },
-//                         message: "Invalid email format",
-//                   },
-//             },
+            address: {
+                  type: String,
+                  required: true,
+            },
 
-//             mobileNo: {
-//                   type: String,
-//                   required: true,
-//                   validate: {
-//                         validator: function (value) {
-//                               return /^\+?[1-9]\d{1,14}$/.test(value); // E.164 phone number format
-//                         },
-//                         message: "Invalid phone number format",
-//                   },
-//             },
+            country: {
+                  type: String,
+                  required: true,
+            },
 
-//             password: {
-//                   type: String,
-//                   required: true,
-//                   minlength: [6, "Password must be at least 6 characters long"],
-//             },
+            email: {
+                  type: String,
+                  required: true,
+                  unique: true, // Ensures no duplicate emails
+                  lowercase: true,
+                  trim: true,
+                  validate: {
+                        validator: function (value) {
+                              return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value); // Valid email regex
+                        },
+                        message: "Invalid email format",
+                  },
+            },
 
-//             accountState: {
-//                   type: String,
-//                   enum: ["active", "suspended", "pending"],
-//                   default: "pending",
-//             },
-//       },
-//       { timestamps: true }
-// );
+            mobileNo: {
+                  type: String,
+                  required: true,
+                  validate: {
+                        validator: function (value) {
+                              return /^\+?[1-9]\d{1,14}$/.test(value); // E.164 phone number format
+                        },
+                        message: "Invalid phone number format",
+                  },
+            },
 
-// // Hash password before saving the user
-// userSchema.pre("save", async function (next) {
-//       if (!this.isModified("password")) return next(); // Skip if password is unchanged
+            password: {
+                  type: String,
+                  required: true,
+                  minlength: [6, "Password must be at least 6 characters long"],
+            },
 
-//       const salt = await bcrypt.genSalt(10);
-//       this.password = await bcrypt.hash(this.password, salt);
-//       next();
-// });
+            accountState: {
+                  type: String,
+                  enum: ["active", "suspended","pending"],
+                  default: "pending",
+            },
 
-// export const User = mongoose.model("User", userSchema);
+            isVerified: {
+                type: Boolean,
+                default: false,
+            },
+
+            successfulCompletedAuctions: { 
+                  type: Number, 
+                  default: 0,
+            }, // For sellers
+            
+            winningBids: { //No.Of winning bids
+                  type: Number, 
+                  default: 0,
+            }, // For buyers
+      },
+      { timestamps: true }
+);
+
+// Hash password before saving the user
+userSchema.pre("save", async function (next) {
+      if (!this.isModified("password")) return next(); // Skip if password is unchanged
+
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(this.password, salt);
+      next();
+});
+
+export const User = mongoose.model("User", userSchema);
+
+export default User;
