@@ -25,7 +25,7 @@ const auctionSchema = new mongoose.Schema(
 
             startDateTime: {
                   type: Date,
-                  required: true,
+                  //required: true,
                   validate: {
                         validator: function (value) {
                               return this.endDate ? value < this.endDate : true;
