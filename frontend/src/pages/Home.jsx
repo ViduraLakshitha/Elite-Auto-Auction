@@ -3,7 +3,7 @@ import Header from "../component/common/Header";
 import Footer from "../component/common/Footer";
 import { useEffect, useState } from "react";
 import AuctionCard from "../component/auction/AuctionCard";
-
+// test 2
 const Home = () => {
   const [auctions, setAuctions] = useState([]);
 
