@@ -1,56 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react'
 
-const CountdownTimer = ({ endTime, onFinish }) => {
+const CountdownTimer = ({endTime, onFinish}) => {
+    const [remainingTime, setRemainingTime] = useState(endTime - Date.now());
 
-    const endTimee = new Date(endTime).getTime() - (5.5 * 60 * 60 * 1000);
-    const [remainingTime, setRemainingTime] = useState(0); 
+    useEffect(()=>{
+        if (remainingTime <= 0) {
+            onFinish();  // Trigger finish callback if time runs out
+            return;
+        }
 
-    useEffect(() => {
-        const updateRemainingTime = () => {
-            const timeLeft = endTimee - Date.now();
-            setRemainingTime(Math.max(0, timeLeft));
+        const intervalId = setInterval(() => {
+            const timeLeft = endTime - Date.now();
+            setRemainingTime(timeLeft);
 
             if (timeLeft <= 0) {
                 clearInterval(intervalId);
                 onFinish();
             }
-        };
-
-        updateRemainingTime(); // Run once immediately
-
-        const intervalId = setInterval(updateRemainingTime, 1000);
+        }, 1000);
 
         return () => clearInterval(intervalId);
-
-    }, [endTimee, onFinish]);
+    },[endTime, remainingTime, onFinish]);
 
     const formatTime = (milliseconds) => {
         const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
-
-        const days = Math.floor(totalSeconds / 86400);
-        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
 
-        if (totalSeconds >= 86400) {
-            return `${days}D Remaining`;
-        } else {
-            return `Ends In ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} `;
-        }
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
 
-    return (
-        <>
-            <h2>CountdownTimer</h2>
-            <div>
-                {remainingTime > 0 ? (
-                    <span>{formatTime(remainingTime)}</span>
-                ) : (
-                    <span>SOLD</span>
-                )}
-            </div>
-        </>
-    );
-};
+  return (
+    <>
+        <h2>CountdownTimer</h2>
+        <div>
+            {remainingTime > 0 ? (
+                <span>{formatTime(remainingTime)}</span>
+            ) : (
+                <span>Finish</span>
+            )}
+        </div>
+    </>
+  )
+}
 
 export default CountdownTimer;
