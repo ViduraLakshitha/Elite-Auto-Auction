@@ -1,61 +1,39 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-const sellerScoreSchema = new mongoose.Schema(
-      {
-            userId: {
-                  type: mongoose.Schema.Types.ObjectId,
-                  ref: "User", // Reference to the User collection
-                  required: true,
-            },
+// const sellerScoreSchema = new mongoose.Schema(
+//       {
+//             userId: {
+//                   type: mongoose.Schema.Types.ObjectId,
+//                   ref: "User", // Reference to the User collection
+//                   required: true,
+//             },
 
-            fullName: {
-                  type: String,
-                  required: true,
-                  trim: true,
-            },
+//             fullName: {
+//                   type: String,
+//                   required: true,
+//                   trim: true,
+//             },
 
-            successfulCompletedAuctions: {
-                  type: Number,
-                  required: true,
-                  min: [0, "Number of completed auctions cannot be negative"],
-            },
+//             noOfCompletedAuctions: {
+//                   type: Number,
+//                   required: true,
+//                   min: [0, "Number of completed auctions cannot be negative"],
+//             },
 
-            rank: {
-                  type: Number,
-                  required: true,
-            },
+//             rank: {
+//                   type: Number,
+//                   default: function () {
+//                         return Math.max(1, Math.floor(this.noOfCompletedAuctions / 5)); // Example rank logic
+//                   },
+//             },
 
-            award: {
-                  type: String,
-                  enum: ["Gold", "Silver", "Bronze", "None"], // Restrict award types
-                  default: "None",
-            },
-      },
-      { timestamps: true }
-);
-// Pre-save hook to update rank based on completed auctions
-sellerScoreSchema.pre("save", function (next) {
-      this.rank = Math.max(1, Math.floor(this.successfulCompletedAuctions / 5));
-      next();
-});
+//             award: {
+//                   type: String,
+//                   enum: ["Gold", "Silver", "Bronze", "None"], // Restrict award types
+//                   default: "None",
+//             },
+//       },
+//       { timestamps: true }
+// );
 
-sellerScoreSchema.pre("save", function (next) {
-      this.rank = Math.max(1, Math.floor(this.successfulCompletedAuctions / 5));
-
-      if (this.successfulCompletedAuctions >= 20) {
-            this.award = "Gold";
-      } else if (this.successfulCompletedAuctions >= 10) {
-            this.award = "Silver";
-      } else if (this.successfulCompletedAuctions >= 5) {
-            this.award = "Bronze";
-      } else {
-            this.award = "None";
-      }
-
-      next();
-});
-
-
-
-const SellerScore = mongoose.model('SellerScore', sellerScoreSchema);
-export default SellerScore;
+// export const SellerScore = mongoose.model("SellerScore", sellerScoreSchema);
