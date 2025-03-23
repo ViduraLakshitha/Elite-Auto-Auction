@@ -1,4 +1,4 @@
-import { useState } from "react"; 
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -124,6 +124,15 @@ const Signup = () => {
               type="password"
               name="password"
               placeholder="Password"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
               onChange={handleChange}
               required
