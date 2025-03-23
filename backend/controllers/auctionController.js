@@ -1,11 +1,13 @@
 import {Auction} from '../model/auction.js';
+import { io } from "../index.js";  // Import Socket.IO instance
 
 export const createAuction = async (req, res) => {
     try {
         if (
             !req.body.userId||
             !req.body.vehicleId||
-            !req.body.startDateTime ||
+            !req.body.auctionTitle||
+            //!req.body.startDateTime ||
             !req.body.endDateTime ||
             !req.body.initialVehiclePrice
         ) {
@@ -15,13 +17,23 @@ export const createAuction = async (req, res) => {
         const newAuction = {
             userId:req.body.userId,
             vehicleId:req.body.vehicleId,
+            auctionTitle:req.body.auctionTitle,
             startDateTime: req.body.startDateTime,
             endDateTime: req.body.endDateTime,
             initialVehiclePrice: req.body.initialVehiclePrice,
         };
 
         const auction = await Auction.create(newAuction);
+        console.log("New auction created:", auction);
 
+        if(!auction.startDateTime){
+            auction.auctionStatus="active";
+            await auction.save();
+        }
+
+        //io.emit("newAuctionCreated", auction);
+        
+        console.log("auctionCreated event emitted");
         return res.status(201).json({ message: 'Auction Created Successfully', subject: auction });
 
     } catch (error) {
@@ -46,12 +58,12 @@ export const updateAuctionStatuses = async () => {
         );
 
         await Auction.updateMany(
-            { 
-                startDateTime: { $lte: localDate },  
-                endDateTime: { $gt: localDate }      
-            },
-            { $set: { auctionStatus: "active" } }
-        );
+                { 
+                    startDateTime: { $lte: localDate },  
+                    endDateTime: { $gt: localDate }      
+                },
+                { $set: { auctionStatus: "active" } }
+            );
 
         await Auction.updateMany(
             { 
@@ -60,63 +72,32 @@ export const updateAuctionStatuses = async () => {
             { $set: { auctionStatus: "ended" } }
         );
         
-        console.log("Auction statuses updated successfully!");
+        //console.log("Auction statuses updated successfully!");
     } catch (error) {
         console.error("Error updating auction statuses:", error.message);
     }
 };
 
-
-//find remaining time of an active auction and store
-export const updateRemainingTime = async () => {
-    try {
-        const currentDate = new Date();
-        
-        const activeAuctions = await Auction.find({ auctionStatus: "active" });
-
-        const updates = activeAuctions.map(async(auction) => {
-            const remainingTime = new Date(auction.endDateTime) - currentDate; // Time difference in milliseconds
-            await Auction.findByIdAndUpdate(auction._id,{remainingTime});
-            return { 
-                ...auction.toObject(), 
-                remainingTime // Attach remaining time in milliseconds
-            };
-        });
-
-        const result = await Promise.all(updates);
-
-        console.log("Active Auctions with Updated Remaining Time:", result);
-
-        console.log("get remaining time function executed!");
-
-        //res.status(200).json(auctionsWithRemainingTime);
-    } catch (error) {
-        //res.status(500).json({ message: error.message });
-        console.log("Error updating remaining time:", error.message);
-        
-    }
-};
-
-
 export const getAllAuctions = async (req, res) => {
     try{
-        const auctions = await Auction.find({});
+        const auctions = await Auction.find({auctionStatus:"active"});
         return res.status(201).json({auctions})
     }catch(error){
         return res.status(500).json({ message: error.message });
     }
 }
 
-// router.get('/', async (req,res) => {
-//     try {
-//         const books = await Book.find({});
-//         return res.status(201).json({
-//             count:books.length,
-//             data:books
-//         });
-//     } catch (error) {
-//         console.log(error.message);
-//         res.status(500).send({message:error.message})
-        
-//     }
-// })
+export const getAuctionById = async (req, res) => {
+    try {
+        const { id } = req.params; // Get the auction ID from URL parameters
+        const auction = await Auction.findById(id);//.populate("userId vehicleId"); // Populate related data if needed
+
+        if (!auction) {
+            return res.status(404).json({ message: "Auction not found" });
+        }
+
+        return res.status(200).json(auction);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};

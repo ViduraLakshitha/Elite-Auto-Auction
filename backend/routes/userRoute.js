@@ -1,6 +1,7 @@
 import express from 'express';
-import { User } from '../model/userModel.js';
+import {User} from '../model/userModel.js';
 import { getAllUsers, getUserById, updateUser, deleteUser } from "../controllers/userController.js"; // Import named exports
+
 
 const router = express.Router();
 

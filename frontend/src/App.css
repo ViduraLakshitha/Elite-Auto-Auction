@@ -1,0 +1,193 @@
+/* ----------------------------------
+   Base Layout (From Your Example)
+---------------------------------- */
+
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: #f4f4f9;
+  color: #333;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 3em;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: 1.5em;
+  color: #34495e;
+}
+
+.main-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* ----------------------------------
+   Notifications Container
+---------------------------------- */
+
+.notifications-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.notifications-container h3 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* ----------------------------------
+   Notification Badge (Optional)
+   - You can place a badge next to a 
+     bell icon or near your heading.
+---------------------------------- */
+
+.notification-badge {
+  display: inline-block;
+  background-color: #e74c3c;
+  color: #fff;
+  font-size: 0.8em;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+}
+
+/* ----------------------------------
+   Notification List
+---------------------------------- */
+
+.notification-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notification-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fdfdfd;
+  border: 1px solid #e3e3e3;
+  border-left: 4px solid #bbb; /* fallback color */
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  transition: background 0.3s ease, border-left-color 0.3s ease;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background: #f9f9f9;
+}
+
+/* If you store the notification type in a data attribute,
+   you can color-code them like so:
+   e.g., <li className="notification-item" data-type={notification.type}> */
+
+.notification-item[data-type="new_listing"] {
+  border-left-color: #3498db;
+}
+
+.notification-item[data-type="bidding_update"] {
+  border-left-color: #e67e22;
+}
+
+.notification-item[data-type="win"] {
+  border-left-color: #2ecc71;
+}
+
+.notification-item[data-type="ending"] {
+  border-left-color: #e74c3c;
+}
+
+.notification-item[data-type="approval"] {
+  border-left-color: #9b59b6;
+}
+
+/* "Read" vs. "Unread" Styles */
+.notification-item.read {
+  opacity: 0.7;
+  background: #f2f2f2;
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----------------------------------
+   Notification Text
+---------------------------------- */
+
+.notification-content p {
+  margin: 0;
+  font-size: 1em;
+  color: #2c3e50;
+}
+
+.notification-content small {
+  margin-top: 5px;
+  font-size: 0.85em;
+  color: #999;
+}
+
+/* ----------------------------------
+   Mark as Read Button
+---------------------------------- */
+
+.mark-read-button {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.2s ease;
+}
+
+.mark-read-button:hover {
+  background: #219150;
+}
+
+/* ----------------------------------
+   Animation (Optional)
+   - A subtle "slide-down" effect 
+   - Apply this class when you 
+     add a new notification
+---------------------------------- */
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.notification-item.new {
+  animation: slideDown 0.4s ease forwards;
+}
