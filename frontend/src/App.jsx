@@ -1,16 +1,22 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Auction from "./pages/Auction";
+import React from 'react';
+import { NotificationProvider } from "./context/NotificationContext.jsx";
+import Notifications from './component/Notifications.jsx';
+import "./App.css";  // Import the CSS file for styling
 
-function App  ()  {
+
+const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/auction-details/:id" element={<Auction/>}/>
-      </Routes>
-    </BrowserRouter>
+    <NotificationProvider>
+      <div className="app-container">
+        <header className="header">
+          <h1>Elite Auto Auctions</h1>
+          <h2>Notification System</h2>
+        </header>
+        <main className="main-content">
+          <Notifications />
+        </main>
+      </div>
+    </NotificationProvider>
   );
 };
 

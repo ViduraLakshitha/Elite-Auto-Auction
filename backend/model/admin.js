@@ -12,9 +12,9 @@ const adminSchema =  mongoose.Schema(
             email: {
                   type: String,
                   required: true,
-                  unique: true, 
+                  unique: true, // Ensures no duplicate emails
                   trim: true,
-                  lowercase: true, 
+                  lowercase: true, // Consistent format
             },
 
             password: {
