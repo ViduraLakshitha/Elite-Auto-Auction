@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-import vehicleRoutes from "./routes/vehicleRoutes.js";  // Corrected path
+import vehicleRoute from "./routes/vehicleRoute.js";  // Corrected path
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ app.use(cookieParser());
 connectDB();
 
 app.use("/api/auth", authRoutes); 
-app.use("/api/vehicles", vehicleRoutes);
+app.use("/api/vehicles", vehicleRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
