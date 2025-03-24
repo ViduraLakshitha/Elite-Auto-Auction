@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { HiOutlineUser, HiBars3BottomRight } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
 import SearchBar from "./SearchBar.jsx";
-import ScoreboardPopup from "../ScoreboardPopup.jsx"; // Import the ScoreboardPopup component
+import ScoreboardPopup from "../scoreboard/ScoreboardPopup.jsx"; // Import the ScoreboardPopup component
 
 const Navbar = () => {
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
@@ -47,7 +47,7 @@ const Navbar = () => {
           </Link>
 
           <Link
-            to="#"
+            to="/user"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Submit a Vehicle

@@ -1,63 +1,62 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-const buyerScoreSchema = new mongoose.Schema(
-      {
-            userId: {
-                  type: mongoose.Schema.Types.ObjectId,
-                  ref: "User", // Reference to the User collection
-                  required: true,
-            },
+// const buyerScoreSchema = new mongoose.Schema(
+//       {
+//             userId: {
+//                   type: mongoose.Schema.Types.ObjectId,
+//                   ref: "User", // Reference to the User collection
+//                   required: true,
+//             },
 
-            fName: {
-                  type: String,
-                  required: true,
-                  trim: true, // Removes extra spaces
-            },
+//             fname: {
+//                   type: String,
+//                   required: true,
+//                   trim: true, // Removes extra spaces
+//             },
 
 
-            lname: {
-                type: String,
-                required: true,
-                trim: true,
-            },
+//             lname: {
+//                 type: String,
+//                 required: true,
+//                 trim: true,
+//             },
 
-            winningBids: {
-                  type: Number,
-                  required: true,
-                  min: [0, "Number of wins cannot be negative"],
-            },
+//             winningBids: {
+//                   type: Number,
+//                   required: true,
+//                   min: [0, "Number of wins cannot be negative"],
+//             },
 
-            rank: {
-                  type: Number,
-                  default: function () {
-                        return Math.max(1, Math.floor(this.noOfWins / 5)); // Example rank logic
-                  },
-            },
+//             rank: {
+//                   type: Number,
+//                   required: true,
+//                   default: 1,
+//             },
 
-            award: {
-                  type: String,
-                  enum: ["Gold", "Silver", "Bronze", "None"], // Restrict award types
-                  default: "None",
-            },
-      },
-      { timestamps: true }
-);
-buyerScoreSchema.pre("save", function (next) {
-      // Rank logic
-      this.rank = Math.max(1, Math.floor(this.winningBids / 5));
+//             award: {
+//                   type: String,
+//                   enum: ["Gold", "Silver", "Bronze", "None"], // Restrict award types
+//                   default: "None",
+//             },
+//       },
+//       { timestamps: true }
+// );
+// buyerScoreSchema.pre("save", function (next) {
+//       // Rank logic
+//       this.rank = Math.max(1, Math.floor(this.winningBids / 5));
     
-      // Award logic based on completed auctions
-      if (this.winningBids >= 20) {
-        this.award = "Gold";
-      } else if (this.winningBids >= 10) {
-        this.award = "Silver";
-      } else if (this.winningBids >= 5) {
-        this.award = "Bronze";
-      } else {
-        this.award = "None";
-      }
+//       // Award logic based on completed auctions
+//       if (this.winningBids >= 20) {
+//         this.award = "Gold";
+//       } else if (this.winningBids >= 10) {
+//         this.award = "Silver";
+//       } else if (this.winningBids >= 5) {
+//         this.award = "Bronze";
+//       } else {
+//         this.award = "None";
+//       }
     
-      next();
-    });
+//       next();
+//     });
 
-export const BuyerScore = mongoose.model("BuyerScore", buyerScoreSchema);
+// export const BuyerScore = mongoose.model("BuyerScore", buyerScoreSchema);

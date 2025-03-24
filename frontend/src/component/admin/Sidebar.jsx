@@ -1,5 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {
+  FaHome,
+  FaChartLine,
+  FaUsers,
+  FaTrophy,
+  FaShoppingCart,
+  FaCar,
+  FaCog,
+  FaSignOutAlt,
+  FaGavel,
+} from "react-icons/fa"; // Import icons
 
 const Sidebar = () => {
   return (
@@ -7,52 +18,93 @@ const Sidebar = () => {
       <h2 className="text-2xl font-bold mb-6">Admin Panel</h2>
       <nav>
         <ul className="space-y-2">
+          {/* Home */}
           <li>
             <Link
-              to="/admin"
-              className="block p-2 hover:bg-gray-700 rounded"
+              to="/"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
-              Dashboard
+              <FaHome className="mr-2" /> Home
             </Link>
           </li>
+
+          {/* Dashboard */}
+          <li>
+            <Link
+              to="/admin/chart"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
+            >
+              <FaChartLine className="mr-2" /> Dashboard
+            </Link>
+          </li>
+
+          {/* Manage Users */}
           <li>
             <Link
               to="/admin/admin"
-              className="block p-2 hover:bg-gray-700 rounded"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
-              Manage Users
+              <FaUsers className="mr-2" /> Manage Users
             </Link>
           </li>
+
+          {/* Seller Scoreboard */}
           <li>
             <Link
               to="/admin/sellers"
-              className="block p-2 hover:bg-gray-700 rounded"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
-              Seller Scoreboard
+              <FaTrophy className="mr-2" /> Seller Scoreboard
             </Link>
           </li>
+
+          {/* Buyer Scoreboard */}
           <li>
             <Link
               to="/admin/buyers"
-              className="block p-2 hover:bg-gray-700 rounded"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
-              Buyer Scoreboard
+              <FaShoppingCart className="mr-2" /> Buyer Scoreboard
             </Link>
           </li>
+
+          {/* Auction Details */}
           <li>
             <Link
-              to="/admin"
-              className="block p-2 hover:bg-gray-700 rounded"
+              to="/Auction"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
-              Vehicle Registration
+              <FaGavel className="mr-2" /> Auction Details
             </Link>
           </li>
+
+          {/* Vehicle Registration */}
+          <li>
+            <Link
+              to="/admin/vehicles"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
+            >
+              <FaCar className="mr-2" /> Vehicle Details
+            </Link>
+          </li>
+
+          {/* Settings */}
           <li>
             <Link
               to="/admin/settings"
-              className="block p-2 hover:bg-gray-700 rounded"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
-              Settings
+              <FaCog className="mr-2" /> Settings
+            </Link>
+          </li>
+
+          {/* Logout */}
+          <li>
+            <Link
+              to="/"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
+            >
+              <FaSignOutAlt className="mr-2" /> Logout
             </Link>
           </li>
         </ul>

@@ -14,7 +14,7 @@ const PaymentPage = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.get("http://localhost:5555/payments");
+        const response = await axios.get("http://localhost:5555/payments/");
         setPayments(response.data);
       } catch (err) {
         console.error("Error fetching payments:", err);

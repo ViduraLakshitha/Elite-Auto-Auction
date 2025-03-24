@@ -1,21 +1,3 @@
-// import { Router } from 'express';
-// import { getTopSellers, updateSellerScoreboard } from '../controllers/sellerScoreboardController.js';
-
-// const router = Router();
-
-// // Fetch top 10 sellers
-// router.get('/sellers', getTopSellers);
-
-// // Manually update seller scoreboard
-// router.get('/updateSeller', async (req, res) => {
-//   await updateSellerScoreboard();
-//   res.json({ message: "Scoreboard updated successfully" });
-// });
-
-// export default router;
-
-
-
 import { Router } from 'express';
 import { getTopSellers, updateSellerScoreboard } from '../controllers/sellerScoreboardController.js';
 

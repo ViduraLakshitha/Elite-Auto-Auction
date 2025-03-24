@@ -7,8 +7,9 @@ const router = express.Router();
 
 router.get("/users", getAllUsers);
 router.delete("/users/:id", deleteUser);
+
 router.get("/profile", getAdminProfile);
-router.put("/profile", updateAdminProfile);
+router.put("/profile/", updateAdminProfile);
 
 //route for save a new admin
 router.post('/', async (req,res) => {

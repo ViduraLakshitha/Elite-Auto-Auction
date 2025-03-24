@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Sidebar from "./Sidebar.jsx"; // Import the Sidebar component
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaBell,
+  FaMoon,
+  FaSave,
+  FaKey,
+} from "react-icons/fa"; // Import icons
 
 const Settings = () => {
   // State for form fields
@@ -24,7 +34,7 @@ const Settings = () => {
     const fetchAdminProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5555/profile", {
+        const response = await axios.get("http://localhost:5555/admin/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(response.data); // Set profile data in state
@@ -42,7 +52,7 @@ const Settings = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        "http://localhost:5555/profile",
+        "http://localhost:5555/admin/",
         profile,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -74,144 +84,152 @@ const Settings = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Settings</h1>
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <Sidebar />
 
-      {/* Profile Settings */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Admin Profile Settings</h2>
-        <form onSubmit={handleProfileUpdate} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <input
-              type="text"
-              value={profile.name}
-              onChange={(e) =>
-                setProfile({ ...profile, name: e.target.value })
-              }
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              value={profile.email}
-              onChange={(e) =>
-                setProfile({ ...profile, email: e.target.value })
-              }
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Phone
-            </label>
-            <input
-              type="tel"
-              value={profile.phone}
-              onChange={(e) =>
-                setProfile({ ...profile, phone: e.target.value })
-              }
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              required
-            />
-          </div> */}
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          >
-            Update Profile
-          </button>
-        </form>
-      </div>
+      {/* Main Content */}
+      <div className="flex-1 p-6 bg-blue-200">
+        <h1 className="text-2xl font-bold mb-6">Settings</h1>
 
-      {/* Password Settings */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Admin Password Settings</h2>
-        <form onSubmit={handlePasswordChange} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Current Password
-            </label>
-            <input
-              type="password"
-              value={password.currentPassword}
-              onChange={(e) =>
-                setPassword({ ...password, currentPassword: e.target.value })
-              }
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              New Password
-            </label>
-            <input
-              type="password"
-              value={password.newPassword}
-              onChange={(e) =>
-                setPassword({ ...password, newPassword: e.target.value })
-              }
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Confirm New Password
-            </label>
-            <input
-              type="password"
-              value={password.confirmPassword}
-              onChange={(e) =>
-                setPassword({ ...password, confirmPassword: e.target.value })
-              }
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          >
-            Change Password
-          </button>
-        </form>
-      </div>
+        {/* Profile Settings */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Admin Profile Settings</h2>
+          <form onSubmit={handleProfileUpdate} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                <div className="flex items-center">
+                  <FaUser className="mr-2" /> Name
+                </div>
+              </label>
+              <input
+                type="text"
+                value={profile.name}
+                onChange={(e) =>
+                  setProfile({ ...profile, name: e.target.value })
+                }
+                className="mt-1 block w-full p-2 border bg-blue-50 border-gray-300 rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                <div className="flex items-center">
+                  <FaEnvelope className="mr-2" /> Email
+                </div>
+              </label>
+              <input
+                type="email"
+                value={profile.email}
+                onChange={(e) =>
+                  setProfile({ ...profile, email: e.target.value })
+                }
+                className="mt-1 block w-full p-2 border bg-blue-50 border-gray-300 rounded"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              <FaSave className="mr-2" /> Update Profile
+            </button>
+          </form>
+        </div>
 
-      {/* System Preferences */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4">System Preferences</h2>
-        <div className="space-y-4">
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="notifications"
-              checked={systemPreferences.notifications}
-              onChange={handleSystemPreferencesChange}
-              className="h-4 w-4 text-blue-500 border-gray-300 rounded"
-            />
-            <label className="ml-2 text-sm text-gray-700">
-              Enable Notifications
-            </label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="darkMode"
-              checked={systemPreferences.darkMode}
-              onChange={handleSystemPreferencesChange}
-              className="h-4 w-4 text-blue-500 border-gray-300 rounded"
-            />
-            <label className="ml-2 text-sm text-gray-700">Dark Mode</label>
+        {/* Password Settings */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Admin Password Settings</h2>
+          <form onSubmit={handlePasswordChange} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                <div className="flex items-center">
+                  <FaLock className="mr-2" /> Current Password
+                </div>
+              </label>
+              <input
+                type="password"
+                value={password.currentPassword}
+                onChange={(e) =>
+                  setPassword({ ...password, currentPassword: e.target.value })
+                }
+                className="mt-1 block w-full p-2 border bg-blue-50 border-gray-300 rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                <div className="flex items-center">
+                  <FaKey className="mr-2" /> New Password
+                </div>
+              </label>
+              <input
+                type="password"
+                value={password.newPassword}
+                onChange={(e) =>
+                  setPassword({ ...password, newPassword: e.target.value })
+                }
+                className="mt-1 block w-full p-2 border bg-blue-50 border-gray-300 rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                <div className="flex items-center">
+                  <FaKey className="mr-2" /> Confirm New Password
+                </div>
+              </label>
+              <input
+                type="password"
+                value={password.confirmPassword}
+                onChange={(e) =>
+                  setPassword({ ...password, confirmPassword: e.target.value })
+                }
+                className="mt-1 block w-full p-2 border bg-blue-50 border-gray-300 rounded"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              <FaSave className="mr-2" /> Change Password
+            </button>
+          </form>
+        </div>
+
+        {/* System Preferences */}
+        <div>
+          <h2 className="text-xl font-semibold mb-4">System Preferences</h2>
+          <div className="space-y-4">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                name="notifications"
+                checked={systemPreferences.notifications}
+                onChange={handleSystemPreferencesChange}
+                className="h-4 w-4 text-blue-500 border-gray-300 rounded"
+              />
+              <label className="ml-2 text-sm text-gray-700">
+                <div className="flex items-center">
+                  <FaBell className="mr-2" /> Enable Notifications
+                </div>
+              </label>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                name="darkMode"
+                checked={systemPreferences.darkMode}
+                onChange={handleSystemPreferencesChange}
+                className="h-4 w-4 text-blue-500 border-gray-300 rounded"
+              />
+              <label className="ml-2 text-sm text-gray-700">
+                <div className="flex items-center">
+                  <FaMoon className="mr-2" /> Dark Mode
+                </div>
+              </label>
+            </div>
           </div>
         </div>
       </div>
