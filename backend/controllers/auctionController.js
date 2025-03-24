@@ -1,5 +1,7 @@
 import {Auction} from '../model/auction.js';
 import { io } from "../index.js";  // Import Socket.IO instance
+import { UserInteractions } from '../model/userInteractions.js';
+import { Vehicle } from '../model/vehicle.js';
 
 export const createAuction = async (req, res) => {
     try {
@@ -97,6 +99,69 @@ export const getAuctionById = async (req, res) => {
         }
 
         return res.status(200).json(auction);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// Track user interactions when clicking an auction card
+export const trackUserClick = async (req, res) => {
+    try {
+        const { userId, vehicleId } = req.body;
+
+        // Fetch the vehicle to get its brand
+        const vehicle = await Vehicle.findById(vehicleId);
+        if (!vehicle) {
+            return res.status(404).json({ message: "Vehicle not found" });
+        }
+
+        const vehicleBrand = vehicle.brand;
+
+        // Find existing interaction record
+        let interaction = await UserInteractions.findOne({ userId, brand: vehicleBrand });
+
+        if (!interaction) {
+            // Create new record if it doesn't exist
+            interaction = new UserInteractions({ userId, brand: vehicleBrand, count: 1 });
+        } else {
+            // Increment count and update timestamp
+            interaction.count += 1;
+        }
+
+        await interaction.save();
+        return res.status(200).json({ message: "Click tracked successfully", interaction });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+export const getRecommendedAuctions = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get user's top-clicked brands (threshold: count >= 5, within last 7 days)
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const topBrands = await UserInteractions.find({
+            userId,
+            count: { $gte: 5 },  // Only consider brands clicked at least 5 times
+            updatedAt: { $gte: sevenDaysAgo }  // Filter recent interactions
+        }).sort({ count: -1 });
+
+        if (topBrands.length === 0) {
+            return res.status(200).json({ message: "No recommendations found" });
+        }
+
+        // Fetch vehicle auctions for top-clicked brands
+        const brands = topBrands.map(b => b.brand);
+        const recommendedAuctions = await Auction.find({ auctionStatus: "active" })
+            .populate({
+                path: 'vehicleId',
+                match: { brand: { $in: brands } }
+            });
+
+        return res.status(200).json({ recommendedAuctions });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

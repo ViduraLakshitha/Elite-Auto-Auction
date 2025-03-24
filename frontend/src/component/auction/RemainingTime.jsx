@@ -25,7 +25,7 @@ export default function RemainingTime ({auction}) {
     };
 
   return (
-    <div>
+    <div className='text-red-500 text-sm'>
         {auction.auctionStatus === "active" && (
                 <CountdownTimer endTime={endTime} onFinish={handleFinish} />
             )}

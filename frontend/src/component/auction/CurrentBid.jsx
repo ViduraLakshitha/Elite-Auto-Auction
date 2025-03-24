@@ -20,7 +20,7 @@ export default function currentBid( {auction} ) {
 
     return (
         <div>
-            <p>Current Bid: ${currentBid}</p>
+            <p className='text-green-600 font-semibold'>Current Bid: ${currentBid}</p>
         </div>
     )
 }

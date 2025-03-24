@@ -68,4 +68,17 @@ server.listen(PORT,()=>{
     
 })
 
+cron.schedule("0 * * * *", async () => {
+    console.log("Running recommendation cleanup...");
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    // Remove old interactions
+    await UserInteractions.deleteMany({ updatedAt: { $lt: sevenDaysAgo } });
+
+    console.log("Old interactions removed.");
+});
+
+
 export { io };
