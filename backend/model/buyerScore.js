@@ -8,13 +8,20 @@
 //                   required: true,
 //             },
 
-//             fullName: {
+//             fname: {
 //                   type: String,
 //                   required: true,
-//                   trim: true,
+//                   trim: true, // Removes extra spaces
 //             },
 
-//             noOfWins: {
+
+//             lname: {
+//                 type: String,
+//                 required: true,
+//                 trim: true,
+//             },
+
+//             winningBids: {
 //                   type: Number,
 //                   required: true,
 //                   min: [0, "Number of wins cannot be negative"],
@@ -22,9 +29,8 @@
 
 //             rank: {
 //                   type: Number,
-//                   default: function () {
-//                         return Math.max(1, Math.floor(this.noOfWins / 5)); // Example rank logic
-//                   },
+//                   required: true,
+//                   default: 1,
 //             },
 
 //             award: {
@@ -35,5 +41,22 @@
 //       },
 //       { timestamps: true }
 // );
+// buyerScoreSchema.pre("save", function (next) {
+//       // Rank logic
+//       this.rank = Math.max(1, Math.floor(this.winningBids / 5));
+    
+//       // Award logic based on completed auctions
+//       if (this.winningBids >= 20) {
+//         this.award = "Gold";
+//       } else if (this.winningBids >= 10) {
+//         this.award = "Silver";
+//       } else if (this.winningBids >= 5) {
+//         this.award = "Bronze";
+//       } else {
+//         this.award = "None";
+//       }
+    
+//       next();
+//     });
 
 // export const BuyerScore = mongoose.model("BuyerScore", buyerScoreSchema);

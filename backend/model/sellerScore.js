@@ -8,23 +8,29 @@
 //                   required: true,
 //             },
 
-//             fullName: {
+//             fname: {
 //                   type: String,
 //                   required: true,
-//                   trim: true,
+//                   trim: true, // Removes extra spaces
 //             },
 
-//             noOfCompletedAuctions: {
+
+//             lname: {
+//                 type: String,
+//                 required: true,
+//                 trim: true,
+//             },
+
+//             successfulCompletedAuctions: {
 //                   type: Number,
 //                   required: true,
-//                   min: [0, "Number of completed auctions cannot be negative"],
+//                   // min: [0, "Number of completed auctions cannot be negative"],
 //             },
 
 //             rank: {
 //                   type: Number,
-//                   default: function () {
-//                         return Math.max(1, Math.floor(this.noOfCompletedAuctions / 5)); // Example rank logic
-//                   },
+//                   required: true,
+//                   default: 1, // Example rank logic
 //             },
 
 //             award: {
@@ -35,5 +41,26 @@
 //       },
 //       { timestamps: true }
 // );
+
+// sellerScoreSchema.pre("save", function (next) {
+//       // Rank logic
+//       this.rank = Math.max(1, Math.floor(this.successfulCompletedAuctions / 5));
+    
+//       // Award logic based on completed auctions
+//       if (this.successfulCompletedAuctions >= 20) {
+//         this.award = "Gold";
+//       } else if (this.successfulCompletedAuctions >= 10) {
+//         this.award = "Silver";
+//       } else if (this.successfulCompletedAuctions >= 5) {
+//         this.award = "Bronze";
+//       } else {
+//         this.award = "None";
+//       }
+    
+//       next();
+//     });
+    
+
+
 
 // export const SellerScore = mongoose.model("SellerScore", sellerScoreSchema);
