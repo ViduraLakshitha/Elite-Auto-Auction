@@ -18,7 +18,7 @@ const SearchBar = () => {
 
   return (
     <div>
-      {isOpen ? (
+      {/* {isOpen ? ( */}
         <form onSubmit={handleSearch}
         className="relative flex items-center justify-center w-full">
           <div>
@@ -41,19 +41,19 @@ const SearchBar = () => {
           </div>
 
           {/* close button */}
-          <button
+          {/* <button
             type="button"
             onClick={handleSearchToggle}
             className="absolute -right-1/12 top-2.5 transform-translate-y-1/2 text-gray-600 hover:text-gray-800"
           >
             <HiMiniXMark className="h-5 w-5" />
-          </button>
+          </button> */}
         </form>
-      ) : (
-        <button onClick={handleSearchToggle}>
-          <HiMagnifyingGlass className="h-6 w-6  flex mt-2" />
-        </button>
-      )}
+      {/* ) : (
+        // <button onClick={handleSearchToggle}>
+        //   <HiMagnifyingGlass className="h-6 w-6  flex mt-2" />
+        // </button>
+      )} */}
     </div>
   );
 };

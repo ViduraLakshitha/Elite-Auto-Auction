@@ -88,8 +88,8 @@ const Home = () => {
 
             <Header />
             <div className="m-40">
+            <h1 className="font-bold text-xl">Active Auctions</h1>
             <div className="m-30 flex flex-row flex-wrap gap-4 ">
-            {/* <h1 className="font-bold text-xl">Active Auctions</h1> */}
             {auctions.length > 0 ? (
                 auctions.map((auction) => (
                     <AuctionCard 
