@@ -27,7 +27,7 @@ const Login = () => {
     setLoading(true);  // Set loading state to true
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData, {
+      const res = await axios.post("http://localhost:5555/api/auth/login", formData, {
         headers: {
           "Content-Type": "application/json",
         },

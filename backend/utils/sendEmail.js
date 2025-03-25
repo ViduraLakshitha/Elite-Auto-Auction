@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 // Asynchronous function with try-catch for better error handling
 export const sendVerificationEmail = async (userEmail, verificationToken) => {
-    const url = `http://localhost:5000/api/auth/verify-email?token=${verificationToken}`;
+    const url = `http://localhost:5555/api/auth/verify-email?token=${verificationToken}`;
 
     const mailOptions = {
         from: 'sasindaprabhath5@gmail.com',

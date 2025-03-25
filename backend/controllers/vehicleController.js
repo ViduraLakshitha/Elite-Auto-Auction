@@ -53,3 +53,13 @@ export const verifyVehicle = async (req, res) => {
         res.status(500).json({ message: 'Error verifying vehicle', error });
     }
 };
+//==========================
+export const getAllVehicles = async (req, res) => {
+    try{
+        const vehicles = await Vehicle.find()
+        
+        return res.status(201).json({vehicles})
+    }catch(error){
+        return res.status(500).json({ message: error.message });
+    }
+}

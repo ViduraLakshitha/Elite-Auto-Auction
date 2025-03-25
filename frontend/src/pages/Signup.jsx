@@ -31,7 +31,7 @@ const Signup = () => {
     try {
       console.log("Sending registration request:", formData); // Debugging log
 
-      const res = await axios.post("http://localhost:5000/api/auth/signup", formData, {
+      const res = await axios.post("http://localhost:5555/api/auth/signup", formData, {
         headers: {
           "Content-Type": "application/json",
         },

@@ -29,7 +29,7 @@ const AdminDashboard = () => {
   // Handle Approved User
   const handleApproveUser = async (userId) => {
     try {
-      await axios.put(`http://localhost:5555/user/${userId}`);
+      await axios.put(`http://localhost:5555/user/${userId}` , { accountState: "active" });
       setUsers(users.map((user) =>
         user._id === userId ? { ...user, accountState: "active" } : user
       ));

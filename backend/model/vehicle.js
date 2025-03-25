@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 
 const vehicleSchema = new mongoose.Schema(
       {
-            userId: {
-                  type: mongoose.Schema.Types.ObjectId,
-                  ref: "User", // Reference to the User collection
-                  required: true,
-            },
+            // userId: {
+            //       type: mongoose.Schema.Types.ObjectId,
+            //       ref: "User", // Reference to the User collection
+            //       required: true,
+            // },
 
             brand: {
                   type: String,
@@ -35,7 +35,7 @@ const vehicleSchema = new mongoose.Schema(
 
             vehicleType: {
                   type: String,
-                  enum: ["Sedan", "SUV", "Truck", "Coupe", "Convertible", "Electric", "Hybrid", "Classic", "Other"],
+                  enum: ["Luxury", "Classic"],
                   required: true,
             },
 

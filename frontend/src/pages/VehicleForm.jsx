@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 
 const VehicleForm = () => {
   const [vehicleData, setVehicleData] = useState({
@@ -17,16 +17,16 @@ const VehicleForm = () => {
     documents: null,
   });
 
-  const [error, setError] = useState(""); // State for error messages
-  const [success, setSuccess] = useState(""); // State for success messages
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name === "initialVehiclePrice" && (value === "" || parseFloat(value) < 0)) {
       return;
     }
-    
+
     setVehicleData({ ...vehicleData, [name]: value });
   };
 
@@ -47,22 +47,19 @@ const VehicleForm = () => {
 
     try {
       const formData = new FormData();
-      Object.keys(vehicleData).forEach((key) => {
+      Object.entries(vehicleData).forEach(([key, value]) => {
         if (key === "images" || key === "documents") {
-          if (vehicleData[key] && vehicleData[key].length > 0) {
-            for (let i = 0; i < vehicleData[key].length; i++) {
-              formData.append(key, vehicleData[key][i]);
-            }
+          if (value && value.length > 0) {
+            Array.from(value).forEach((file) => formData.append(key, file));
           } else {
-            setError(`Please upload at least one ${key}.`);
-            return;
+            throw new Error(`Please upload at least one ${key}.`);
           }
         } else {
-          formData.append(key, vehicleData[key]);
+          formData.append(key, value);
         }
       });
 
-      const response = await axios.post("http://localhost:5000/api/vehicles/add", formData, {
+      const response = await axios.post("http://localhost:5555/api/vehicles/add", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -92,7 +89,6 @@ const VehicleForm = () => {
             <option value="">Select Vehicle Type</option>
             <option value="Luxury">Luxury</option>
             <option value="Classic">Classic</option>
-            
           </select>
 
           <select name="condition" className="input-field" value={vehicleData.condition} onChange={handleChange} required>

@@ -31,14 +31,14 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="container mx-auto flex items-center py-6 px-6" id="navBar">
-        <div className="flex mt-1.5">
+      <nav className="container mx-auto flex py-6 " id="navBar">
+        <div className="flex mt-1.5 ml-8">
           <Link to="/" className="text-2xl font-medium">
             Elite Auto Auction
           </Link>
         </div>
 
-        <div className="hidden md:flex ml-38 mt-3 space-x-10">
+        <div className="hidden md:flex ml-20 mt-3 space-x-10">
           <Link
             to="#"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
@@ -47,7 +47,7 @@ const Navbar = () => {
           </Link>
 
           <Link
-            to="/user"
+            to="/register-vehicle"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Submit a Vehicle
@@ -95,21 +95,34 @@ const Navbar = () => {
         </div>
 
         {/* Right Icons */}
-        <div className="flex ml-40 space-x-10">
+        <div className="flex ml-15 space-x-10">
           <Link to="/profile" className="hover:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700 flex mt-2" />
           </Link>
 
           <SearchBar />
 
-          <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
+          {/* <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
             <HiBars3BottomRight className="h-6 w-6" />
-          </button>
+          </button> */}
         </div>
+        {/* Login button */}
+        <Link to="/login">
+        <button className="bg-blue-700 w-20 h-10 text-white rounded ml-10">
+          Login
+        </button>
+      </Link>
+
+          {/* signin button */}
+          <Link to="/signup">
+        <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
+          SignUp
+        </button>
+      </Link>
       </nav>
 
       {/* Mobile Navigation */}
-      <div
+      {/* <div
         className={`fixed top-0 left-0 w-3/4 sm:w-1/2 md:w-1/3 h-full bg-white shadow-lg transform transition-transform duration-300 z-50 ${
           navDrawerOpen ? "translate-x-0" : "-translate-x-full"
         }`}
@@ -163,8 +176,8 @@ const Navbar = () => {
               Contact Us
             </Link>
           </nav>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
 
       {/* Scoreboard Popup */}
       {scoreboardPopupOpen && (

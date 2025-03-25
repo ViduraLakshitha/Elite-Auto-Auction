@@ -1,73 +1,65 @@
 import mongoose from "mongoose";
 
 const auctionSchema = new mongoose.Schema(
-      {
-        userId: {
+    {
+        vehicleId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User", // Reference the Vehicle collection
+            ref: "Vehicle",
             required: true,
         },
 
-
-            vehicleId: {
-                  type: mongoose.Schema.Types.ObjectId,
-                  ref: "Vehicle", // Reference the Vehicle collection
-                  required: true,
-            },
-
-            startDateTime: {
-                type: Date,
-                required: true,
-                validate: {
-                      validator: function (value) {
-                            return this.endDate ? value < this.endDate : true;
-                      },
-                      message: "Start date must be before the end date",
-                },
-          },
-
-          endDateTime: {
+        startDateTime: {
             type: Date,
             required: true,
             validate: {
-                  validator: function (value) {
-                        return this.startDate ? value > this.startDate : true;
-                  },
-                  message: "End date must be after the start date",
+                validator: function (value) {
+                    return this.endDateTime ? value < this.endDateTime : true;
+                },
+                message: "Start date must be before the end date",
             },
-      },
+        },
 
-            initialVehiclePrice: {
-                  type: Number,
-                  required: true,
-                  min: [0, "Price cannot be negative"], // Ensures price is not negative
+        endDateTime: {
+            type: Date,
+            required: true,
+            validate: {
+                validator: function (value) {
+                    return this.startDateTime ? value > this.startDateTime : true;
+                },
+                message: "End date must be after the start date",
             },
+        },
 
-            isVerified: {
-                type: Boolean,
-                default: false,
-              },
-  
+        initialVehiclePrice: {
+            type: Number,
+            required: true,
+            min: [0, "Price cannot be negative"],
+        },
 
-            currentBid: {
-                  type: Number,
-                  required: true,
-                  default: 0, // Starts at 0 if no bids yet
-            },
+        isVerified: {
+            type: Boolean,
+            default: false,
+        },
 
-            auctionStates: {
-                  type: String,
-                  enum: ["pending", "active", "completed", "cancelled"], // Restrict valid states
-                  default: "pending",
-                  required: true,
-            },
+        currentBid: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
 
-            remainingTime: {  
-                type: Number,
-                default: 0,
-          },
-      },
-      { timestamps: true } // Adds createdAt and updatedAt fields
+        auctionStates: {
+            type: String,
+            enum: ["pending", "active", "completed", "cancelled"],
+            default: "pending",
+            required: true,
+        },
+
+        remainingTime: {
+            type: Number,
+            default: 0,
+        },
+    },
+    { timestamps: true } // Adds createdAt and updatedAt fields
 );
 
-export const Auction = mongoose.model("Auction", auctionSchema);
+export default mongoose.model("Auction", auctionSchema);

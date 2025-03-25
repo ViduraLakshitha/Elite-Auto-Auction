@@ -3,6 +3,7 @@ import Header from "../component/common/Header";
 import Footer from "../component/common/Footer";
 import React, { useEffect, useState } from 'react';
 import AuctionCard from '../component/auction/AuctionCard';
+import AuctionSlider from "../component/common/AuctionSlider";
 
 const Home = () => {
     const [auctions, setAuctions] = useState([]);
@@ -33,6 +34,11 @@ const Home = () => {
     return (
         <div>
             <Header />
+
+            <div className="mt-10 mb-10">
+                <AuctionSlider />
+            </div>
+
             <h1>Auctions</h1>
             {auctions && auctions.length > 0 ? (
                 auctions.map((auction) => (

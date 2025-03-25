@@ -71,7 +71,7 @@ export const verifyEmail = async (req, res) => {
         await user.save();
 
         // Redirect to a success page
-        res.redirect("http://localhost:5173/verification-success");  // Adjust URL as needed
+        res.redirect("http://localhost:5173/");  // Adjust URL as needed
     } catch (error) {
         console.error("Email verification error:", error);
         res.status(400).json({ error: "Invalid or expired token" });
