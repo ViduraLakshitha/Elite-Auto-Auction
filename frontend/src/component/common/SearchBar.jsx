@@ -6,10 +6,6 @@ const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSearchToggle = () => {
-    setIsOpen(!isOpen);
-  };
-
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("search Term: ", searchTerm);
@@ -40,24 +36,9 @@ const SearchBar = () => {
             </button>
           </div>
 
-          {/* close button */}
-          {/* <button
-            type="button"
-            onClick={handleSearchToggle}
-            className="absolute -right-1/12 top-2.5 transform-translate-y-1/2 text-gray-600 hover:text-gray-800"
-          >
-            <HiMiniXMark className="h-5 w-5" />
-          </button> */}
         </form>
-      {/* ) : (
-        // <button onClick={handleSearchToggle}>
-        //   <HiMagnifyingGlass className="h-6 w-6  flex mt-2" />
-        // </button>
-      )} */}
     </div>
   );
 };
 
 export default SearchBar;
-
-

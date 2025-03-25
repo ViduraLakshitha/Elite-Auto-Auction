@@ -77,14 +77,10 @@ const Home = () => {
   return (
         <div>
             <Header />
-
-            <div className="mt-10 mb-10">
-                <AuctionSlider/>
-            </div>
             
             <div className="m-4">
-            <h1 className="font-bold text-xl ml-70">Active Auctions</h1>
-            <div className="ml-65 mr-50 mb-10 flex flex-row flex-wrap gap-8 ">
+            <h1 className="font-bold text-xl ml-25">Active Auctions</h1>
+            <div className="ml-23 mr-10 mb-10 flex flex-row flex-wrap gap-8 ">
             {auctions.length > 0 ? (
                 auctions.map((auction) => (
                     <AuctionCard 
@@ -98,29 +94,10 @@ const Home = () => {
             )}
             </div>
             </div>
-
-            {userId && recommendedAuctions.length > 0 && (
-                <div className=" ml-4 mt-5">
-                    <h2 className="font-bold text-xl ml-70">Recommended for You</h2>
-                    <div className="ml-65 mr-50 mb-10 flex flex-row flex-wrap gap-8 ">
-                    
-                    {recommendedAuctions.map((auction) => 
-                    auction.vehicleId ? (
-                        <AuctionCard 
-                            key={auction._id} 
-                            auction={auction} 
-                            onClick={() => handleAuctionCardClick(auction._id, auction.vehicleId)} 
-                        />
-                    ): null)}
-                    </div>
-                </div>
+      </div>
             )}
 
             <Footer />
 
-        </div>
-    
-  );
-};
 
 export default Home;

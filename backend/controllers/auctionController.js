@@ -166,3 +166,22 @@ export const getRecommendedAuctions = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+export const searchAuctions = async (req, res) => {
+    try {
+        const { query } = req.query;
+        
+        if (!query) {
+            return res.status(400).json({ message: "Search query is required" });
+        }
+
+        const auctions = await Auction.find({
+            auctionTitle: { $regex: query, $options: "i" }  // Case-insensitive search
+        }).populate("vehicleId"); // Populate vehicle details if needed
+
+        res.status(200).json(auctions);
+    } catch (error) {
+        res.status(500).json({ message: "Error searching auctions", error });
+    }
+};
+

@@ -24,7 +24,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex ml-20 mt-3 space-x-10">
           <Link
-            to="#"
+            to="/auctions"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Auctions
@@ -45,14 +45,14 @@ const Navbar = () => {
           </Link>
 
           <Link
-            to="#"
+            to="/about"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             About Us
           </Link>
 
           <Link
-            to="#"
+            to="/contact"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Contact Us

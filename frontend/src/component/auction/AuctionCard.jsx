@@ -9,7 +9,7 @@ const socket = io("http://localhost:5555");
 export default function  AuctionCard ({ auction, onClick }) {
 
     return (
-        <div className="border p-4 my-2 rounded-md shadow-md h-120 w-120 " onClick={onClick}>
+        <div className="border p-4 my-2 rounded-md shadow-md h-100 w-80 " onClick={onClick}>
             <h2 className='font-extrabold text-xl'>{auction.auctionTitle}</h2>
             <p className='text-gray-600'>auction id: {auction._id}</p>
             <p className='text-gray-500'>Initial price: ${auction.initialVehiclePrice}</p>
