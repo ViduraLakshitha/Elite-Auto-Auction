@@ -12,7 +12,7 @@ const AboutUs = () => {
           Welcome to our premium vehicle auction platform! We specialize in bringing you the best luxury and classic cars from trusted sellers worldwide. Our mission is to provide a secure, transparent, and engaging auction experience for both buyers and sellers.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-30">
           <div>
             <h2 className="text-2xl font-semibold mb-3">Our Mission</h2>
             <p className="text-gray-600">
@@ -31,7 +31,7 @@ const AboutUs = () => {
           </div>
         </div>
 
-        <div className="text-center mt-10">
+        <div className="text-center mt-20">
           <h2 className="text-2xl font-semibold mb-3">Get in Touch</h2>
           <p className="text-gray-700">
             Have any questions? Feel free to <a href="/contact" className="text-blue-500 font-semibold">Contact Us</a> anytime!
