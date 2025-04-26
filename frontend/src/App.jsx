@@ -16,7 +16,7 @@ import Signup from "./pages/Signup.jsx";
 import Login from "./pages/Login.jsx"; 
 import Dashboard from "./pages/Dashboard.jsx"; 
 import VehicleForm from "./pages/VehicleForm.jsx"; 
-import VehicleList from "./component/user/VehicleList.jsx"; // ✅ Import VehicleList
+import VehicleList from "./component/user/VehicleList.jsx"; //Import VehicleList
 
 
 const App = () => {

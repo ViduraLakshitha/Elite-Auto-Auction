@@ -36,7 +36,7 @@ const Signup = () => {
           "Content-Type": "application/json",
         },
       });
-
+      
       console.log("Registration response:", res.data); // Debugging log
 
       // Check if registration was successful and email verification is needed

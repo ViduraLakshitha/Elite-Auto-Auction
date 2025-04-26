@@ -35,7 +35,7 @@ const Login = () => {
 
       if (res.data?.token) {
         saveToken(res.data.token);  // Save the JWT token if login is successful
-        navigate("/dashboard");  // Redirect to dashboard after login
+        navigate("/");  // Redirect to dashboard after login
       } else {
         setError("Login failed. Please try again.");
       }
