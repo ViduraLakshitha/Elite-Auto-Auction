@@ -1,5 +1,6 @@
 import {Auction} from '../model/auction.js';
 import { io } from "../index.js";  // Import Socket.IO instance
+import { Vehicle } from '../model/vehicle.js';
 
 export const createAuction = async (req, res) => {
     try {
@@ -80,7 +81,11 @@ export const updateAuctionStatuses = async () => {
 
 export const getAllAuctions = async (req, res) => {
     try{
-        const auctions = await Auction.find({auctionStatus:"active"});
+        const auctions = await Auction.find({auctionStatus:"active"})
+        .populate({
+            path:'vehicleId',
+        })
+        .exec(); 
         return res.status(201).json({auctions})
     }catch(error){
         return res.status(500).json({ message: error.message });
@@ -90,7 +95,11 @@ export const getAllAuctions = async (req, res) => {
 export const getAuctionById = async (req, res) => {
     try {
         const { id } = req.params; // Get the auction ID from URL parameters
-        const auction = await Auction.findById(id);//.populate("userId vehicleId"); // Populate related data if needed
+        const auction = await Auction.findById(id)
+        .populate({
+            path:'vehicleId',
+        })
+        .exec(); //.populate("userId vehicleId"); // Populate related data if needed
 
         if (!auction) {
             return res.status(404).json({ message: "Auction not found" });

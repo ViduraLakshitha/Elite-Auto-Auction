@@ -13,12 +13,7 @@ import sellerScoreboardRoutes from './routes/sellerScoreboardRoutes.js';
 import buyerScoreboardRoutes from './routes/buyerScoreboardRoutes.js';
 import { Server } from "socket.io";
 import http from "http";
-
-//import { Server } from "socket.io";
-//import http from "http";
-//test
-
-
+import path from "path";
 
 const app = express();
 
@@ -26,10 +21,12 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(express.json());
+app.use(cors());
 
-app.use(cors())
+// Serve uploaded images statically
+app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
 
-app.use('/admin',adminRoute);
+app.use('/admin', adminRoute);
 app.use('/user', userRoute);
 app.use('/vehicle', vehicleRoute);
 app.use('/auction', auctionRoute);
@@ -40,19 +37,16 @@ app.use('/bid', bidRoute);
 mongoose
     .connect(mongoDBURL)
     .then(()=>{
-        console.log("App connected to databaase");
+        console.log("App connected to database");
 
         // Schedule status updates every second
         cron.schedule("* * * * * *", async () => {
-            //console.log("Running auction status update task...");
             await updateAuctionStatuses();
         });
     })
     .catch((error)=>{
         console.log(error);
-        
-    })
-
+    });
 
 // Listen for new updates
 io.on("connection", (socket) => {
@@ -63,9 +57,8 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(PORT,()=>{
-    console.log(`app is listening on port ${PORT}`);
-    
-})
+server.listen(PORT, () => {
+    console.log(`App is listening on port ${PORT}`);
+});
 
 export { io };

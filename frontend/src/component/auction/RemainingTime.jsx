@@ -4,7 +4,7 @@ import CountdownTimer from './CountdownTimer';
 
 const socket = io("http://localhost:5555");
 
-export default function RemainingTime ({auction}) {
+export default function RemainingTime ({auction, className}) {
     const [endTime, setEndTime] = useState(new Date(auction.endDateTime).getTime());
 
     useEffect(()=>{
@@ -27,7 +27,7 @@ export default function RemainingTime ({auction}) {
   return (
     <div>
         {auction.auctionStatus === "active" && (
-                <CountdownTimer endTime={endTime} onFinish={handleFinish} />
+                <CountdownTimer className={className} endTime={endTime} onFinish={handleFinish} />
             )}
     </div>
   )

@@ -72,3 +72,34 @@ export const ManageBid = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 }
+
+// export const getAllBidsByAuctionId=async(req,res)=>{
+//     try{
+//         const {id} = req.params;
+//         const Bids=await Bid.find({auctionId:id});
+
+//         if(!Bids){
+//             return res.status(404).json({message: "Bids not found"})
+//         }
+
+//         return res.status(201).json({Bids})
+//     }catch(error){
+//         return res.status(500).json({message: error.message})
+//     }
+// }
+
+
+export const getAllBidsByAuctionId = async (req, res) => {
+    try {
+        const { id } = req.params; // Get auction ID from URL
+        const bids = await Bid.find({ auctionId: id }); // Fetch bids
+
+        if (bids.length === 0) {  // Check if no bids exist
+            return res.status(404).json({ message: "No bids found for this auction." });
+        }
+
+        return res.status(200).json(bids); 
+    } catch (error) {
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+};

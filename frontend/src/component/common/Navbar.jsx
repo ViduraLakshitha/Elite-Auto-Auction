@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="container mx-auto flex iterms-center  py-6 px-6"
+        className="container mx-auto flex py-6"
         id="navBar"
       >
         <div className="flex mt-1.5">
@@ -22,7 +22,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="hidden md:flex ml-30 mt-3 space-x-10">
+        <div className="hidden md:flex ml-20 mt-3 space-x-10">
           <Link
             to="#"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
@@ -60,17 +60,28 @@ const Navbar = () => {
         </div>
 
         {/* Right Icons */}
-        <div className="flex ml-38 space-x-10">
+        <div className="flex ml-15 space-x-10">
           <Link to="/profile" className="hover:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700 flex mt-2" />
           </Link>
 
           <SearchBar />
 
-          <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
+          {/* <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
             <HiBars3BottomRight className="h-6 w-6" />
-          </button>
+          </button> */}
         </div>
+
+            {/* Login button */}
+        <button className="bg-blue-700 w-20 h-10 text-white border: rounded ml-10">
+            Loogin
+          </button>
+
+          {/* signin button */}
+        <button className="bg-blue-700 w-20 h-10 text-white border: rounded ml-5">
+            Signin
+          </button>
+
       </nav>
 
       {/* Mobile Navigation */}

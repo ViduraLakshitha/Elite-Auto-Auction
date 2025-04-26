@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 
 const socket = io("http://localhost:5555");
 
-export default function currentBid( {auction} ) {
+export default function currentBid( {auction, className} ) {
     const [currentBid, setCurrentBid] = useState(auction.currentBid);
 
     useEffect(()=>{
@@ -20,7 +20,7 @@ export default function currentBid( {auction} ) {
 
     return (
         <div>
-            <p>Current Bid: ${currentBid}</p>
+            <p className={`${className}`}><span className='font-bold'>Current Bid:</span> ${currentBid}</p>
         </div>
     )
 }

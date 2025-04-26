@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const CountdownTimer = ({ endTime, onFinish }) => {
+const CountdownTimer = ({ endTime, onFinish, className }) => {
 
     const endTimee = new Date(endTime).getTime() - (5.5 * 60 * 60 * 1000);
     const [remainingTime, setRemainingTime] = useState(0); 
@@ -33,9 +33,9 @@ const CountdownTimer = ({ endTime, onFinish }) => {
         const seconds = totalSeconds % 60;
 
         if (totalSeconds >= 86400) {
-            return `${days}D Remaining`;
+            return <p><span className='text-green-800 font-bold'>{days}D </span>Remaining</p>;
         } else {
-            return `Ends In ${hours.toString().padStart(2, '0')} Hrs, ${minutes.toString().padStart(2, '0')} Min, ${seconds.toString().padStart(2, '0')} Secs `;
+            return <p>Ends In <span className='text-red-700 font-bold'>{hours.toString().padStart(2, '0')}</span> Hrs, <span className='text-red-700 font-bold'>{minutes.toString().padStart(2, '0')}</span> Min, <span className='text-red-700 font-bold'>{seconds.toString().padStart(2, '0')}</span> Secs </p>;
         }
     };
 
@@ -43,7 +43,7 @@ const CountdownTimer = ({ endTime, onFinish }) => {
         <>
             <div>
                 {remainingTime > 0 ? (
-                    <span>{formatTime(remainingTime)}</span>
+                    <span className={`${className}`}>{formatTime(remainingTime)}</span>
                 ) : (
                     <span>SOLD</span>
                 )}

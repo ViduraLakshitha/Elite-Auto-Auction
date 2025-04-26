@@ -6,13 +6,13 @@ export default function EndDate ({auction}) {
     useEffect(()=>{
         const date = new Date(auction.endDateTime);
         const newDate = addMinutes(date, -330);// Subtract 5 hours and 30 minutes (330 minutes)
-        const formattedDate = format(new Date(newDate), "EEEE, MMMM d ");
+        const formattedDate = format(new Date(newDate), "EEEE, MMMM d h:mma");
         setEndDate(formattedDate)
     }, [auction._id])
 
     return(
         <div>
-            <p>Ends On: {endDate}</p>
+            <p className='text-gray-500 text-s'>Ends On: {endDate}</p>
         </div>
     )
 }
