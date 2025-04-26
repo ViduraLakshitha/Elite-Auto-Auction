@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
-import "jspdf-autotable"; // For PDF table generation
+import "jspdf-autotable";
 import {
   FaUser,
   FaTrophy,
   FaAward,
   FaDownload,
   FaChartLine,
-} from "react-icons/fa"; // Import icons
+} from "react-icons/fa"; 
 
 const SellerScoreboard = () => {
   const [sellers, setSellers] = useState([]);
@@ -25,9 +25,9 @@ const SellerScoreboard = () => {
       });
   }, []);
 
-  // Generate PDF for the top seller
+  // Generate PDF 
   const generatePDF = () => {
-    const topSeller = sellers[0]; // Get the top seller (winner)
+    const topSeller = sellers[0]; // Get the winner
     if (!topSeller) {
       alert("No sellers found to generate a report.");
       return;
@@ -43,7 +43,7 @@ const SellerScoreboard = () => {
     doc.text(`Rank: ${topSeller.sellerRank}`, 10, 40);
     doc.text(`Awards: ${topSeller.sellerAward}`, 10, 50);
 
-    doc.save("top_seller_report.pdf");
+    doc.save("top seller.pdf");
   };
 
   return (
@@ -107,13 +107,13 @@ const SellerScoreboard = () => {
         </table>
       </div>
 
-      {/* Download PDF Button */}
+    
       <div className="flex justify-end mb-4">
         <button
           onClick={generatePDF}
           className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-200"
         >
-          <FaDownload className="mr-2" /> Download Top Seller Report (PDF)
+          <FaDownload className="mr-2" /> Download Report
         </button>
       </div>
 
@@ -126,3 +126,49 @@ const SellerScoreboard = () => {
 };
 
 export default SellerScoreboard;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+
+// const TopCompletedAuctions = () => {
+//   const [topUsers, setTopUsers] = useState([]);
+
+//   useEffect(() => {
+//     const fetchTopUsers = async () => {
+//       try {
+//         const response = await axios.get("http://localhost:5555/auctions/top-completed");
+//         setTopUsers(response.data);
+//       } catch (error) {
+//         console.error("Error fetching top users:", error);
+//       }
+//     };
+
+//     fetchTopUsers();
+//   }, []);
+
+//   return (
+//     <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+//       <h2 className="text-xl font-bold mb-4"> Top 10 Users (Completed Auctions)</h2>
+//       <table className="w-full border-collapse border border-gray-300">
+//         <thead>
+//           <tr className="bg-gray-200">
+//             <th className="border p-2">Rank</th>
+//             <th className="border p-2">User ID</th>
+//             <th className="border p-2">Completed Auctions</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {topUsers.map((user, index) => (
+//             <tr key={user._id} className="border">
+//               <td className="border p-2">{index + 1}</td>
+//               <td className="border p-2">{user._id}</td>
+//               <td className="border p-2">{user.completedAuctionsCount}</td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
+//     </div>
+//   );
+// };
+
+// export default TopCompletedAuctions;

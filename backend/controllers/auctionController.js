@@ -106,6 +106,27 @@ export const getAllAuctions = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 }
+//=====
+// In your auction completion logic
+const updateUserStats = async (auction) => {
+    // Update seller stats
+    await User.findByIdAndUpdate(auction.userId, {
+      $inc: { successfulCompletedAuctions: 1 }
+    });
+    
+    // Find winning bid and update buyer stats
+    const winningBid = await Bid.findOne({ auctionId: auction._id })
+      .sort({ bidAmount: -1 })
+      .limit(1);
+    
+    if (winningBid) {
+      await User.findByIdAndUpdate(winningBid.userId, {
+        $inc: { winningBids: 1 }
+      });
+    }
+  };
+
+  
 
 // router.get('/', async (req,res) => {
 //     try {
@@ -120,3 +141,5 @@ export const getAllAuctions = async (req, res) => {
         
 //     }
 // })
+
+

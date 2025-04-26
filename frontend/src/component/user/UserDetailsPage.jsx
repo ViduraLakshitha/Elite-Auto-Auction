@@ -45,6 +45,8 @@ const UserDetailsPage = () => {
     fetchUser();
   }, []);
 
+  
+
   if (loading) {
     return <div className="container mx-auto p-6">Loading...</div>;
   }
@@ -146,17 +148,19 @@ const UserDetailsPage = () => {
           <FaEdit className="mr-2" /> Edit User
         </button>
 
+        
+
 
           {/* Seller Rank */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <FaTrophy className="mr-2 text-gray-700" />
             <p className="text-gray-700">
               <span className="font-semibold">Seller Rank:</span> {user.sellerRank}
             </p>
-          </div>
+          </div> */}
 
           {/* Seller Award */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <FaAward className="mr-2 text-gray-700" />
             <p className="text-gray-700">
               <span className="font-semibold">Seller Award:</span>{" "}
@@ -174,18 +178,18 @@ const UserDetailsPage = () => {
                 {user.sellerAward}
               </span>
             </p>
-          </div>
+          </div> */}
 
           {/* Buyer Rank */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <FaTrophy className="mr-2 text-gray-700" />
             <p className="text-gray-700">
               <span className="font-semibold">Buyer Rank:</span> {user.buyerRank}
             </p>
-          </div>
+          </div> */}
 
           {/* Buyer Award */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <FaAward className="mr-2 text-gray-700" />
             <p className="text-gray-700">
               <span className="font-semibold">Buyer Award:</span>{" "}
@@ -203,7 +207,7 @@ const UserDetailsPage = () => {
                 {user.buyerAward}
               </span>
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/user/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params;// Get URL ID
 
     // Check if the ID is a valid MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -67,7 +67,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// Protected routes (add authentication middleware later)
+// Protected routes
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);

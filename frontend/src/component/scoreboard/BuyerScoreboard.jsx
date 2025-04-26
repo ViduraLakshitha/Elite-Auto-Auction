@@ -25,9 +25,9 @@ const BuyerScoreboard = () => {
       });
   }, []);
 
-  // Generate PDF for the top buyer (winner)
+  // Generate PDF 
   const generatePDF = () => {
-    const topBuyer = buyers[0]; // Get the top buyer (winner)
+    const topBuyer = buyers[0]; // Get the top buyer
     if (!topBuyer) {
       alert("No buyers found to generate a report.");
       return;
@@ -50,7 +50,7 @@ const BuyerScoreboard = () => {
     <div className="container mx-auto p-6  bg-blue-200">
       <h2 className="text-2xl font-bold mb-4 text-center">Top Buyers</h2>
 
-      {/* Buyer Table */}
+      
       <div className="overflow-x-auto">
         <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
           <thead className="bg-gray-100">
@@ -107,17 +107,17 @@ const BuyerScoreboard = () => {
         </table>
       </div>
 
-      {/* Download PDF Button */}
+      
       <div className="flex justify-end mb-4">
         <button
           onClick={generatePDF}
           className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-200"
         >
-          <FaDownload className="mr-2" /> Download Top Buyer Report (PDF)
+          <FaDownload className="mr-2" /> Download Report (PDF)
         </button>
       </div>
 
-      {/* Footer Note */}
+      
       <p className="text-gray-600 text-sm text-center mt-4">
         Only the top 10 buyers are displayed.
       </p>
@@ -126,3 +126,4 @@ const BuyerScoreboard = () => {
 };
 
 export default BuyerScoreboard;
+

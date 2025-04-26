@@ -8,6 +8,18 @@ const paymentSchema = new mongoose.Schema(
                   required: true,
             },
 
+            auctionId: {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: "Auction",
+                  required: true
+            },
+
+            bidId: {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: "Bid",
+                  required: true
+       },
+
             transactionId: {
                   type: String,
                   required: true,
@@ -32,6 +44,42 @@ const paymentSchema = new mongoose.Schema(
                   enum: ["PayPal", "Stripe", "Credit Card", "Bank Transfer"],
                   required: true,
             },
+
+            isDeposit: {
+                  type: Boolean,
+                  default: false
+            },
+
+            currency: {
+                  type: String,
+                  default: "USD"
+            },
+             // Add these fields for auction payments
+    auctionItem: {
+      type: String,
+      required: function() { return !this.isDeposit; }
+    },
+    sellerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: function() { return !this.isDeposit; }
+    },
+    fees: {
+      platformFee: {
+        type: Number,
+        default: 0
+      },
+      processingFee: {
+        type: Number,
+        default: 0
+      }
+    },
+    netAmount: {
+      type: Number,
+      required: function() { return !this.isDeposit; }
+    },
+  
+      gatewayResponse: Object // Store raw payment processor response
       },
       { timestamps: true }
 );

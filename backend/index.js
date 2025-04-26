@@ -30,6 +30,7 @@ app.use('/buyers', buyerScoreboardRoutes);
 app.use('/payments', paymentRoutes);
 
 
+
 mongoose.connect(mongoDBURL)
   .then(() => {
     console.log("Database connected successfully!");
