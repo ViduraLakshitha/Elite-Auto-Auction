@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Sidebar from "../component/admin/Sidebar.jsx";
 import Papa from "papaparse"; // Import papaparse for CSV generation
 
 const AdminDashboard = () => {
+  const location = useLocation();
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [showWelcome, setShowWelcome] = useState(false);
+
+   // Check for welcome message from login
+   useEffect(() => {
+    if (location.state?.showWelcome) {
+      setWelcomeMessage(location.state.welcomeMessage);
+      setShowWelcome(true);
+      
+      // Hide welcome message after 3 seconds
+      const timer = setTimeout(() => {
+        setShowWelcome(false);
+      }, 6000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
 
   // Fetch all users on component mount
   useEffect(() => {
@@ -94,6 +113,15 @@ const AdminDashboard = () => {
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <Sidebar />
+
+      <div className="flex-1 p-6 bg-blue-200">
+        {/* Welcome Message */}
+        {showWelcome && (
+          <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg animate-fade-in">
+            <h2 className="text-xl font-semibold">{welcomeMessage}</h2>
+            <p>You have successfully logged in to the admin dashboard.</p>
+          </div>
+        )}
 
       {/* Main Content */}
       <div className="flex-1 p-6 bg-blue-200">
@@ -204,6 +232,8 @@ const AdminDashboard = () => {
           </tbody>
         </table>
       </div>
+      </div>
+
     </div>
   );
 };

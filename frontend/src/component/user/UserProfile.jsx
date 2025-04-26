@@ -304,8 +304,8 @@ const UserProfile = () => {
                     type="email"
                     name="email"
                     value={formData.email}
-                    onChange={handleInputChange}
-                    className={`w-full p-2 border rounded bg-white${
+                    // onChange={handleInputChange}
+                    disabled className={`w-full p-2 border rounded bg-white${
                       errors.email ? "border-red-500" : ""
                     }`}
                     required

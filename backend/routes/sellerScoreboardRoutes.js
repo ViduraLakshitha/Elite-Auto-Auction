@@ -4,10 +4,10 @@ import { getTopSellers, updateSellerScoreboard } from '../controllers/sellerScor
 
 const router = Router();
 
-// Fix: Corrected route to be `/sellers` (not `/sellers/sellers`)
+// Corrected route to be "/sellers"
 router.get('/', getTopSellers);
 
-// Fix: Proper response message for manual update
+// Proper response message for manual update
 router.get('/update', async (req, res) => {
   try {
     await updateSellerScoreboard();

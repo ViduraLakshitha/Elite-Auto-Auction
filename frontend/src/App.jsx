@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import SellerScoreboard from "./component/scoreboard/SellerScoreboard.jsx";
 import BuyerScoreboard from "./component/scoreboard/BuyerScoreboard.jsx";
@@ -10,6 +10,7 @@ import Settings from "./component/admin/Settings.jsx";
 import PaymentPage from "./component/payment/PaymentPage.jsx";
 import ChartAdmin from "./component/admin/ChartAdmin.jsx";
 import UserDetailsPage from "./component/user/UserDetailsPage.jsx";
+import AdminLogin from "./component/admin/AdminLogin.jsx";
 
 // Import missing components
 import Signup from "./pages/Signup.jsx"; 
@@ -18,6 +19,10 @@ import Dashboard from "./pages/Dashboard.jsx";
 import VehicleForm from "./pages/VehicleForm.jsx"; 
 import VehicleList from "./component/user/VehicleList.jsx"; //Import VehicleList
 
+const ProtectedAdminRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem("isAdminLoggedIn") === "true";
+  return isAuthenticated ? children : <Navigate to="/admin/login" replace />;
+};
 
 const App = () => {
   return (
@@ -54,6 +59,50 @@ const App = () => {
 
         {/* Payments */}
         <Route path="/payments" element={<PaymentPage />} />
+        <Route path="/user" element={<UserDetailsPage />} />
+        
+        {/* Admin Login */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        
+        {/* Admin Routes */}
+        <Route path="/admin/" element={
+          <ProtectedAdminRoute>
+            <AdminDashboard />
+          </ProtectedAdminRoute>
+        } />
+        <Route path="/admin/sellers" element={
+          <ProtectedAdminRoute>
+            <SellerScoreboard />
+          </ProtectedAdminRoute>
+        } />
+        <Route path="/admin/buyers" element={
+          <ProtectedAdminRoute>
+            <BuyerScoreboard />
+          </ProtectedAdminRoute>
+        } />
+        <Route path="/admin/settings" element={
+          <ProtectedAdminRoute>
+            <Settings />
+          </ProtectedAdminRoute>
+        } />
+        <Route path="/admin/profile" element={
+          <ProtectedAdminRoute>
+            <Settings />
+          </ProtectedAdminRoute>
+        } />
+        <Route path="/admin/admin" element={
+          <ProtectedAdminRoute>
+            <AdminDashboard />
+          </ProtectedAdminRoute>
+        } />
+        <Route path="/admin/chart" element={
+          <ProtectedAdminRoute>
+            <ChartAdmin />
+          </ProtectedAdminRoute>
+        } />
+        
+        {/* Catch-all route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
