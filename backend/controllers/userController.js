@@ -57,4 +57,4 @@ export async function deleteUser(req, res) {
   } catch (err) {
     res.status(500).json({ message: "Error deleting user", error: err.message });
   }
-}
+} 

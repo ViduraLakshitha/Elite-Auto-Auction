@@ -1,4 +1,4 @@
-import Auction from '../model/auction.js'; // ✅ Correct import
+import Auction from '../model/auction.js'; // 
 
 export const createAuction = async (req, res) => {
     try {
