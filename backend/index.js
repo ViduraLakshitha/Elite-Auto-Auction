@@ -28,6 +28,8 @@ app.use('/auction', auctionRoute);
 app.use('/sellers', sellerScoreboardRoutes); 
 app.use('/buyers', buyerScoreboardRoutes);
 app.use('/payments', paymentRoutes);
+app.use("/api", auctionRoute);
+
 
 
 

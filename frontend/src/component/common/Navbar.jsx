@@ -80,7 +80,7 @@ const Navbar = () => {
           </div>
 
           <Link
-            to="/payments"
+            to="/scoreboard"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             About Us

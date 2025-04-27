@@ -1,4 +1,6 @@
 import {Auction} from '../model/auction.js';
+import { Bid } from "../model/bid.js";
+
 
 export const createAuction = async (req, res) => {
     try {
@@ -126,20 +128,20 @@ const updateUserStats = async (auction) => {
     }
   };
 
-  
+  // Controller to get the scoreboard
+export const getScoreboard = async (req, res) => {
+  try {
+    const scoreboard = await Auction.find({
+      auctionStatus: { $in: ["ended", "completed"] },
+      winningBid: { $gt: 0 },
+    })
+      .populate("vehicleId", "vehicleName model") // only get name and model of vehicle
+      .populate("finalWinnerUserId", "name email") // only get name and email of winner
+      .sort({ winningBid: -1 }); // highest winning bid first
 
-// router.get('/', async (req,res) => {
-//     try {
-//         const books = await Book.find({});
-//         return res.status(201).json({
-//             count:books.length,
-//             data:books
-//         });
-//     } catch (error) {
-//         console.log(error.message);
-//         res.status(500).send({message:error.message})
-        
-//     }
-// })
-
-
+    res.status(200).json(scoreboard);
+  } catch (error) {
+    console.error("Error fetching scoreboard:", error);
+    res.status(500).json({ message: "Failed to load scoreboard" });
+  }
+};

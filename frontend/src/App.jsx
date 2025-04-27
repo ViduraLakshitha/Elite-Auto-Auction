@@ -11,6 +11,7 @@ import PaymentPage from "./component/payment/PaymentPage.jsx";
 import ChartAdmin from "./component/admin/ChartAdmin.jsx";
 import UserDetailsPage from "./component/user/UserDetailsPage.jsx";
 import AdminLogin from "./component/admin/AdminLogin.jsx";
+import Scoreboard from "./pages/Scoreboard.jsx";
 
 const ProtectedAdminRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("isAdminLoggedIn") === "true";
@@ -23,11 +24,13 @@ const App = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/scoreboard" element={<ScoreboardPopup />} />
+        {/* <Route path="/scoreboard" element={<ScoreboardPopup />} /> */}
         <Route path="/admin/scoreboard" element={<ScoreboardPopup />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/payments" element={<PaymentPage />} />
         <Route path="/user" element={<UserDetailsPage />} />
+        <Route path="/scoreboard" element={<Scoreboard />} />
+
         
         {/* Admin Login */}
         <Route path="/admin/login" element={<AdminLogin />} />

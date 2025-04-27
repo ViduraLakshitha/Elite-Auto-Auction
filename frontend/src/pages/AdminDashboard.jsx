@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Sidebar from "../component/admin/Sidebar.jsx";
-import Papa from "papaparse"; // Import papaparse for CSV generation
+import Papa from "papaparse";
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -13,45 +13,42 @@ const AdminDashboard = () => {
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [showWelcome, setShowWelcome] = useState(false);
 
-   // Check for welcome message from login
-   useEffect(() => {
+  // Handle welcome message
+  useEffect(() => {
     if (location.state?.showWelcome) {
       setWelcomeMessage(location.state.welcomeMessage);
       setShowWelcome(true);
-      
-      // Hide welcome message after 3 seconds
-      const timer = setTimeout(() => {
-        setShowWelcome(false);
-      }, 6000);
-      
+
+      const timer = setTimeout(() => setShowWelcome(false), 6000);
       return () => clearTimeout(timer);
     }
   }, [location.state]);
 
-  // Fetch all users on component mount
+  // Fetch all users
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get("http://localhost:5555/user/");
         setUsers(response.data);
       } catch (error) {
-        setError("Error fetching users. Please try again later.");
         console.error("Error fetching users:", error);
+        setError("Error fetching users. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchUsers();
   }, []);
 
-  // Handle Approved User
+  // Approve user
   const handleApproveUser = async (userId) => {
     try {
       await axios.put(`http://localhost:5555/user/${userId}`, { accountState: "active" });
-      setUsers(users.map((user) =>
-        user._id === userId ? { ...user, accountState: "active" } : user
-      ));
+      setUsers((prev) =>
+        prev.map((user) =>
+          user._id === userId ? { ...user, accountState: "active" } : user
+        )
+      );
       alert("User approved successfully!");
     } catch (error) {
       console.error("Error approving user:", error);
@@ -59,11 +56,11 @@ const AdminDashboard = () => {
     }
   };
 
-  // Handle user deletion
+  // Delete user
   const handleDeleteUser = async (userId) => {
     try {
       await axios.delete(`http://localhost:5555/user/${userId}`);
-      setUsers(users.filter((user) => user._id !== userId));
+      setUsers((prev) => prev.filter((user) => user._id !== userId));
       alert("User deleted successfully!");
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -71,7 +68,7 @@ const AdminDashboard = () => {
     }
   };
 
-  // Filter users based on search query
+  // Filtered users
   const filteredUsers = users.filter((user) =>
     (`${user.fname ?? ""} ${user.lname ?? ""} ${user.email ?? ""}`)
       .toLowerCase()
@@ -80,160 +77,143 @@ const AdminDashboard = () => {
 
   // Generate CSV Report
   const generateCSVReport = () => {
+    if (filteredUsers.length === 0) {
+      alert("No users available to download.");
+      return;
+    }
+
     const csvData = filteredUsers.map((user) => ({
-      "First Name": user.fname,
-      "Last Name": user.lname,
-      "Email": user.email,
-      "Address": user.address,
-      "Country": user.country,
-      "Mobile No": user.mobileNo,
-      "Account State": user.accountState,
+      "First Name": user.fname || "",
+      "Last Name": user.lname || "",
+      "Email": user.email || "",
+      "Address": user.address || "",
+      "Country": user.country || "",
+      "Mobile No": user.mobileNo || "",
+      "Account State": user.accountState || "",
     }));
 
     const csv = Papa.unparse(csvData, { header: true });
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
+    const url = window.URL.createObjectURL(blob);
+
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "users_report.csv");
+    link.setAttribute("download", "luxury_vehicle_auction_users_report.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   if (loading) {
-    return <div className="flex min-h-screen p-6">Loading...</div>;
+    return <div className="flex min-h-screen items-center justify-center text-xl">Loading...</div>;
   }
 
   if (error) {
-    return <div className="flex min-h-screen p-6 text-red-500">{error}</div>;
+    return <div className="flex min-h-screen items-center justify-center text-red-500 text-xl">{error}</div>;
   }
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
       <Sidebar />
 
-      <div className="flex-1 p-6 bg-blue-200">
+      <div className="flex-1 p-6 bg-gradient-to-br from-gray-100 to-blue-200">
+
         {/* Welcome Message */}
         {showWelcome && (
-          <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg animate-fade-in">
-            <h2 className="text-xl font-semibold">{welcomeMessage}</h2>
-            <p>You have successfully logged in to the admin dashboard.</p>
+          <div className="mb-6 p-6 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900 font-bold text-xl rounded-lg shadow-lg animate-pulse">
+            {welcomeMessage} 🚀 Welcome to the Luxury Auction Admin Panel!
           </div>
         )}
 
-      {/* Main Content */}
-      <div className="flex-1 p-6 bg-blue-200">
-        <h2 className="text-2xl font-bold mb-6">User Profiles</h2>
+        {/* Header */}
+        <h2 className="text-4xl font-extrabold text-gray-800 mb-8">Manage User Profiles</h2>
 
-        {/* Search Bar and Download Button */}
-        <div className="flex items-center justify-between mb-4">
+        {/* Search & CSV Download */}
+        <div className="flex items-center justify-between mb-6">
           <input
             type="text"
-            placeholder="Search users..."
-            className="w-1/2 p-2 border bg-blue-50 border-gray-300 rounded"
+            placeholder="🔎 Search users..."
+            className="w-1/2 p-3 border-2 border-yellow-400 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button
             onClick={generateCSVReport}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
+            className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300"
           >
-            Download CSV Report
+            📄 Download User Report
           </button>
         </div>
 
         {/* User Table */}
-        <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-4 text-left text-sm font-semibold text-gray-700 uppercase">
-                Number
-              </th>
-              <th className="p-4 text-left text-sm font-semibold text-gray-700 uppercase">
-                Full Name
-              </th>
-              <th className="p-4 text-left text-sm font-semibold text-gray-700 uppercase">
-                Email
-              </th>
-              <th className="p-4 text-left text-sm font-semibold text-gray-700 uppercase">
-                Address
-              </th>
-              <th className="p-4 text-left text-sm font-semibold text-gray-700 uppercase">
-                Country
-              </th>
-              <th className="p-4 text-left text-sm font-semibold text-gray-700 uppercase">
-                Mobile No
-              </th>
-              <th className="p-4 text-left text-sm font-semibold text-gray-700 uppercase">
-                Account State
-              </th>
-              <th className="p-4 text-left text-sm font-semibold text-gray-700 uppercase">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user, index) => (
-                <tr
-                  key={user._id || index}
-                  className="hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <td className="p-4 text-sm text-gray-700">{index + 1}</td>
-                  <td className="p-4 text-sm text-gray-700 font-medium">{`${user.fname} ${user.lname}`}</td>
-                  <td className="p-4 text-sm text-gray-700">{user.email}</td>
-                  <td className="p-4 text-sm text-gray-700">{user.address}</td>
-                  <td className="p-4 text-sm text-gray-700">{user.country}</td>
-                  <td className="p-4 text-sm text-gray-700">{user.mobileNo}</td>
-                  <td className="p-4 text-sm text-gray-700">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        user.accountState === "active"
-                          ? "bg-green-100 text-green-700"
-                          : user.accountState === "pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {user.accountState}
-                    </span>
-                  </td>
-                  <td className="p-4 text-sm text-gray-700">
-                    <div className="flex items-center space-x-2">
-                      {/* Approve Button */}
+        <div className="overflow-x-auto shadow-lg rounded-lg">
+          <table className="min-w-full bg-white rounded-lg overflow-hidden">
+            <thead className="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+              <tr>
+                <th className="py-3 px-6 text-left">#</th>
+                <th className="py-3 px-6 text-left">Full Name</th>
+                <th className="py-3 px-6 text-left">Email</th>
+                <th className="py-3 px-6 text-left">Address</th>
+                <th className="py-3 px-6 text-left">Country</th>
+                <th className="py-3 px-6 text-left">Mobile No</th>
+                <th className="py-3 px-6 text-left">Account State</th>
+                <th className="py-3 px-6 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-700 text-sm font-light">
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user, index) => (
+                  <tr key={user._id} className="border-b hover:bg-gray-100">
+                    <td className="py-3 px-6">{index + 1}</td>
+                    <td className="py-3 px-6">{`${user.fname} ${user.lname}`}</td>
+                    <td className="py-3 px-6">{user.email}</td>
+                    <td className="py-3 px-6">{user.address}</td>
+                    <td className="py-3 px-6">{user.country}</td>
+                    <td className="py-3 px-6">{user.mobileNo}</td>
+                    <td className="py-3 px-6">
+                      <span
+                        className={`py-1 px-3 rounded-full text-xs ${
+                          user.accountState === "active"
+                            ? "bg-green-200 text-green-800"
+                            : user.accountState === "pending"
+                            ? "bg-yellow-200 text-yellow-800"
+                            : "bg-red-200 text-red-800"
+                        }`}
+                      >
+                        {user.accountState}
+                      </span>
+                    </td>
+                    <td className="py-3 px-6 flex items-center justify-center space-x-2">
                       {user.accountState !== "active" && (
                         <button
-                          className="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded-lg transition-colors duration-200"
                           onClick={() => handleApproveUser(user._id)}
+                          className="bg-green-500 hover:bg-green-600 text-white py-1 px-4 rounded-full text-sm font-semibold"
                         >
                           Approve
                         </button>
                       )}
-                      {/* Delete Button */}
                       <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded-lg transition-colors duration-200"
                         onClick={() => handleDeleteUser(user._id)}
+                        className="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded-full text-sm font-semibold"
                       >
                         Delete
                       </button>
-                    </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8" className="text-center py-10 text-gray-500 text-lg">
+                    No users found.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="8" className="text-center p-8 text-gray-500">
-                  No users found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      </div>
+              )}
+            </tbody>
+          </table>
+        </div>
 
+      </div>
     </div>
   );
 };
