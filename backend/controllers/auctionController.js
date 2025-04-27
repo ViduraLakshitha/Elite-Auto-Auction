@@ -1,11 +1,14 @@
-import Auction from '../model/auction.js'; // 
+import {Auction} from '../model/auction.js';
+import { io } from "../index.js";  // Import Socket.IO instance
+import { Vehicle } from '../model/vehicle.js';
 
 export const createAuction = async (req, res) => {
     try {
         if (
-            !req.body.userId ||
-            !req.body.vehicleId ||
-            !req.body.startDateTime ||
+            !req.body.userId||
+            !req.body.vehicleId||
+            !req.body.auctionTitle||
+            //!req.body.startDateTime ||
             !req.body.endDateTime ||
             !req.body.initialVehiclePrice
         ) {
@@ -13,16 +16,26 @@ export const createAuction = async (req, res) => {
         }
 
         const newAuction = {
-            userId: req.body.userId,
-            vehicleId: req.body.vehicleId,
+            userId:req.body.userId,
+            vehicleId:req.body.vehicleId,
+            auctionTitle:req.body.auctionTitle,
             startDateTime: req.body.startDateTime,
             endDateTime: req.body.endDateTime,
             initialVehiclePrice: req.body.initialVehiclePrice,
         };
 
         const auction = await Auction.create(newAuction);
+        console.log("New auction created:", auction);
 
-        return res.status(201).json({ message: 'Auction Created Successfully', auction });
+        if(!auction.startDateTime){
+            auction.auctionStatus="active";
+            await auction.save();
+        }
+
+        //io.emit("newAuctionCreated", auction);
+        
+        console.log("auctionCreated event emitted");
+        return res.status(201).json({ message: 'Auction Created Successfully', subject: auction });
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -42,9 +55,12 @@ export const updateAuctionStatuses = async () => {
         );
 
         await Auction.updateMany(
-            { startDateTime: { $lte: localDate }, endDateTime: { $gt: localDate } },
-            { $set: { auctionStatus: "active" } }
-        );
+                { 
+                    startDateTime: { $lte: localDate },  
+                    endDateTime: { $gt: localDate }      
+                },
+                { $set: { auctionStatus: "active" } }
+            );
 
         await Auction.updateMany(
             { endDateTime: { $lte: localDate } },
@@ -79,10 +95,14 @@ export const updateRemainingTime = async () => {
 
 // Function to get all auctions
 export const getAllAuctions = async (req, res) => {
-    try {
-        const auctions = await Auction.find({});
-        return res.status(200).json({ auctions });
-    } catch (error) {
+    try{
+        const auctions = await Auction.find({auctionStatus:"active"})
+        .populate({
+            path:'vehicleId',
+        })
+        .exec(); 
+        return res.status(201).json({auctions})
+    }catch(error){
         return res.status(500).json({ message: error.message });
     }
 };
@@ -110,18 +130,21 @@ const updateUserStats = async (auction) => {
 
   
 
-// router.get('/', async (req,res) => {
-//     try {
-//         const books = await Book.find({});
-//         return res.status(201).json({
-//             count:books.length,
-//             data:books
-//         });
-//     } catch (error) {
-//         console.log(error.message);
-//         res.status(500).send({message:error.message})
-        
-//     }
-// })
+export const getAuctionById = async (req, res) => {
+    try {
+        const { id } = req.params; // Get the auction ID from URL parameters
+        const auction = await Auction.findById(id)
+        .populate({
+            path:'vehicleId',
+        })
+        .exec(); //.populate("userId vehicleId"); // Populate related data if needed
 
+        if (!auction) {
+            return res.status(404).json({ message: "Auction not found" });
+        }
 
+        return res.status(200).json(auction);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};

@@ -23,8 +23,11 @@ const ProtectedAdminRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("isAdminLoggedIn") === "true";
   return isAuthenticated ? children : <Navigate to="/admin/login" replace />;
 };
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Auction from "./pages/Auction";
 
-const App = () => {
+function App  ()  {
   return (
     <Router>
       <Routes>
@@ -103,6 +106,7 @@ const App = () => {
         
         {/* Catch-all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/auction-details/:id" element={<Auction/>}/>
       </Routes>
     </Router>
   );

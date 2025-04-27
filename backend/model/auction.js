@@ -1,23 +1,39 @@
 import mongoose from "mongoose";
 
 const auctionSchema = new mongoose.Schema(
-    {
-        vehicleId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Vehicle",
-            required: true,
-        },
+      {
 
-        startDateTime: {
-            type: Date,
-            required: true,
-            validate: {
-                validator: function (value) {
-                    return this.endDateTime ? value < this.endDateTime : true;
-                },
-                message: "Start date must be before the end date",
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User", // Reference the Vehicle collection
+                required: true,
             },
-        },
+
+
+
+            vehicleId: {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: "Vehicle", // Reference the Vehicle collection
+                  required: true,
+            },
+
+            auctionTitle: {
+                  type: String,
+                  required: true,
+            },
+
+
+            startDateTime: {
+                  type: Date,
+                  //required: true,
+                  validate: {
+                        validator: function (value) {
+                              return this.endDate ? value < this.endDate : true;
+                        },
+                        message: "Start date must be before the end date",
+                  },
+            },
+
 
         endDateTime: {
             type: Date,
@@ -60,6 +76,12 @@ const auctionSchema = new mongoose.Schema(
         },
     },
     { timestamps: true } // Adds createdAt and updatedAt fields
+            winningBid: {
+                  type: Number,
+                  default: 0,
+            },
+      },
+      { timestamps: true } // Adds createdAt and updatedAt fields
 );
 
 export default mongoose.model("Auction", auctionSchema);

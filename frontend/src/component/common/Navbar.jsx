@@ -31,9 +31,12 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="container mx-auto flex py-6 " id="navBar">
-        <div className="flex mt-1.5 ml-8">
-          <Link to="/" className="text-2xl font-medium">
+      <nav
+        className="container mx-auto flex py-6"
+        id="navBar"
+      >
+        <div className="flex mt-1.5">
+          <Link to="/" className="text-2xl font-medium ">
             Elite Auto Auction
           </Link>
         </div>
@@ -102,6 +105,7 @@ const Navbar = () => {
 
           <SearchBar />
 
+          {/* <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
           {/* <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
             <HiBars3BottomRight className="h-6 w-6" />
           </button> */}

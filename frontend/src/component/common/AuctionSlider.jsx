@@ -1,3 +1,69 @@
+// import React, { useState } from "react";
+
+// const AuctionSlider = () => {
+//   // Image paths (ensure images are inside the public/img folder)
+//   const images = [
+//     "../../../imgs/car1.jpg",
+//     "../../../imgs/car2.jpg",
+//     "../../../imgs/car3.jpg",
+//   ];
+
+//   const [currentIndex, setCurrentIndex] = useState(0);
+
+//   // Go to next image
+//   const nextSlide = () => {
+//     setCurrentIndex((prevIndex) =>
+//       prevIndex === images.length - 1 ? 0 : prevIndex + 1
+//     );
+//   };
+
+//   // Go to previous image
+//   const prevSlide = () => {
+//     setCurrentIndex((prevIndex) =>
+//       prevIndex === 0 ? images.length - 1 : prevIndex - 1
+//     );
+//   };
+
+//   return (
+//     <div className="relative w-full max-w-lg mx-auto overflow-hidden">
+//       <div className="flex transition-transform duration-500 ease-in-out"
+//         style={{ transform: translateX(-${currentIndex * 100}%) }}>
+//         {images.map((image, index) => (
+//           <div key={index} className="w-full flex-shrink-0">
+//             <img
+//               src={image}
+//               alt={Auction ${index + 1}}
+//               className="w-full h-auto rounded-lg shadow-lg"
+//             />
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* Left Button */}
+//       <button
+//         onClick={prevSlide}
+//         className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black text-white p-2 rounded-full"
+//       >
+//         &#8249;
+//       </button>
+
+//       {/* Right Button */}
+//       <button
+//         onClick={nextSlide}
+//         className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black text-white p-2 rounded-full"
+//       >
+//         &#8250;
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default AuctionSlider;
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 
 const images = [
@@ -27,7 +93,7 @@ const AuctionSlider = () => {
       <img
         src={images[currentIndex]}
         alt={`Auction Car ${currentIndex + 1}`}
-        className="w-full h-100 object-cover rounded-lg shadow-lg transition-all duration-500"
+        className="w-full h-125 object-cover rounded-lg shadow-lg transition-all duration-500"
       />
       
       {/* Navigation Dots */}

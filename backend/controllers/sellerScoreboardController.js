@@ -1,4 +1,5 @@
-import { User } from "../model/userModel.js";
+import {User} from '../model/userModel.js';
+import SellerScore from '../model/sellerScore.js';
 
 // Get top 10 sellers
 export const getTopSellers = async (req, res) => {

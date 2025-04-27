@@ -161,5 +161,6 @@ userSchema.index({ successfulCompletedAuctions: -1 });
 userSchema.index({ winningBids: -1 });
 
 export const User = mongoose.model("User", userSchema);
+export default User;
 
 // export const User = mongoose.model("User", userSchema);
