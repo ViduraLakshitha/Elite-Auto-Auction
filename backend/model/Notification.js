@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+/*import mongoose from 'mongoose';
 
 const notificationSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -8,4 +8,4 @@ const notificationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export const Notification = mongoose.model('Notification', notificationSchema);
+export const Notification = mongoose.model('Notification', notificationSchema);*/

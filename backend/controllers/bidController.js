@@ -1,4 +1,4 @@
-import { Auction } from "../model/auction.js";
+import Auction from "../model/auction.js";
 import { Bid } from "../model/bid.js";
 import { io } from "../index.js";  // Import Socket.IO instance
 

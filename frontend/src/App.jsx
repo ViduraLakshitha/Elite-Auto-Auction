@@ -23,8 +23,8 @@ const ProtectedAdminRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("isAdminLoggedIn") === "true";
   return isAuthenticated ? children : <Navigate to="/admin/login" replace />;
 };
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+//import { BrowserRouter, Routes, Route } from "react-router-dom";
+//import Home from "./pages/Home";
 import Auction from "./pages/Auction";
 
 function App  ()  {
