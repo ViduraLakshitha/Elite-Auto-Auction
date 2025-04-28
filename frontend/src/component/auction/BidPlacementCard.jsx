@@ -3,56 +3,32 @@ import RemainingTime from "./RemainingTime";
 import { useParams } from 'react-router-dom';
 import CurrentBid from './CurrentBid'
 import EndDate from "./EndDate";
-import axios from "axios"
+import io from 'socket.io-client';
 
 export default function BidPlacementCard({auction, userId}){
     const{id} = useParams()
     const [bidAmount, setBidAmount] = useState("")
-    const [bid, setBid] = useState([])
-    const [bidCount, setBidCount] = useState(0)
-    // const [minBid, setMinBid] = useState();
-
-    // console.log(`ddvsvs${auction.initialVehiclePrice}`);
-    // console.log(id);
+    const [bidCount, setBidCount] = useState(auction.bidCount)
     
+    useEffect(() => {
+        const socket = io("http://localhost:5555");
     
-
-        // if (auction.currentBid === 0) {
-        //     setMinBid(auction.initialVehiclePrice + 250);
-        // } else {
-        //     setMinBid(auction.currentBid + 250);
-        // }
+        socket.on("newBidPlaced", (data) => {
+            if (data.auctionId === id) { // id of this auction card
+                setBidCount(data.bidCount); // update the local state
+            }
+        });
     
-
-    // useEffect(()=>{
-    //     const fetchBids=async()=>{
-    //         try{
-    //             const response = await fetch(`http://localhost:5555/bid/bid-records/${id}`)
-    //             console.log(response);
-                
-    //             const data = await response.json()
-    //             setBid(data)
-    //             setBidCount(bid.length)
-    //         }catch(error){
-    //             console.error('Error fetching bids:', error);
-                
-    //         }
-    //     }
-    //     fetchBids();
-    // },[id])
-
-    // console.log("Bid",bid.length);
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
     
-
     const handleBidChange=(e) =>{
         setBidAmount(e.target.value);
     }
 
     const handlePlaceBid = async() => {
-
-        console.log(`ffffffffffffffffffffffff${id}`);
-        console.log(`ffffffffffffffffffffffff${bidAmount}`);
-        console.log(`ffffffffffffffffffffffff${userId}`);
         
         if(!userId){
             alert("You must have login first!");
@@ -64,38 +40,39 @@ export default function BidPlacementCard({auction, userId}){
         
         if(auction.currentBid === 0 && bidAmount <= auction.initialVehiclePrice){
             alert(`starting bid price is ${auction.initialVehiclePrice + 250}`)
+            return
         }
         console.log(`initialprice ${auction.initialVehiclePrice}`);
         
-        if(auction.currentBid != 0 && bidAmount <= auction.currentBid + 250){
-                alert(`placea bid of ${auction.currentBid + 250} or more`)
+        if(auction.currentBid != 0 && bidAmount <= auction.currentBid + 249){
+                //alert(`place a bid of ${auction.currentBid + 250} or more`)
+                alert(`minimum bid increment is 250$`)
+                return
         }
 
         try {
+            console.log(`userIf ${userId}`);
+            console.log(`aucId ${id}`);
+            console.log(`bidAAA ${bidAmount}`);
+
+
             if (!id || !userId || !bidAmount) {
                 alert("All fields are required!");
                 return;
             }
-
-            //++++++++++++++++++++++++++++++++++++++++++++++
-            const res = await axios.post("http://localhost:5555/bid/bid-place", FormData,{
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            //++++++++++++++++++++++++++++++++++++++++++++++
         
-            // const response = await fetch("http://localhost:5555/bid/bid-place", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ id, userId, bidAmount })
-            // });
-            // console.log(`hhhhhhhhhhhhhhhhhhhhhhh ${response}`);
-            
+            const response = await fetch("http://localhost:5555/bid/bid-place", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ auctionId:id, userId, bidAmount })
+            });
+            console.log(`${response}`);
         
             let data;
             try {
                 data = await response.json();
+                console.log(data);
+                
             } catch (error) {
                 console.error("Invalid JSON response", error);
                 alert("Unexpected server response");
@@ -114,13 +91,11 @@ export default function BidPlacementCard({auction, userId}){
             console.error("Network error:", error);
             alert("Failed to place bid. Please try again.");
         }
-        
-
     }
 
     return(
         <div>
-            <div className="bg-gray-100 p-6 rounded-lg shadow-md w-4/10 mx-auto my-11">
+            <div className="bg-gray-100 p-6 rounded-lg shadow-md my-11">
             <h2 className="font-bold text-lg mb-4">Bid on This Listing</h2>
             <div className="space-y-2">
                 <div className="flex gap-32">

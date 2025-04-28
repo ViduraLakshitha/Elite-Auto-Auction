@@ -1,12 +1,12 @@
 // components/VehicleAuctionCard.js
 import React from 'react';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import RemainingTime from './RemainingTime';
 import CurrentBid from './CurrentBid';
 import EndDate from './EndDate';
 // import imageUrl from "../../../../backend/uploads/porsche_356_speedster.jpg"
 
-const socket = io("http://localhost:5555");
+// const socket = io("http://localhost:5555");
 
 export default function AuctionCard({ auction, onClick }) {
     // Construct full image URL from backend
@@ -36,7 +36,7 @@ export default function AuctionCard({ auction, onClick }) {
                 <EndDate auction={auction}/>
                 {auction.auctionStatus === "active" && (
                     <React.Fragment key={auction._id}>
-                        <CurrentBid auction={auction} />
+                        <span className='flex text-gray-500'>Current Bid <CurrentBid auction={auction} className={'ml-2 text-black mb-2'}/></span>
                         <RemainingTime auction={auction}/>
                     </React.Fragment>
                 )}

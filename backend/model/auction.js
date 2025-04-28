@@ -63,10 +63,17 @@ const auctionSchema = new mongoose.Schema(
                   default: "pending",
             },
 
+            
+
             winningBid: {
                   type: Number,
                   default: 0,
             },
+
+            bidCount: {
+                  type: Number,
+                  default: 0,
+            }
       },
       { timestamps: true } // Adds createdAt and updatedAt fields
 );

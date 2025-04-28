@@ -6,6 +6,7 @@ import userRoute from "./routes/userRoute.js";
 import vehicleRoute from "./routes/vehicleRoute.js";
 import auctionRoute from "./routes/auctionRoute.js";
 import bidRoute from "./routes/bidRoute.js";
+import commentRoute from"./routes/commentRoute.js";
 import cron from "node-cron";
 import { updateAuctionStatuses } from "./controllers/auctionController.js"; 
 import cors from 'cors';
@@ -33,6 +34,7 @@ app.use('/auction', auctionRoute);
 app.use('/sellers', sellerScoreboardRoutes);
 app.use('/buyers', buyerScoreboardRoutes);
 app.use('/bid', bidRoute);
+app.use('/comment',commentRoute);
 
 mongoose
     .connect(mongoDBURL)
