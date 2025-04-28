@@ -2,9 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-// Function to save JWT Token (to localStorage or cookies)
-const saveToken = (token) => {
+// Function to save user data
+const saveUserData = (token, userId) => {
   localStorage.setItem("token", token);
+  localStorage.setItem("userId", userId);
 };
 
 const Login = () => {
@@ -33,21 +34,59 @@ const Login = () => {
         },
       });
 
+      console.log("Full login response:", res.data); // Debug log
+
+      // Check for token in response
       if (res.data?.token) {
-        saveToken(res.data.token);  // Save the JWT token if login is successful
-        navigate("/");  // Redirect to dashboard after login
+        // Try to get userId from different possible locations in the response
+        const userId = res.data.user?._id || 
+                      res.data.userId || 
+                      res.data.user?.id || 
+                      res.data.id;
+
+        console.log("Extracted userId:", userId); // Debug log
+
+        if (userId) {
+          saveUserData(res.data.token, userId);
+          navigate("/");  // Redirect to dashboard after login
+        } else {
+          // If we can't find userId, try to decode the token
+          try {
+            const tokenParts = res.data.token.split('.');
+            if (tokenParts.length === 3) {
+              const payload = JSON.parse(atob(tokenParts[1]));
+              console.log("Token payload:", payload); // Debug log
+              
+              if (payload.id || payload.userId || payload._id) {
+                const userIdFromToken = payload.id || payload.userId || payload._id;
+                saveUserData(res.data.token, userIdFromToken);
+                navigate("/");
+                return;
+              }
+            }
+          } catch (tokenError) {
+            console.error("Error decoding token:", tokenError);
+          }
+
+          console.error("No userId found in response or token:", res.data);
+          setError("Login failed: User ID not found in response");
+        }
       } else {
-        setError("Login failed. Please try again.");
+        console.error("No token found in response:", res.data);
+        setError("Login failed: No authentication token received");
       }
     } catch (err) {
+      console.error("Login error:", err); // Debug log
       let errorMessage = "Something went wrong"; // Default error message
 
       if (err.response) {
         // If the server responded with an error
         errorMessage = err.response.data?.message || errorMessage;
+        console.error("Server error response:", err.response.data); // Debug log
       } else if (err.request) {
         // If there was no response from the server
         errorMessage = "Network error: Could not connect to the server.";
+        console.error("No server response:", err.request); // Debug log
       }
 
       setError(errorMessage);  // Set the error message to be displayed

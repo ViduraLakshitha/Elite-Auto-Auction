@@ -6,9 +6,9 @@ const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  // const handleSearchToggle = () => {
-  //   setIsOpen(!isOpen);
-  // };
+  const handleSearchToggle = () => {
+    setIsOpen(!isOpen);
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -59,5 +59,3 @@ const SearchBar = () => {
 };
 
 export default SearchBar;
-
-

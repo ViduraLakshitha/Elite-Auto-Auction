@@ -1,15 +1,35 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";  // <-- Add useEffect here
+import { Link, useNavigate } from "react-router-dom";  // Add useNavigate
 import { HiOutlineUser, HiBars3BottomRight } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
 import SearchBar from "./SearchBar.jsx";
-import ScoreboardPopup from "../scoreboard/ScoreboardPopup.jsx"; // Import the ScoreboardPopup component
+import ScoreboardPopup from "../scoreboard/ScoreboardPopup.jsx";
 
 const Navbar = () => {
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
   const [scoreboardDropdownOpen, setScoreboardDropdownOpen] = useState(false);
   const [scoreboardPopupOpen, setScoreboardPopupOpen] = useState(false);
   const [selectedScoreboardType, setSelectedScoreboardType] = useState(null);
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // <-- new state
+  const navigate = useNavigate(); // <-- for logout if needed
+
+  // Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  // Optional: Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/"); // redirect to login after logout
+  };
 
   const toggleNavDrawer = () => {
     setNavDrawerOpen(!navDrawerOpen);
@@ -22,7 +42,7 @@ const Navbar = () => {
   const handleScoreboardSelection = (type) => {
     setSelectedScoreboardType(type);
     setScoreboardPopupOpen(true);
-    setScoreboardDropdownOpen(false); // Close the dropdown after selection
+    setScoreboardDropdownOpen(false);
   };
 
   const closeScoreboardPopup = () => {
@@ -31,73 +51,40 @@ const Navbar = () => {
 
   return (
     <>
-      <nav
-        className="container mx-auto flex py-6"
-        id="navBar"
-      >
+      <nav className="container mx-auto flex py-6 ml-15" id="navBar">
         <div className="flex mt-1.5">
-          <Link to="/" className="text-2xl font-medium ">
+          <Link to="/" className="text-2xl font-medium">
             Elite Auto Auction
           </Link>
         </div>
 
         <div className="hidden md:flex ml-20 mt-3 space-x-10">
           <Link
-            to="#"
+            to="/auctions"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Auctions
           </Link>
-
           <Link
             to="/register-vehicle"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Submit a Vehicle
           </Link>
-
           <Link
             to="/scoreboard"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Scoreboard
           </Link>
-
-          {/* Scoreboard Dropdown */}
-          {/* <div className="relative">
-            <button
-              onClick={toggleScoreboardDropdown}
-              className="text-gray-700 hover:text-black text-sm font-medium uppercase focus:outline-none"
-            >
-              Score Board
-            </button>
-            {scoreboardDropdownOpen && (
-              <div className="absolute mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
-                <button
-                  onClick={() => handleScoreboardSelection("seller")}
-                  className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Seller Scoreboard
-                </button>
-                <button
-                  onClick={() => handleScoreboardSelection("buyer")}
-                  className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Buyer Scoreboard
-                </button>
-              </div>
-            )}
-          </div> */}
-
           <Link
-            to="/scoreboard"
+            to="/about"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             About Us
           </Link>
-
           <Link
-            to="/admin"
+            to="/contact"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Contact Us
@@ -105,90 +92,46 @@ const Navbar = () => {
         </div>
 
         {/* Right Icons */}
-        <div className="flex ml-15 space-x-10">
-          <Link to="/profile" className="hover:text-black">
-            <HiOutlineUser className="h-6 w-6 text-gray-700 flex mt-2" />
-          </Link>
-
+        <div className="flex ml-15 items-center">
           <SearchBar />
 
-          {/* <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
-          {/* <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
+          {isLoggedIn ? (
+            // If user is logged in, show Profile and Logout button
+            <>
+              
+
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 w-20 h-10 text-white rounded ml-5"
+              >
+                Logout
+              </button>
+
+              <Link to="/profile" className="hover:text-black">
+                <HiOutlineUser className="h-6 w-6 text-gray-700 ml-15" />
+              </Link>
+            </>
+          ) : (
+            // If user is not logged in, show Login and SignUp buttons
+            <>
+              <Link to="/login">
+                <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
+                  Login
+                </button>
+              </Link>
+              <Link to="/signup">
+                <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          )}
+
+          <button onClick={toggleNavDrawer} className="md:hidden flex">
             <HiBars3BottomRight className="h-6 w-6" />
-          </button> */}
-        </div>
-        {/* Login button */}
-        <Link to="/login">
-        <button className="bg-blue-700 w-20 h-10 text-white rounded ml-10">
-          Login
-        </button>
-      </Link>
-
-          {/* signin button */}
-          <Link to="/signup">
-        <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
-          SignUp
-        </button>
-      </Link>
-      </nav>
-
-      {/* Mobile Navigation */}
-      {/* <div
-        className={`fixed top-0 left-0 w-3/4 sm:w-1/2 md:w-1/3 h-full bg-white shadow-lg transform transition-transform duration-300 z-50 ${
-          navDrawerOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex justify-end p-4">
-          <button onClick={toggleNavDrawer}>
-            <IoMdClose className="h-6 w-6 text-gray-600" />
           </button>
         </div>
-
-        <div className="p-4">
-          <h2 className="text-xl font-semibold mb-4">Menu</h2>
-          <nav className="space-y-4">
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Auctions
-            </Link>
-
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Submit a Vehicle
-            </Link>
-
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Score Board
-            </Link>
-
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              About Us
-            </Link>
-
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Contact Us
-            </Link>
-          </nav>
-        </div> */}
-      {/* </div> */}
+      </nav>
 
       {/* Scoreboard Popup */}
       {scoreboardPopupOpen && (
