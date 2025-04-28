@@ -114,7 +114,7 @@ const Navbar = () => {
 
           <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
             <HiBars3BottomRight className="h-6 w-6" />
-          </button> */}
+          </button> 
         </div>
         {/* Login button */}
         <Link to="/login">
@@ -130,64 +130,6 @@ const Navbar = () => {
         </button>
       </Link>
       </nav>
-
-      {/* Mobile Navigation */}
-      {/* <div
-        className={`fixed top-0 left-0 w-3/4 sm:w-1/2 md:w-1/3 h-full bg-white shadow-lg transform transition-transform duration-300 z-50 ${
-          navDrawerOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex justify-end p-4">
-          <button onClick={toggleNavDrawer}>
-            <IoMdClose className="h-6 w-6 text-gray-600" />
-          </button>
-        </div>
-
-        <div className="p-4">
-          <h2 className="text-xl font-semibold mb-4">Menu</h2>
-          <nav className="space-y-4">
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Auctions
-            </Link>
-
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Submit a Vehicle
-            </Link>
-
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Score Board
-            </Link>
-
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              About Us
-            </Link>
-
-            <Link
-              to="#"
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Contact Us
-            </Link>
-          </nav>
-        </div> */}
-      {/* </div> */}
 
       {/* Scoreboard Popup */}
       {scoreboardPopupOpen && (
