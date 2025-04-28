@@ -56,8 +56,15 @@ const Navbar = () => {
             Submit a Vehicle
           </Link>
 
+          <Link
+            to="/scoreboard"
+            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
+          >
+            Scoreboard
+          </Link>
+
           {/* Scoreboard Dropdown */}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={toggleScoreboardDropdown}
               className="text-gray-700 hover:text-black text-sm font-medium uppercase focus:outline-none"
@@ -80,7 +87,7 @@ const Navbar = () => {
                 </button>
               </div>
             )}
-          </div>
+          </div> */}
 
           <Link
             to="/scoreboard"
