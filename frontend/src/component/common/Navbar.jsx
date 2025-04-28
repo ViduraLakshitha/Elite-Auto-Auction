@@ -43,7 +43,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex ml-20 mt-3 space-x-10">
           <Link
-            to="#"
+            to="/auctions"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Auctions
@@ -90,14 +90,14 @@ const Navbar = () => {
           </div> */}
 
           <Link
-            to="/scoreboard"
+            to="/about"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             About Us
           </Link>
 
           <Link
-            to="/admin"
+            to="/contact"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Contact Us
@@ -112,8 +112,7 @@ const Navbar = () => {
 
           <SearchBar />
 
-          {/* <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
-          {/* <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
+          <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
             <HiBars3BottomRight className="h-6 w-6" />
           </button> */}
         </div>
