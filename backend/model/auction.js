@@ -57,24 +57,29 @@ const auctionSchema = new mongoose.Schema(
       default: 0,
     },
 
-    auctionStates: {
-      type: String,
-      enum: ["pending", "active", "completed", "cancelled"],
-      default: "pending",
-      required: true,
-    },
+            auctionStatus: {
+                  type: String,
+                  enum: ["pending", "active", "ended", "completed", "cancelled"], // Restrict valid states
+                  default: "pending",
+                  required: true,
+            },
 
-    remainingTime: {
-      type: Number,
-      default: 0,
-    },
-
-    winningBid: {
-      type: Number,
-      default: 0,
-    },
-  },
-  { timestamps: true }
+            remainingTime: {  
+                  type: Number,
+                  default: 0,
+            },
+             // NEW fields for winner
+            finalWinnerUserId: {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: "User",
+                  default: null,
+           },
+            winningBid: {
+                  type: Number,
+                  default: 0,
+         },
+      },
+      { timestamps: true } // Adds createdAt and updatedAt fields
 );
 
 export default mongoose.model("Auction", auctionSchema);

@@ -11,6 +11,7 @@ import PaymentPage from "./component/payment/PaymentPage.jsx";
 import ChartAdmin from "./component/admin/ChartAdmin.jsx";
 import UserDetailsPage from "./component/user/UserDetailsPage.jsx";
 import AdminLogin from "./component/admin/AdminLogin.jsx";
+import Scoreboard from "./pages/Scoreboard.jsx";
 
 // Import missing components
 import Signup from "./pages/Signup.jsx"; 
@@ -50,8 +51,8 @@ function App  ()  {
         
 
         {/* Scoreboards */}
-        <Route path="/scoreboard" element={<ScoreboardPopup />} />
-        <Route path="/admin/scoreboard" element={<ScoreboardPopup />} />
+        {/* <Route path="/scoreboard" element={<ScoreboardPopup />} /> */}
+        
         <Route path="/admin/sellers" element={<SellerScoreboard />} />
         <Route path="/admin/buyers" element={<BuyerScoreboard />} />
 
@@ -63,6 +64,8 @@ function App  ()  {
         {/* Payments */}
         <Route path="/payments" element={<PaymentPage />} />
         <Route path="/user" element={<UserDetailsPage />} />
+        <Route path="/scoreboard" element={<Scoreboard />} />
+
         
         {/* Admin Login */}
         <Route path="/admin/login" element={<AdminLogin />} />

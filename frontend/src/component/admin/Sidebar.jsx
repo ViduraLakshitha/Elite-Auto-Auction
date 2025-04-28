@@ -10,56 +10,58 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-gray-800 text-white w-64 min-h-screen p-4">
-      <h2 className="text-2xl font-bold mb-6">Admin Panel</h2>
+    <div className="bg-gradient-to-b from-gray-900 to-black text-white w-64 min-h-screen p-6 shadow-lg">
+      <h2 className="text-3xl font-extrabold text-center mb-8 text-gradient bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
+        Admin Panel
+      </h2>
       <nav>
-        <ul className="space-y-2">
+        <ul className="space-y-4">
           <li>
-            <Link to="/" className="flex items-center p-2 hover:bg-gray-700 rounded">
-              <FaHome className="mr-2" /> Home
+            <Link to="/" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaHome className="mr-3 text-xl" /> Home
             </Link>
           </li>
           <li>
-            <Link to="/admin/chart" className="flex items-center p-2 hover:bg-gray-700 rounded">
-              <FaChartLine className="mr-2" /> Dashboard
+            <Link to="/admin/chart" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaChartLine className="mr-3 text-xl" /> Dashboard
             </Link>
           </li>
           <li>
-            <Link to="/admin/admin" className="flex items-center p-2 hover:bg-gray-700 rounded">
-              <FaUsers className="mr-2" /> Manage Users
+            <Link to="/admin/admin" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaUsers className="mr-3 text-xl" /> Manage Users
             </Link>
           </li>
           <li>
-            <Link to="/admin/sellers" className="flex items-center p-2 hover:bg-gray-700 rounded">
-              <FaTrophy className="mr-2" /> Seller Scoreboard
+            <Link to="/admin/sellers" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaTrophy className="mr-3 text-xl" /> Seller Scoreboard
             </Link>
           </li>
           <li>
-            <Link to="/admin/buyers" className="flex items-center p-2 hover:bg-gray-700 rounded">
-              <FaShoppingCart className="mr-2" /> Buyer Scoreboard
+            <Link to="/admin/buyers" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaShoppingCart className="mr-3 text-xl" /> Buyer Scoreboard
             </Link>
           </li>
           <li>
-            <Link to="/Auction" className="flex items-center p-2 hover:bg-gray-700 rounded">
-              <FaGavel className="mr-2" /> Auction Details
+            <Link to="/Auction" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaGavel className="mr-3 text-xl" /> Auction Details
             </Link>
           </li>
           <li>
-            <Link to="/vehicles" className="flex items-center p-2 hover:bg-gray-700 rounded">
-              <FaCar className="mr-2" /> Vehicle Details
+            <Link to="/vehicles" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaCar className="mr-3 text-xl" /> Vehicle Details
             </Link>
           </li>
           <li>
-            <Link to="/admin/settings" className="flex items-center p-2 hover:bg-gray-700 rounded">
-              <FaCog className="mr-2" /> Settings
+            <Link to="/admin/settings" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaCog className="mr-3 text-xl" /> Settings
             </Link>
           </li>
           <li>
             <button 
               onClick={handleLogout}
-              className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+              className="flex items-center w-full p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300"
             >
-              <FaSignOutAlt className="mr-2" /> Logout
+              <FaSignOutAlt className="mr-3 text-xl" /> Logout
             </button>
           </li>
         </ul>

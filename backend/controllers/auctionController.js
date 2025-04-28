@@ -1,4 +1,4 @@
-import Auction from "../model/auction.js"; // ✅ Correct import
+import {Auction} from '../model/auction.js'; // ✅ Correct import
 import { io } from "../index.js"; // Import io from index.js which is the main file
 import Vehicle from "../model/vehicle.js"; // ✅ Correct import
 //import User from "../model/user.js"; // ✅ Added User model import
@@ -141,4 +141,39 @@ const updateUserStats = async (auction) => {
     } catch (error) {
         console.error("Error updating user stats:", error.message);
     }
+};
+
+    // Update seller stats
+    await User.findByIdAndUpdate(auction.userId, {
+      $inc: { successfulCompletedAuctions: 1 }
+    });
+    
+    // Find winning bid and update buyer stats
+    const winningBid = await Bid.findOne({ auctionId: auction._id })
+      .sort({ bidAmount: -1 })
+      .limit(1);
+    
+    if (winningBid) {
+      await User.findByIdAndUpdate(winningBid.userId, {
+        $inc: { winningBids: 1 }
+      });
+    }
+  };
+
+  // Controller to get the scoreboard
+export const getScoreboard = async (req, res) => {
+  try {
+    const scoreboard = await Auction.find({
+      auctionStatus: { $in: ["ended", "completed"] },
+      winningBid: { $gt: 0 },
+    })
+      .populate("vehicleId", "vehicleName model") // only get name and model of vehicle
+      .populate("finalWinnerUserId", "name email") // only get name and email of winner
+      .sort({ winningBid: -1 }); // highest winning bid first
+
+    res.status(200).json(scoreboard);
+  } catch (error) {
+    console.error("Error fetching scoreboard:", error);
+    res.status(500).json({ message: "Failed to load scoreboard" });
+  }
 };

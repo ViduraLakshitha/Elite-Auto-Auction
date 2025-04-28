@@ -52,103 +52,105 @@ const Settings = () => {
     <div className="flex min-h-screen">
       <Sidebar />
       
-      <div className="flex-1 p-6 bg-blue-200">
-        <h1 className="text-2xl font-bold mb-6">Admin Settings</h1>
+      <div className="flex-1 p-8 bg-gray-100">
+        <h1 className="text-3xl font-extrabold text-center mb-10 text-gray-8000">
+          Admin Settings
+        </h1>
 
         {/* Profile Settings */}
-        <div className="mb-8 bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4 flex items-center">
-            <FaUser className="mr-2" /> Profile Information
+        <div className="mb-10 bg-white p-8 rounded-xl shadow-xl">
+          <h2 className="text-2xl font-semibold mb-5 flex items-center text-gray-800">
+            <FaUser className="mr-3 text-2xl" /> Profile Information
           </h2>
-          <form onSubmit={handleProfileUpdate} className="space-y-4">
+          <form onSubmit={handleProfileUpdate} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-lg font-medium text-gray-700 mb-2">
                 Full Name
               </label>
               <input
                 type="text"
                 value={profile.name}
                 onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-yellow-400"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-lg font-medium text-gray-700 mb-2">
                 Email Address
               </label>
               <input
                 type="email"
                 value={profile.email}
                 onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-yellow-400"
                 required
               />
             </div>
             <button
               type="submit"
-              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors"
+              className="flex items-center bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-gradient-to-l transition duration-300"
             >
-              <FaSave className="mr-2" /> Update Profile
+              <FaSave className="mr-3 text-xl" /> Update Profile
             </button>
           </form>
         </div>
 
         {/* Password Settings */}
-        <div className="mb-8 bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4 flex items-center">
-            <FaLock className="mr-2" /> Password Settings
+        <div className="mb-10 bg-white p-8 rounded-xl shadow-xl">
+          <h2 className="text-2xl font-semibold mb-5 flex items-center text-gray-800">
+            <FaLock className="mr-3 text-2xl" /> Password Settings
           </h2>
-          <form onSubmit={handlePasswordChange} className="space-y-4">
+          <form onSubmit={handlePasswordChange} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-lg font-medium text-gray-700 mb-2">
                 Current Password
               </label>
               <input
                 type="password"
                 value={password.currentPassword}
                 onChange={(e) => setPassword({ ...password, currentPassword: e.target.value })}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-yellow-400"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-lg font-medium text-gray-700 mb-2">
                 New Password
               </label>
               <input
                 type="password"
                 value={password.newPassword}
                 onChange={(e) => setPassword({ ...password, newPassword: e.target.value })}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-yellow-400"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-lg font-medium text-gray-700 mb-2">
                 Confirm New Password
               </label>
               <input
                 type="password"
                 value={password.confirmPassword}
                 onChange={(e) => setPassword({ ...password, confirmPassword: e.target.value })}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-yellow-400"
                 required
               />
             </div>
             <button
               type="submit"
-              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors"
+              className="flex items-center bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-gradient-to-l transition duration-300"
             >
-              <FaSave className="mr-2" /> Change Password
+              <FaSave className="mr-3 text-xl" /> Change Password
             </button>
           </form>
         </div>
 
         {/* System Preferences */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">System Preferences</h2>
-          <div className="space-y-3">
+        <div className="bg-white p-8 rounded-xl shadow-xl">
+          <h2 className="text-2xl font-semibold mb-5 text-gray-800">System Preferences</h2>
+          <div className="space-y-4">
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -156,10 +158,10 @@ const Settings = () => {
                 name="notifications"
                 checked={systemPreferences.notifications}
                 onChange={handleSystemPreferencesChange}
-                className="h-4 w-4 text-blue-500 rounded"
+                className="h-5 w-5 text-yellow-500 rounded-xl"
               />
-              <label htmlFor="notifications" className="ml-2 flex items-center">
-                <FaBell className="mr-2" /> Enable Notifications
+              <label htmlFor="notifications" className="ml-3 text-lg font-medium text-gray-700 flex items-center">
+                <FaBell className="mr-3 text-xl" /> Enable Notifications
               </label>
             </div>
             <div className="flex items-center">
@@ -169,10 +171,10 @@ const Settings = () => {
                 name="darkMode"
                 checked={systemPreferences.darkMode}
                 onChange={handleSystemPreferencesChange}
-                className="h-4 w-4 text-blue-500 rounded"
+                className="h-5 w-5 text-yellow-500 rounded-xl"
               />
-              <label htmlFor="darkMode" className="ml-2 flex items-center">
-                <FaMoon className="mr-2" /> Dark Mode
+              <label htmlFor="darkMode" className="ml-3 text-lg font-medium text-gray-700 flex items-center">
+                <FaMoon className="mr-3 text-xl" /> Dark Mode
               </label>
             </div>
           </div>

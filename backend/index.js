@@ -50,6 +50,8 @@ app.use('/sellers', sellerScoreboardRoutes);
 app.use('/buyers', buyerScoreboardRoutes);
 app.use('/bid', bidRoute);
 app.use('/payments', paymentRoutes);
+app.use("/api", auctionRoute);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoute);
 

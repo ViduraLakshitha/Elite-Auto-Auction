@@ -1,11 +1,13 @@
 import express from 'express';
-import { createAuction, getAllAuctions, getAuctionById } from '../controllers/auctionController.js';
+import { createAuction, getAllAuctions, getAuctionById , getScoreboard } from '../controllers/auctionController.js';
 
 const router = express.Router();
 
 router.post('/register',createAuction);
 router.get('/details', getAllAuctions);
 router.get('/details/single-auction/:id',getAuctionById);
+router.get("/scoreboard", getScoreboard);
+
 //=========
 
 const getTopCompletedAuctions = async () => {
