@@ -48,7 +48,7 @@ const Login = () => {
 
         if (userId) {
           saveUserData(res.data.token, userId);
-          navigate("/");  // Redirect to dashboard after login
+        navigate("/");  // Redirect to dashboard after login
         } else {
           // If we can't find userId, try to decode the token
           try {

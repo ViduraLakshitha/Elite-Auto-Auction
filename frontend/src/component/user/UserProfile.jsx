@@ -21,15 +21,15 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
         const token = localStorage.getItem("token");
 
         if (!userId || !token) {
           console.error("Authentication required");
           navigate("/login"); // Redirect to login if not authenticated
-          return;
-        }
-
+        return;
+      }
+  
         const config = {
           headers: {
             Authorization: `Bearer ${token}`
@@ -41,18 +41,18 @@ const UserProfile = () => {
         
         if (response.data) {
           setUser(response.data);
-          setFormData({
-            fname: response.data.fname || "",
-            lname: response.data.lname || "",
-            email: response.data.email || "",
-            address: response.data.address || "",
-            country: response.data.country || "",
-            mobileNo: response.data.mobileNo || "",
-          });
-
+        setFormData({
+          fname: response.data.fname || "",
+          lname: response.data.lname || "",
+          email: response.data.email || "",
+          address: response.data.address || "",
+          country: response.data.country || "",
+          mobileNo: response.data.mobileNo || "",
+        });
+  
           // Fetch payment history
           const paymentResponse = await axios.get(`http://localhost:5555/user/${userId}/payments`, config);
-          setPaymentHistory(paymentResponse.data);
+        setPaymentHistory(paymentResponse.data);
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -66,7 +66,7 @@ const UserProfile = () => {
         setLoading(false);
       }
     };
-
+  
     fetchUserDetails();
   }, [navigate]);
 
@@ -127,31 +127,31 @@ const UserProfile = () => {
           <h2 className="text-2xl font-bold text-white">User Profile</h2>
         </div>
 
-        {/* Toggle View / Edit */}
+      {/* Toggle View / Edit */}
         <div className="flex gap-2 p-4 bg-gray-50">
-          <button
-            onClick={() => setShowDetails(true)}
+        <button
+          onClick={() => setShowDetails(true)}
             className={`px-4 py-2 rounded transition-colors ${
               showDetails 
                 ? "bg-blue-500 text-white" 
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
-          >
-            View Details
-          </button>
-          <button
-            onClick={() => setShowDetails(false)}
+        >
+          View Details
+        </button>
+        <button
+          onClick={() => setShowDetails(false)}
             className={`px-4 py-2 rounded transition-colors ${
               !showDetails 
                 ? "bg-blue-500 text-white" 
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
-          >
-            Edit Profile
-          </button>
-        </div>
+        >
+          Edit Profile
+        </button>
+      </div>
 
-        {showDetails ? (
+      {showDetails ? (
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg">
@@ -180,116 +180,116 @@ const UserProfile = () => {
               </div>
             </div>
 
-            {/* Payment History */}
+          {/* Payment History */}
             <div className="mt-8">
               <h4 className="text-xl font-semibold mb-4">Payment History</h4>
-              {paymentHistory.length > 0 ? (
+            {paymentHistory.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="bg-gray-100">
+                <thead>
+                  <tr className="bg-gray-100">
                         <th className="p-3 text-left">Auction ID</th>
                         <th className="p-3 text-left">Amount</th>
                         <th className="p-3 text-left">Date</th>
                         <th className="p-3 text-left">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {paymentHistory.map((payment) => (
+                  </tr>
+                </thead>
+                <tbody>
+                  {paymentHistory.map((payment) => (
                         <tr key={payment._id} className="border-b hover:bg-gray-50">
                           <td className="p-3">{payment.auctionId}</td>
                           <td className="p-3">${payment.amount.toFixed(2)}</td>
                           <td className="p-3">{new Date(payment.date).toLocaleDateString()}</td>
                           <td className="p-3">
-                            <span
+                        <span
                               className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                                payment.status === "completed"
-                                  ? "bg-green-100 text-green-700"
-                                  : payment.status === "pending"
-                                  ? "bg-yellow-100 text-yellow-700"
-                                  : "bg-red-100 text-red-700"
-                              }`}
-                            >
-                              {payment.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                            payment.status === "completed"
+                              ? "bg-green-100 text-green-700"
+                              : payment.status === "pending"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {payment.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
                 </div>
-              ) : (
+            ) : (
                 <p className="text-gray-600 bg-gray-50 p-4 rounded-lg">No payment history available.</p>
-              )}
-            </div>
+            )}
           </div>
-        ) : (
+        </div>
+      ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   First Name
                 </label>
-                <input
-                  type="text"
-                  name="fname"
-                  value={formData.fname}
-                  onChange={handleInputChange}
+            <input
+              type="text"
+              name="fname"
+              value={formData.fname}
+              onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
+              required
+            />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Last Name
-                </label>
-                <input
-                  type="text"
-                  name="lname"
-                  value={formData.lname}
-                  onChange={handleInputChange}
+          </label>
+            <input
+              type="text"
+              name="lname"
+              value={formData.lname}
+              onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
+              required
+            />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Address
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
+          </label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
+              required
+            />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Country
-                </label>
-                <input
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
+          </label>
+            <input
+              type="text"
+              name="country"
+              value={formData.country}
+              onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
+              required
+            />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Mobile No
-                </label>
-                <input
-                  type="text"
-                  name="mobileNo"
-                  value={formData.mobileNo}
-                  onChange={handleInputChange}
+          </label>
+            <input
+              type="text"
+              name="mobileNo"
+              value={formData.mobileNo}
+              onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
+              required
+            />
               </div>
             </div>
             <div className="flex justify-end mt-6">
@@ -297,11 +297,11 @@ const UserProfile = () => {
                 type="submit"
                 className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
               >
-                Save Changes
-              </button>
+            Save Changes
+          </button>
             </div>
-          </form>
-        )}
+        </form>
+      )}
       </div>
     </div>
   );
