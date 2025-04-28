@@ -1,15 +1,35 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";  // <-- Add useEffect here
+import { Link, useNavigate } from "react-router-dom";  // Add useNavigate
 import { HiOutlineUser, HiBars3BottomRight } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
 import SearchBar from "./SearchBar.jsx";
-import ScoreboardPopup from "../scoreboard/ScoreboardPopup.jsx"; // Import the ScoreboardPopup component
+import ScoreboardPopup from "../scoreboard/ScoreboardPopup.jsx";
 
 const Navbar = () => {
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
   const [scoreboardDropdownOpen, setScoreboardDropdownOpen] = useState(false);
   const [scoreboardPopupOpen, setScoreboardPopupOpen] = useState(false);
   const [selectedScoreboardType, setSelectedScoreboardType] = useState(null);
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // <-- new state
+  const navigate = useNavigate(); // <-- for logout if needed
+
+  // Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  // Optional: Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/"); // redirect to login after logout
+  };
 
   const toggleNavDrawer = () => {
     setNavDrawerOpen(!navDrawerOpen);
@@ -22,7 +42,7 @@ const Navbar = () => {
   const handleScoreboardSelection = (type) => {
     setSelectedScoreboardType(type);
     setScoreboardPopupOpen(true);
-    setScoreboardDropdownOpen(false); // Close the dropdown after selection
+    setScoreboardDropdownOpen(false);
   };
 
   const closeScoreboardPopup = () => {
@@ -31,12 +51,9 @@ const Navbar = () => {
 
   return (
     <>
-      <nav
-        className="container mx-auto flex py-6"
-        id="navBar"
-      >
+      <nav className="container mx-auto flex py-6 ml-15" id="navBar">
         <div className="flex mt-1.5">
-          <Link to="/" className="text-2xl font-medium ">
+          <Link to="/" className="text-2xl font-medium">
             Elite Auto Auction
           </Link>
         </div>
@@ -48,54 +65,24 @@ const Navbar = () => {
           >
             Auctions
           </Link>
-
           <Link
             to="/register-vehicle"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Submit a Vehicle
           </Link>
-
           <Link
             to="/scoreboard"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Scoreboard
           </Link>
-
-          {/* Scoreboard Dropdown */}
-          {/* <div className="relative">
-            <button
-              onClick={toggleScoreboardDropdown}
-              className="text-gray-700 hover:text-black text-sm font-medium uppercase focus:outline-none"
-            >
-              Score Board
-            </button>
-            {scoreboardDropdownOpen && (
-              <div className="absolute mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
-                <button
-                  onClick={() => handleScoreboardSelection("seller")}
-                  className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Seller Scoreboard
-                </button>
-                <button
-                  onClick={() => handleScoreboardSelection("buyer")}
-                  className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Buyer Scoreboard
-                </button>
-              </div>
-            )}
-          </div> */}
-
           <Link
             to="/about"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             About Us
           </Link>
-
           <Link
             to="/contact"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
@@ -105,30 +92,45 @@ const Navbar = () => {
         </div>
 
         {/* Right Icons */}
-        <div className="flex ml-15 space-x-10">
-          <Link to="/profile" className="hover:text-black">
-            <HiOutlineUser className="h-6 w-6 text-gray-700 flex mt-2" />
-          </Link>
-
+        <div className="flex ml-15 items-center">
           <SearchBar />
 
-          <button onClick={toggleNavDrawer} className="md:hidden flex mt-2">
-            <HiBars3BottomRight className="h-6 w-6" />
-          </button> 
-        </div>
-        {/* Login button */}
-        <Link to="/login">
-        <button className="bg-blue-700 w-20 h-10 text-white rounded ml-10">
-          Login
-        </button>
-      </Link>
+          {isLoggedIn ? (
+            // If user is logged in, show Profile and Logout button
+            <>
+              
 
-          {/* signin button */}
-          <Link to="/signup">
-        <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
-          SignUp
-        </button>
-      </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 w-20 h-10 text-white rounded ml-5"
+              >
+                Logout
+              </button>
+
+              <Link to="/profile" className="hover:text-black">
+                <HiOutlineUser className="h-6 w-6 text-gray-700 ml-15" />
+              </Link>
+            </>
+          ) : (
+            // If user is not logged in, show Login and SignUp buttons
+            <>
+              <Link to="/login">
+                <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
+                  Login
+                </button>
+              </Link>
+              <Link to="/signup">
+                <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          )}
+
+          <button onClick={toggleNavDrawer} className="md:hidden flex">
+            <HiBars3BottomRight className="h-6 w-6" />
+          </button>
+        </div>
       </nav>
 
       {/* Scoreboard Popup */}

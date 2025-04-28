@@ -3,8 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -15,119 +14,82 @@ const UserProfile = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
-  const [showDetails, setShowDetails] = useState(false);
-  const [paymentHistory, setPaymentHistory] = useState([]); // State for payment history
+  const [showDetails, setShowDetails] = useState(true);
+  const [paymentHistory, setPaymentHistory] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch all users on component mount
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchUserDetails = async () => {
       try {
-        const response = await axios.get("http://localhost:5555/user/");
-        setUsers(response.data);
+        const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("token");
+
+        if (!userId || !token) {
+          console.error("Authentication required");
+          navigate("/login"); // Redirect to login if not authenticated
+          return;
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
+
+        // Fetch user details
+        const response = await axios.get(`http://localhost:5555/user/${userId}`, config);
+        
+        if (response.data) {
+          setUser(response.data);
+          setFormData({
+            fname: response.data.fname || "",
+            lname: response.data.lname || "",
+            email: response.data.email || "",
+            address: response.data.address || "",
+            country: response.data.country || "",
+            mobileNo: response.data.mobileNo || "",
+          });
+
+          // Fetch payment history
+          const paymentResponse = await axios.get(`http://localhost:5555/user/${userId}/payments`, config);
+          setPaymentHistory(paymentResponse.data);
+        }
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching user profile:", error);
+        if (error.response && error.response.status === 401) {
+          // Handle unauthorized access
+          localStorage.removeItem("userId");
+          localStorage.removeItem("token");
+          navigate("/login"); // Redirect to login on authentication error
+        }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUsers();
-  }, []);
+    fetchUserDetails();
+  }, [navigate]);
 
-  // Handle user selection
-  const handleSelectUser = async (id) => {
-    console.log("Selected User ID:", id); // Log the ID
-    try {
-      const response = await axios.get(`http://localhost:5555/user/${id}`);
-      setSelectedUser(response.data);
-      setFormData({
-        fname: response.data.fname || "",
-        lname: response.data.lname || "",
-        email: response.data.email || "",
-        address: response.data.address || "",
-        country: response.data.country || "",
-        mobileNo: response.data.mobileNo || "",
-      });
-      setErrors({}); // Clear errors when selecting a new user
-      setShowDetails(true); // Show details when a user is selected
-
-      // Fetch payment history for the selected user
-      const paymentResponse = await axios.get(
-        `http://localhost:5555/user/${id}/payments`
-      );
-      setPaymentHistory(paymentResponse.data);
-    } catch (error) {
-      console.error("Error fetching user or payment history:", error);
-    }
-  };
-
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    // Validate input on change
-    if (name === "email") {
-      validateEmail(value);
-    } else if (name === "mobileNo") {
-      validateMobileNo(value);
-    }
   };
 
-  // Validate email
-  const validateEmail = (email) => {
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (!emailRegex.test(email)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        email: "Invalid email format",
-      }));
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, email: "" }));
-    }
-  };
-
-  // Validate mobile number
-  const validateMobileNo = (mobileNo) => {
-    const mobileRegex = /^\+?[1-9]\d{1,14}$/; // E.164 format
-    if (!mobileRegex.test(mobileNo)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        mobileNo: "Invalid mobile number format",
-      }));
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, mobileNo: "" }));
-    }
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all fields before submitting
-    validateEmail(formData.email);
-    validateMobileNo(formData.mobileNo);
-
-    // Check if there are any errors
-    if (errors.email || errors.mobileNo) {
-      alert("Please fix the errors before submitting.");
-      return;
-    }
-
     try {
-      const response = await axios.put(
-        `http://localhost:5555/user/${selectedUser._id}`,
-        formData
-      );
-      setSelectedUser(response.data);
-      alert("Profile updated successfully");
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
 
-      // Refresh the user list
-      const updatedUsers = users.map((user) =>
-        user._id === selectedUser._id ? response.data : user
-      );
-      setUsers(updatedUsers);
+      const response = await axios.put(`http://localhost:5555/user/${user._id}`, formData, config);
+      setUser(response.data);
+      setShowDetails(true); // Switch back to view mode after successful update
+      alert("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile.");
@@ -135,232 +97,210 @@ const UserProfile = () => {
   };
 
   if (loading) {
-    return <div className="container mx-auto p-6">Loading...</div>;
+    return (
+      <div className="container mx-auto p-6 flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <p>Please log in to view your profile.</p>
+          <button 
+            onClick={() => navigate("/login")}
+            className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">User Profile</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* User List */}
-        <div className="bg-white shadow-lg rounded-lg p-4">
-          <h3 className="text-xl font-semibold mb-3">Select a User</h3>
-          <ul className="divide-y divide-gray-200">
-            {users.map((user) => (
-              <li
-                key={user._id}
-                className="p-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSelectUser(user._id)}
-              >
-                {user.fname} {user.lname} ({user.accountState})
-              </li>
-            ))}
-          </ul>
+    <div className="container mx-auto p-6 max-w-4xl">
+      <div className="bg-white shadow-xl rounded-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+          <h2 className="text-2xl font-bold text-white">User Profile</h2>
         </div>
 
-        {/* User Details or Edit Form */}
-        {selectedUser && (
-          <div className="bg-blue-200 shadow-lg rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4">
-              {showDetails ? "User Details" : "Edit Profile"}:{" "}
-              {selectedUser.fname} {selectedUser.lname}
-            </h3>
+        {/* Toggle View / Edit */}
+        <div className="flex gap-2 p-4 bg-gray-50">
+          <button
+            onClick={() => setShowDetails(true)}
+            className={`px-4 py-2 rounded transition-colors ${
+              showDetails 
+                ? "bg-blue-500 text-white" 
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+          >
+            View Details
+          </button>
+          <button
+            onClick={() => setShowDetails(false)}
+            className={`px-4 py-2 rounded transition-colors ${
+              !showDetails 
+                ? "bg-blue-500 text-white" 
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+          >
+            Edit Profile
+          </button>
+        </div>
 
-            {/* Toggle between Details and Edit Form */}
-            <div className="flex gap-2 mb-4">
-              <button
-                onClick={() => setShowDetails(true)}
-                className={`px-4 py-2 rounded ${
-                  showDetails
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300 text-gray-700"
-                }`}
-              >
-                View Details
-              </button>
-              <button
-                onClick={() => setShowDetails(false)}
-                className={`px-4 py-2 rounded ${
-                  !showDetails
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300 text-gray-700"
-                }`}
-              >
-                Edit Profile
-              </button>
+        {showDetails ? (
+          <div className="p-6 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-600">First Name</p>
+                <p className="font-semibold">{user.fname}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-600">Last Name</p>
+                <p className="font-semibold">{user.lname}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-600">Email</p>
+                <p className="font-semibold">{user.email}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-600">Mobile No</p>
+                <p className="font-semibold">{user.mobileNo}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-600">Address</p>
+                <p className="font-semibold">{user.address}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-600">Country</p>
+                <p className="font-semibold">{user.country}</p>
+              </div>
             </div>
 
-            {/* User Details Page */}
-            {showDetails ? (
-              <div className="space-y-4">
-                <p>
-                  <strong>First Name:</strong> {selectedUser.fname}
-                </p>
-                <p>
-                  <strong>Last Name:</strong> {selectedUser.lname}
-                </p>
-                <p>
-                  <strong>Email:</strong> {selectedUser.email}
-                </p>
-                <p>
-                  <strong>Address:</strong> {selectedUser.address}
-                </p>
-                <p>
-                  <strong>Country:</strong> {selectedUser.country}
-                </p>
-                <p>
-                  <strong>Mobile No:</strong> {selectedUser.mobileNo}
-                </p>
-                <p>
-                  <strong>Account State:</strong>{" "}
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                      selectedUser.accountState === "active"
-                        ? "bg-green-100 text-green-700"
-                        : selectedUser.accountState === "pending"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {selectedUser.accountState}
-                  </span>
-                </p>
-
-                {/* Payment History Section */}
-                <div className="mt-6">
-                  <h4 className="text-lg font-semibold mb-3">Payment History</h4>
-                  {paymentHistory.length > 0 ? (
-                    <table className="w-full border-collapse border border-gray-300">
-                      <thead>
-                        <tr className="bg-gray-100">
-                          <th className="p-2 border border-gray-300">Auction ID</th>
-                          <th className="p-2 border border-gray-300">Amount</th>
-                          <th className="p-2 border border-gray-300">Date</th>
-                          <th className="p-2 border border-gray-300">Status</th>
+            {/* Payment History */}
+            <div className="mt-8">
+              <h4 className="text-xl font-semibold mb-4">Payment History</h4>
+              {paymentHistory.length > 0 ? (
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="p-3 text-left">Auction ID</th>
+                        <th className="p-3 text-left">Amount</th>
+                        <th className="p-3 text-left">Date</th>
+                        <th className="p-3 text-left">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paymentHistory.map((payment) => (
+                        <tr key={payment._id} className="border-b hover:bg-gray-50">
+                          <td className="p-3">{payment.auctionId}</td>
+                          <td className="p-3">${payment.amount.toFixed(2)}</td>
+                          <td className="p-3">{new Date(payment.date).toLocaleDateString()}</td>
+                          <td className="p-3">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                payment.status === "completed"
+                                  ? "bg-green-100 text-green-700"
+                                  : payment.status === "pending"
+                                  ? "bg-yellow-100 text-yellow-700"
+                                  : "bg-red-100 text-red-700"
+                              }`}
+                            >
+                              {payment.status}
+                            </span>
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {paymentHistory.map((payment) => (
-                          <tr key={payment._id} className="hover:bg-gray-50">
-                            <td className="p-2 border border-gray-300">
-                              {payment.auctionId}
-                            </td>
-                            <td className="p-2 border border-gray-300">
-                              ${payment.amount.toFixed(2)}
-                            </td>
-                            <td className="p-2 border border-gray-300">
-                              {new Date(payment.date).toLocaleDateString()}
-                            </td>
-                            <td className="p-2 border border-gray-300">
-                              <span
-                                className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                                  payment.status === "completed"
-                                    ? "bg-green-100 text-green-700"
-                                    : payment.status === "pending"
-                                    ? "bg-yellow-100 text-yellow-700"
-                                    : "bg-red-100 text-red-700"
-                                }`}
-                              >
-                                {payment.status}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <p className="text-gray-600">No payment history available.</p>
-                  )}
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              </div>
-            ) : (
-              // Edit Profile Form
-              <form onSubmit={handleSubmit}>
-                <label className="block mb-2">
-                  First Name:
-                  <input
-                    type="text"
-                    name="fname"
-                    value={formData.fname}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded bg-white"
-                    required
-                  />
-                </label>
-                <label className="block mb-2">
-                  Last Name:
-                  <input
-                    type="text"
-                    name="lname"
-                    value={formData.lname}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded bg-white"
-                    required
-                  />
-                </label>
-                <label className="block mb-2">
-                  Email:
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    // onChange={handleInputChange}
-                    disabled className={`w-full p-2 border rounded bg-white${
-                      errors.email ? "border-red-500" : ""
-                    }`}
-                    required
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                  )}
-                </label>
-                <label className="block mb-2">
-                  Address:
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded bg-white"
-                    required
-                  />
-                </label>
-                <label className="block mb-2">
-                  Country:
-                  <input
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded bg-white"
-                    required
-                  />
-                </label>
-                <label className="block mb-4">
-                  Mobile No:
-                  <input
-                    type="text"
-                    name="mobileNo"
-                    value={formData.mobileNo}
-                    onChange={handleInputChange}
-                    className={`w-full p-2 border rounded bg-white ${
-                      errors.mobileNo ? "border-red-500" : ""
-                    }`}
-                    required
-                  />
-                  {errors.mobileNo && (
-                    <p className="text-red-500 text-sm mt-1">{errors.mobileNo}</p>
-                  )}
-                </label>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Save Changes
-                </button>
-              </form>
-            )}
+              ) : (
+                <p className="text-gray-600 bg-gray-50 p-4 rounded-lg">No payment history available.</p>
+              )}
+            </div>
           </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  name="fname"
+                  value={formData.fname}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  name="lname"
+                  value={formData.lname}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Country
+                </label>
+                <input
+                  type="text"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Mobile No
+                </label>
+                <input
+                  type="text"
+                  name="mobileNo"
+                  value={formData.mobileNo}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex justify-end mt-6">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
         )}
       </div>
     </div>
