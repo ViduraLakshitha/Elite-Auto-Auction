@@ -24,6 +24,20 @@ export async function getUserById(req, res) {
   }
 }
 
+// Get a single user by Email
+export async function getUserByEmail(req, res) {
+  try {
+    const email = req.params.email.toLowerCase(); // Optional: make it case-insensitive
+    const user = await User.findOne({ email }).select("-password"); // Exclude password
+    if (!user) {
+      return res.status(404).json({ message: "User not found with this email" });
+    }
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching user by email", error: err.message });
+  }
+}
+
 // Update a user's profile
 export async function updateUser(req, res) {
   try {

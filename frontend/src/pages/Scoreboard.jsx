@@ -67,7 +67,7 @@ const Scoreboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-8 relative">
         <h1 className="text-4xl font-extrabold text-center w-full text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 drop-shadow-lg">
-          🏆 Vehicle Auction Scoreboard
+          Vehicle Auction Scoreboard
         </h1>
 
         {/* Download Button */}
@@ -76,7 +76,7 @@ const Scoreboard = () => {
           className="absolute right-16 top-0 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 flex items-center space-x-2"
         >
           <FaDownload />
-          <span>Download Top Winners</span>
+          <span>Download Winners List</span>
         </button>
       </div>
 

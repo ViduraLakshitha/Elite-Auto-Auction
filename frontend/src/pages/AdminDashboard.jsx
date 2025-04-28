@@ -127,7 +127,7 @@ const AdminDashboard = () => {
         )}
 
         {/* Header */}
-        <h2 className="text-4xl font-extrabold text-gray-800 mb-8">Manage User Profiles</h2>
+        <h2 className="text-4xl font-extrabold text-gray-800 mb-8">User Profiles</h2>
 
         {/* Search & CSV Download */}
         <div className="flex items-center justify-between mb-6">
@@ -142,7 +142,7 @@ const AdminDashboard = () => {
             onClick={generateCSVReport}
             className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300"
           >
-            📄 Download User Report
+            Download User Report
           </button>
         </div>
 

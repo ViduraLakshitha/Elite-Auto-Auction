@@ -136,7 +136,7 @@ export const getScoreboard = async (req, res) => {
       winningBid: { $gt: 0 },
     })
       .populate("vehicleId", "vehicleName model") // only get name and model of vehicle
-      .populate("finalWinnerUserId", "name email") // only get name and email of winner
+      .populate("finalWinnerUserId", "name ") // only get name of winner
       .sort({ winningBid: -1 }); // highest winning bid first
 
     res.status(200).json(scoreboard);
