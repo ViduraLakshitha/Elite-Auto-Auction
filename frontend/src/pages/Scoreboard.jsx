@@ -36,7 +36,6 @@ const Scoreboard = () => {
       unit: "mm"
     });
   
-    
     // Add title
     doc.setFontSize(22);
     doc.setTextColor(40);
@@ -131,8 +130,8 @@ const Scoreboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
-        <div className="text-2xl font-semibold text-gold animate-pulse">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-2xl font-serif font-semibold text-gray-700 animate-pulse">
           Loading auction results...
         </div>
       </div>
@@ -141,8 +140,8 @@ const Scoreboard = () => {
 
   if (scoreboard.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
-        <div className="text-xl text-gray-400">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-xl font-serif text-gray-600">
           No auction results available yet!
         </div>
       </div>
@@ -150,106 +149,108 @@ const Scoreboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 p-4 md:p-8 relative">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 drop-shadow-lg">
-          🏆 Vehicle Auction Scoreboard
-        </h1>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="container mx-auto px-6 py-16 flex-grow">
+        {/* Header Section */}
+        <div className="max-w-6xl mx-auto text-center mb-16">
+          <h1 className="text-5xl font-bold text-gray-900 mb-6 font-serif tracking-tight">🏆 Auction Scoreboard</h1>
+          <div className="h-1 w-24 bg-amber-500 mx-auto mb-8"></div>
+          <p className="text-xl text-gray-600 leading-relaxed">
+            Explore the results of our premium vehicle auctions. Below you'll find all completed auctions with their winning bids.
+          </p>
+        </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-3">
+        {/* Actions */}
+        <div className="flex justify-center gap-4 mb-12">
           <button
             onClick={downloadPDF}
-            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-full shadow-lg transition duration-300 flex items-center space-x-2"
+            className="bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center space-x-2"
           >
             <FaDownload />
-            <span className="hidden sm:inline">Export to PDF</span>
+            <span>Export to PDF</span>
           </button>
           
           <button
             onClick={() => navigate("/")}
-            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-full shadow-lg transition duration-300 flex items-center space-x-2"
+            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center space-x-2"
           >
             <FaTimes />
-            <span className="hidden sm:inline">Close</span>
+            <span>Close</span>
           </button>
         </div>
-      </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto rounded-2xl shadow-2xl mb-8 border border-gray-700">
-        <table className="w-full table-auto border-collapse bg-gradient-to-br from-gray-800 to-gray-900 text-white">
-          <thead>
-            <tr className="text-gold border-b border-gray-600 text-lg">
-              <th className="p-4">
-                <div className="flex items-center justify-center">
-                  <FaChartBar className="mr-2" /> Rank
-                </div>
-              </th>
-              <th className="p-4 text-left">
-                <div className="flex items-center">
-                  <FaCar className="mr-2" /> Vehicle
-                </div>
-              </th>
-              <th className="p-4">
-                <div className="flex items-center justify-center">
-                  <FaUserTie className="mr-2" /> Winner
-                </div>
-              </th>
-              <th className="p-4">
-                <div className="flex items-center justify-center">
-                  <FaDollarSign className="mr-2" /> Winning Bid
-                </div>
-              </th>
-              <th className="p-4">
-                <div className="flex items-center justify-center">
-                  <FaFlagCheckered className="mr-2" /> Status
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {scoreboard.map((item, index) => (
-              <tr
-                key={item._id || index}
-                className={`transition-all duration-200 ${
-                  index % 2 === 0 ? "bg-gray-800/50" : "bg-gray-700/50"
-                } hover:bg-gray-600/70`}
-              >
-                <td className="p-4 text-center font-bold text-yellow-400">
-                  {index + 1}
-                </td>
-                <td className="p-4 font-medium">
-                  <div className="font-bold">{item?.vehicleId?.vehicleName || 'N/A'}</div>
-                  <div className="text-sm text-gray-300">{item?.vehicleId?.model || ''}</div>
-                </td>
-                <td className="p-4 text-center">
-                  {item?.finalWinnerUserId?.name || "Unknown"}
-                </td>
-                <td className="p-4 text-center font-mono text-green-400">
-                  ${(item?.winningBid || 0).toLocaleString()}
-                </td>
-                <td className="p-4 text-center">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    item?.auctionStatus === 'completed' 
-                      ? 'bg-green-900/50 text-green-300' 
-                      : 'bg-blue-900/50 text-blue-300'
-                  }`}>
-                    {item?.auctionStatus ? 
-                      item.auctionStatus.charAt(0).toUpperCase() + item.auctionStatus.slice(1).toLowerCase() 
-                      : 'N/A'}
-                  </span>
-                </td>
+        {/* Table */}
+        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+          <table className="w-full table-auto">
+            <thead className="bg-gray-50">
+              <tr className="border-b border-gray-200">
+                <th className="py-4 px-6 text-left font-serif font-semibold text-gray-700">
+                  <div className="flex items-center">
+                    <FaChartBar className="mr-2 text-amber-500" /> Rank
+                  </div>
+                </th>
+                <th className="py-4 px-6 text-left font-serif font-semibold text-gray-700">
+                  <div className="flex items-center">
+                    <FaCar className="mr-2 text-amber-500" /> Vehicle
+                  </div>
+                </th>
+                <th className="py-4 px-6 text-left font-serif font-semibold text-gray-700">
+                  <div className="flex items-center">
+                    <FaUserTie className="mr-2 text-amber-500" /> Winner
+                  </div>
+                </th>
+                <th className="py-4 px-6 text-left font-serif font-semibold text-gray-700">
+                  <div className="flex items-center">
+                    <FaDollarSign className="mr-2 text-amber-500" /> Winning Bid
+                  </div>
+                </th>
+                <th className="py-4 px-6 text-left font-serif font-semibold text-gray-700">
+                  <div className="flex items-center">
+                    <FaFlagCheckered className="mr-2 text-amber-500" /> Status
+                  </div>
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {scoreboard.map((item, index) => (
+                <tr
+                  key={item._id || index}
+                  className="border-b border-gray-100 hover:bg-gray-50 transition duration-150"
+                >
+                  <td className="py-4 px-6 font-serif font-bold text-amber-600">
+                    {index + 1}
+                  </td>
+                  <td className="py-4 px-6">
+                    <div className="font-medium text-gray-800">{item?.vehicleId?.vehicleName || 'N/A'}</div>
+                    <div className="text-sm text-gray-500">{item?.vehicleId?.model || ''}</div>
+                  </td>
+                  <td className="py-4 px-6 text-gray-700">
+                    {item?.finalWinnerUserId?.name || "Unknown"}
+                  </td>
+                  <td className="py-4 px-6 font-mono text-green-600">
+                    ${(item?.winningBid || 0).toLocaleString()}
+                  </td>
+                  <td className="py-4 px-6">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      item?.auctionStatus === 'completed' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {item?.auctionStatus ? 
+                        item.auctionStatus.charAt(0).toUpperCase() + item.auctionStatus.slice(1).toLowerCase() 
+                        : 'N/A'}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      {/* Stats Footer */}
-      <div className="text-center text-gray-400 text-sm mt-8">
-        Showing {scoreboard.length} completed auctions • Generated on {new Date().toLocaleDateString()}
+        {/* Footer */}
+        <div className="max-w-6xl mx-auto text-center text-gray-500 text-sm mt-8">
+          Showing {scoreboard.length} completed auctions • Generated on {new Date().toLocaleDateString()}
+        </div>
       </div>
     </div>
   );
