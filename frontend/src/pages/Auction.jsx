@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import CurrentBid from '../component/auction/CurrentBid'
 import RemainingTime from '../component/auction/RemainingTime';
 import Header from '../component/common/Header';
-import Footer from '../component/common/footer';
+import Footer from '../component/common/Footer';
 import BidPlacementCard from '../component/auction/BidPlacementCard';
 import Gallery from '../component/auction/Gallery';
 import LiveBidHistory from '../component/auction/LiveBidHistory';
