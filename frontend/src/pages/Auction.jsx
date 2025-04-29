@@ -6,7 +6,7 @@ import RemainingTime from '../component/auction/RemainingTime';
 import EndDate from '../component/auction/EndDate';
 import carImage from '../../imgs/BMW_i8.jpg';
 import Header from '../component/common/Header';
-import Footer from '../component/common/Footer';
+import Footer from '../component/common/footer';
 import BidPlacementCard from '../component/auction/BidPlacementCard';
 import Gallery from '../component/auction/Gallery';
 
