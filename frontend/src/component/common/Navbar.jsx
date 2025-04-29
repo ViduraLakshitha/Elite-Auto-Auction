@@ -46,13 +46,13 @@ const Navbar = () => {
   return (
     <>
       <nav className="bg-gradient-to-r from-gray-900 to-gray-800 shadow-lg">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-6 py-4 text-sm flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <FaCrown className="text-amber-400 h-6 w-6" />
+            <FaCrown className="text-amber-400 h-4 w-4" />
             <Link 
               to="/" 
-              className="text-2xl font-serif font-medium text-white tracking-wider"
+              className="font-serif text-lg text-white tracking-wider"
             >
               ELITE<span className="text-amber-400">AUTO</span>AUCTIONS
             </Link>
@@ -75,9 +75,9 @@ const Navbar = () => {
               </Link>
               <Link
             to="/register-transportation"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase flex items-center"
+            className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
           >
-            <FaTruck className="mr-1" /> Transportation
+            Transportation
           </Link>
           <Link
                 to="/scoreboard"
@@ -89,13 +89,13 @@ const Navbar = () => {
                 to="/about"
                 className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
               >
-                ABOUT US
+                ABOUTUS
               </Link>
               <Link
                 to="/contact"
                 className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
               >
-                CONTACT US
+                CONTACTUS
               </Link>
             </div>
 
