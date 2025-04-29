@@ -11,24 +11,40 @@ const addVehicle = async (req, res) => {
 
     console.log('Files:', files);
     console.log('Request Body:', req.body);
+    console.log('User from auth:', req.user); // Debug log
 
     const { initialVehiclePrice, startDateTime, endDateTime, ...vehicleData } = req.body;
+
+    // Get userId from the authenticated user
+    const userId = req.user.userId; // Changed from req.user.id to req.user.userId
+
+    if (!userId) {
+      return res.status(401).json({ message: 'User ID not found in token' });
+    }
 
     // Now include user ID automatically
     const newVehicle = new Vehicle({
       ...vehicleData,
       images,
       documents,
-      userId: req.user.id, // <==== Important: takes from auth middleware
+      userId: userId,
     });
 
     const savedVehicle = await newVehicle.save();
 
+    // Create auction with all required fields
     const newAuction = new Auction({
       vehicleId: savedVehicle._id,
+      userId: userId, // Add userId to auction
+      auctionTitle: `${vehicleData.brand} ${vehicleData.model} ${vehicleData.year}`, // Create title from vehicle details
       initialVehiclePrice,
-      startDateTime,
-      endDateTime,
+      startDateTime: startDateTime || new Date(), // Use provided date or current date
+      endDateTime: endDateTime || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Default to 7 days from now if not provided
+      status: 'pending', // Set initial status
+      currentPrice: initialVehiclePrice, // Set initial price
+      description: vehicleData.description, // Use vehicle description
+      isActive: true, // Set as active
+      isVerified: false, // Set as unverified initially
     });
 
     await newAuction.save();

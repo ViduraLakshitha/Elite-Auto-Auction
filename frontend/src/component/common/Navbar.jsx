@@ -28,7 +28,8 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
-    navigate("/"); // redirect to login after logout
+    navigate("/");
+     // redirect to login after logout
   };
 
   const toggleNavDrawer = () => {

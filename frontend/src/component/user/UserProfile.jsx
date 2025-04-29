@@ -21,7 +21,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
         const token = localStorage.getItem("token");
 
         if (!userId || !token) {
@@ -40,17 +40,18 @@ const UserProfile = () => {
 
         if (response.data) {
           setUser(response.data);
-          setFormData({
-            fname: response.data.fname || "",
-            lname: response.data.lname || "",
-            email: response.data.email || "",
-            address: response.data.address || "",
-            country: response.data.country || "",
-            mobileNo: response.data.mobileNo || "",
-          });
-
+        setFormData({
+          fname: response.data.fname || "",
+          lname: response.data.lname || "",
+          email: response.data.email || "",
+          address: response.data.address || "",
+          country: response.data.country || "",
+          mobileNo: response.data.mobileNo || "",
+        });
+  
+          // Fetch payment history
           const paymentResponse = await axios.get(`http://localhost:5555/user/${userId}/payments`, config);
-          setPaymentHistory(paymentResponse.data);
+        setPaymentHistory(paymentResponse.data);
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -63,7 +64,7 @@ const UserProfile = () => {
         setLoading(false);
       }
     };
-
+  
     fetchUserDetails();
   }, [navigate]);
 
@@ -164,7 +165,7 @@ const UserProfile = () => {
           
         </div>
 
-        {showDetails ? (
+      {showDetails ? (
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* View Details */}
@@ -176,10 +177,10 @@ const UserProfile = () => {
               <InfoBlock label="Country" value={user.country} />
             </div>
 
-            {/* Payment History */}
+          {/* Payment History */}
             <div className="mt-8">
               <h4 className="text-xl font-semibold mb-4">Payment History</h4>
-              {paymentHistory.length > 0 ? (
+            {paymentHistory.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse">
                     <thead>
@@ -188,33 +189,33 @@ const UserProfile = () => {
                         <th className="p-3 text-left">Amount</th>
                         <th className="p-3 text-left">Date</th>
                         <th className="p-3 text-left">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {paymentHistory.map((payment) => (
+                  </tr>
+                </thead>
+                <tbody>
+                  {paymentHistory.map((payment) => (
                         <tr key={payment._id} className="border-b hover:bg-gray-50">
                           <td className="p-3">{payment.auctionId}</td>
                           <td className="p-3">${payment.amount.toFixed(2)}</td>
                           <td className="p-3">{new Date(payment.date).toLocaleDateString()}</td>
                           <td className="p-3">
-                            <span
+                        <span
                               className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                                payment.status === "completed"
-                                  ? "bg-green-100 text-green-700"
-                                  : payment.status === "pending"
-                                  ? "bg-yellow-100 text-yellow-700"
-                                  : "bg-red-100 text-red-700"
-                              }`}
-                            >
-                              {payment.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                            payment.status === "completed"
+                              ? "bg-green-100 text-green-700"
+                              : payment.status === "pending"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {payment.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
                 </div>
-              ) : (
+            ) : (
                 <p className="text-gray-600 bg-gray-50 p-4 rounded-lg">No payment history available.</p>
               )}
             </div>
@@ -273,11 +274,11 @@ const UserProfile = () => {
                 type="submit"
                 className="bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-800 transition-colors"
               >
-                Save Changes
-              </button>
+            Save Changes
+          </button>
             </div>
-          </form>
-        )}
+        </form>
+      )}
       </div>
     </div>
   );

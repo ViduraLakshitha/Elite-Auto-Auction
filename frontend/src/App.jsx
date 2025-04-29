@@ -19,6 +19,7 @@ import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx"; 
 import VehicleForm from "./pages/VehicleForm.jsx"; 
 import VehicleList from "./component/user/VehicleList.jsx"; //Import VehicleList
+import PaymentForm from "./pages/PaymentForm.jsx";
 
 const ProtectedAdminRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("isAdminLoggedIn") === "true";
@@ -65,7 +66,7 @@ function App  ()  {
         <Route path="/admin/chart" element={<ChartAdmin />} />
 
         {/* Payments */}
-        <Route path="/payments" element={<PaymentPage />} />
+        <Route path="/payment" element={<PaymentForm />} />
         <Route path="/user" element={<UserDetailsPage />} />
         <Route path="/scoreboard" element={<Scoreboard />} />
 
