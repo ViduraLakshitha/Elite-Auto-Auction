@@ -43,14 +43,6 @@
 
 
 
-
-
-
-
-
-
-
-
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import CountdownTimer from './CountdownTimer';
@@ -116,6 +108,7 @@ export default function RemainingTime({ auction, className, userId }) {
             <WinPopUp 
                 open={showWinPopup} 
                 onClose={() => setShowWinPopup(false)}
+                auction={auction}
                 auctionTitle={auction.auctionTitle}
             />
         </div>

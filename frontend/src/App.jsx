@@ -27,6 +27,8 @@ const ProtectedAdminRoute = ({ children }) => {
 //import { BrowserRouter, Routes, Route } from "react-router-dom";
 //import Home from "./pages/Home";
 import Auction from "./pages/Auction";
+import PaymentPortal from "./pages/PaymentPortal";
+import AuctionsAll from "./pages/AuctionsAll";
 import AuctionList from "./pages/AuctionList"; // Import your AuctionList component
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
@@ -108,6 +110,8 @@ function App  ()  {
         {/* Catch-all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/auction-details/:id" element={<Auction/>}/>
+        <Route path="/payment-final" element={<PaymentPortal />} />
+        <Route path="/auctions-all" element={<AuctionsAll/>}/>
         <Route path="/auctions" element={<AuctionList />} /> 
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/about" element={<AboutUs />} />

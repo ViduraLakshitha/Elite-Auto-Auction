@@ -75,13 +75,24 @@
 
 
 
-
-
-
 import React from 'react';
 import { Dialog } from '@headlessui/react';
+import { useNavigate } from 'react-router-dom';
 
-const WinPopUp = ({ open, onClose, auctionTitle }) => {
+const WinPopUp = ({ open, onClose, auction, auctionTitle, userId }) => {
+    const navigate = useNavigate();
+
+    const handleProceedToPayment = () => {
+        navigate('/payment-final', {
+            state: {
+                auctionId: auction._id,
+                userId: userId,
+                winningBid: auction.winningBid,
+            }
+        });
+        onClose();
+    };
+
     return (
         <Dialog open={open} onClose={onClose}>
             {/* Backdrop with blur and transparency */}
@@ -106,10 +117,7 @@ const WinPopUp = ({ open, onClose, auctionTitle }) => {
                         </button>
                         <button
                             className="px-6 py-2 bg-amber-500 text-white rounded-lg transition-colors w-full"
-                            onClick={() => {
-                                alert("Redirecting to payment...");
-                                onClose();
-                            }}
+                            onClick={handleProceedToPayment}
                         >
                             Proceed to Payment
                         </button>
