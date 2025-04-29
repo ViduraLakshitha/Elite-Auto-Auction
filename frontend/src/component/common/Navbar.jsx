@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";  // <-- Add useEffect here
-import { Link, useNavigate } from "react-router-dom";  // Add useNavigate
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineUser, HiBars3BottomRight } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
+import { FaCrown } from "react-icons/fa"; // New crown icon for premium feel
 import { FaTruck } from "react-icons/fa";
 import SearchBar from "./SearchBar.jsx";
 import ScoreboardPopup from "../scoreboard/ScoreboardPopup.jsx";
@@ -11,26 +12,18 @@ const Navbar = () => {
   const [scoreboardDropdownOpen, setScoreboardDropdownOpen] = useState(false);
   const [scoreboardPopupOpen, setScoreboardPopupOpen] = useState(false);
   const [selectedScoreboardType, setSelectedScoreboardType] = useState(null);
-  
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // <-- new state
-  const navigate = useNavigate(); // <-- for logout if needed
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
-  // Check if user is logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
+    setIsLoggedIn(!!token);
   }, []);
 
-  // Optional: Logout handler
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     navigate("/");
-     // redirect to login after logout
   };
 
   const toggleNavDrawer = () => {
@@ -53,90 +46,203 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="container mx-auto flex py-6 ml-15" id="navBar">
-        <div className="flex mt-1.5">
-          <Link to="/" className="text-2xl font-medium">
-            Elite Auto Auction
-          </Link>
-        </div>
+      <nav className="bg-gradient-to-r from-gray-900 to-gray-800 shadow-lg">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <FaCrown className="text-amber-400 h-6 w-6" />
+            <Link 
+              to="/" 
+              className="text-2xl font-serif font-medium text-white tracking-wider"
+            >
+              ELITE<span className="text-amber-400">AUTO</span>AUCTIONS
+            </Link>
+          </div>
 
-        <div className="hidden md:flex ml-20 mt-3 space-x-10">
-          <Link
-            to="/auctions"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Auctions
-          </Link>
-          <Link
-            to="/register-vehicle"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Submit a Vehicle
-          </Link>
-          <Link
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8">
+            <div className="flex space-x-8">
+              <Link
+                to="/auctions"
+                className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
+              >
+                AUCTIONS
+              </Link>
+              <Link
+                to="/register-vehicle"
+                className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
+              >
+                SUBMIT VEHICLE
+              </Link>
+              <Link
             to="/register-transportation"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase flex items-center"
           >
             <FaTruck className="mr-1" /> Transportation
           </Link>
           <Link
-            to="/scoreboard"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Scoreboard
-          </Link>
-          <Link
-            to="/about"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            About Us
-          </Link>
-          <Link
-            to="/contact"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Contact Us
-          </Link>
-        </div>
-
-        {/* Right Icons */}
-        <div className="flex ml-15 items-center">
-          <SearchBar />
-
-          {isLoggedIn ? (
-            // If user is logged in, show Profile and Logout button
-            <>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 w-20 h-10 text-white rounded ml-5"
+                to="/scoreboard"
+                className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
               >
-                Logout
-              </button>
+                SCOREBOARD
+              </Link>
+              <Link
+                to="/about"
+                className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
+              >
+                ABOUT US
+              </Link>
+              <Link
+                to="/contact"
+                className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
+              >
+                CONTACT US
+              </Link>
+            </div>
 
-              <Link to="/profile" className="hover:text-black">
-                <HiOutlineUser className="h-6 w-6 text-gray-700 ml-15" />
-              </Link>
-            </>
-          ) : (
-            // If user is not logged in, show Login and SignUp buttons
-            <>
-              <Link to="/login">
-                <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
-                  Login
-                </button>
-              </Link>
-              <Link to="/signup">
-                <button className="bg-blue-700 w-20 h-10 text-white rounded ml-5">
-                  Sign Up
-                </button>
-              </Link>
-            </>
-          )}
+            <div className="flex items-center space-x-6 ml-8">
+              <SearchBar />
+              
+              {isLoggedIn ? (
+                <>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-transparent border border-amber-400 text-amber-400 px-4 py-2 rounded-md text-sm uppercase tracking-wider hover:bg-amber-400 hover:text-gray-900 transition-colors duration-300"
+                  >
+                    LOGOUT
+                  </button>
+                  <Link 
+                    to="/profile" 
+                    className="text-gray-300 hover:text-amber-400 transition-colors duration-300"
+                  >
+                    <HiOutlineUser className="h-6 w-6" />
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <button className="bg-transparent border border-gray-300 text-gray-300 px-4 py-2 rounded-md text-sm uppercase tracking-wider hover:bg-gray-700 hover:text-white transition-colors duration-300">
+                      LOGIN
+                    </button>
+                  </Link>
+                  <Link to="/signup">
+                    <button className="bg-amber-500 text-gray-900 px-4 py-2 rounded-md text-sm uppercase tracking-wider hover:bg-amber-400 transition-colors duration-300">
+                      REGISTER
+                    </button>
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
 
-          <button onClick={toggleNavDrawer} className="md:hidden flex">
-            <HiBars3BottomRight className="h-6 w-6" />
+          {/* Mobile Menu Button */}
+          <button 
+            onClick={toggleNavDrawer} 
+            className="lg:hidden text-gray-300 hover:text-amber-400 focus:outline-none"
+          >
+            <HiBars3BottomRight className="h-8 w-8" />
           </button>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {navDrawerOpen && (
+          <div className="lg:hidden bg-gray-800 shadow-xl fixed inset-0 z-50 overflow-y-auto">
+            <div className="container mx-auto px-6 py-4">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center space-x-2">
+                  <FaCrown className="text-amber-400 h-6 w-6" />
+                  <span className="text-xl font-serif font-medium text-white tracking-wider">
+                    ELITE AUTO AUCTIONS
+                  </span>
+                </div>
+                <button 
+                  onClick={toggleNavDrawer} 
+                  className="text-gray-300 hover:text-amber-400 focus:outline-none"
+                >
+                  <IoMdClose className="h-8 w-8" />
+                </button>
+              </div>
+
+              <div className="mt-12 flex flex-col space-y-8">
+                <Link
+                  to="/auctions"
+                  className="text-gray-300 hover:text-amber-400 text-lg uppercase tracking-wider transition-colors duration-300"
+                  onClick={toggleNavDrawer}
+                >
+                  Auctions
+                </Link>
+                <Link
+                  to="/register-vehicle"
+                  className="text-gray-300 hover:text-amber-400 text-lg uppercase tracking-wider transition-colors duration-300"
+                  onClick={toggleNavDrawer}
+                >
+                  Submit Vehicle
+                </Link>
+                <Link
+                  to="/scoreboard"
+                  className="text-gray-300 hover:text-amber-400 text-lg uppercase tracking-wider transition-colors duration-300"
+                  onClick={toggleNavDrawer}
+                >
+                  Scoreboard
+                </Link>
+                <Link
+                  to="/about"
+                  className="text-gray-300 hover:text-amber-400 text-lg uppercase tracking-wider transition-colors duration-300"
+                  onClick={toggleNavDrawer}
+                >
+                  About Us
+                </Link>
+                <Link
+                  to="/contact"
+                  className="text-gray-300 hover:text-amber-400 text-lg uppercase tracking-wider transition-colors duration-300"
+                  onClick={toggleNavDrawer}
+                >
+                  Contact Us
+                </Link>
+
+                <div className="pt-8 border-t border-gray-700">
+                  {isLoggedIn ? (
+                    <div className="flex flex-col space-y-6">
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          toggleNavDrawer();
+                        }}
+                        className="w-full bg-transparent border border-amber-400 text-amber-400 px-6 py-3 rounded-md text-lg uppercase tracking-wider hover:bg-amber-400 hover:text-gray-900 transition-colors duration-300"
+                      >
+                        Logout
+                      </button>
+                      <Link
+                        to="/profile"
+                        className="text-center text-gray-300 hover:text-amber-400 text-lg uppercase tracking-wider transition-colors duration-300"
+                        onClick={toggleNavDrawer}
+                      >
+                        My Profile
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col space-y-6">
+                      <Link
+                        to="/login"
+                        className="w-full bg-transparent border border-gray-300 text-gray-300 px-6 py-3 rounded-md text-lg uppercase tracking-wider hover:bg-gray-700 hover:text-white transition-colors duration-300 text-center"
+                        onClick={toggleNavDrawer}
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        to="/signup"
+                        className="w-full bg-amber-500 text-gray-900 px-6 py-3 rounded-md text-lg uppercase tracking-wider hover:bg-amber-400 transition-colors duration-300 text-center"
+                        onClick={toggleNavDrawer}
+                      >
+                        Register
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Mobile Navigation Drawer */}
