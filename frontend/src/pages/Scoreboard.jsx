@@ -221,7 +221,7 @@ const Scoreboard = () => {
                     {index + 1}
                   </td>
                   <td className="py-4 px-6">
-                    <div className="font-medium text-gray-800">{item?.vehicleId?.vehicleName || 'N/A'}</div>
+                    <div className="font-medium text-gray-800">{item?.vehicleId?.vehicleName || ''}</div>
                     <div className="text-sm text-gray-500">{item?.vehicleId?.model || ''}</div>
                   </td>
                   <td className="py-4 px-6 text-gray-700">
