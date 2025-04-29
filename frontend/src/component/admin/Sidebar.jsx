@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaChartLine, FaUsers, FaTrophy, FaShoppingCart, FaCar, FaCog, FaSignOutAlt, FaGavel } from "react-icons/fa";
+import { FaHome, FaChartLine, FaUsers, FaTrophy, FaShoppingCart, FaCar, FaCog, FaSignOutAlt, FaGavel, FaTruck } from "react-icons/fa";
 
 const Sidebar = () => {
   const handleLogout = () => {
@@ -49,6 +49,11 @@ const Sidebar = () => {
           <li>
             <Link to="/vehicles" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
               <FaCar className="mr-3 text-xl" /> Vehicle Details
+            </Link>
+          </li>
+          <li>
+            <Link to="/admin/transportation" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaTruck className="mr-3 text-xl" /> Transportation
             </Link>
           </li>
           <li>

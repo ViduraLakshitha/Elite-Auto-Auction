@@ -1,5 +1,5 @@
 import express from "express";
-import Contact from "../model/Contact"; // Create a Contact model in MongoDB
+import Contact from "../model/contact.model.js"; // fixed import
 
 const contact = express.Router();
 

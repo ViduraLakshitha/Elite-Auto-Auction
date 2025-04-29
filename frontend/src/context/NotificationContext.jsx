@@ -22,7 +22,7 @@ export const NotificationProvider = ({ children }) => {
     fetchNotifications();
 
     // Connect to Socket.IO server
-    const socket = io('http://localhost:5000');
+    const socket = io('http://localhost:5555');
 
     // Listen for incoming notifications
     socket.on('receiveNotification', (newNotification) => {
@@ -38,7 +38,7 @@ export const NotificationProvider = ({ children }) => {
   // Function to mark a notification as read
   const markAsRead = async (notificationId) => {
     try {
-      await axios.put(`http://localhost:5000/api/notifications/${notificationId}`);
+      await axios.put(`http://localhost:5555/api/notifications/${notificationId}`);
       setNotifications((prev) =>
         prev.map((n) =>
           n._id === notificationId ? { ...n, read: true } : n

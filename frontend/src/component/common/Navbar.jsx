@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";  // <-- Add useEffect here
 import { Link, useNavigate } from "react-router-dom";  // Add useNavigate
 import { HiOutlineUser, HiBars3BottomRight } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
+import { FaTruck } from "react-icons/fa";
 import SearchBar from "./SearchBar.jsx";
 import ScoreboardPopup from "../scoreboard/ScoreboardPopup.jsx";
 
@@ -73,6 +74,12 @@ const Navbar = () => {
             Submit a Vehicle
           </Link>
           <Link
+            to="/register-transportation"
+            className="text-gray-700 hover:text-black text-sm font-medium uppercase flex items-center"
+          >
+            <FaTruck className="mr-1" /> Transportation
+          </Link>
+          <Link
             to="/scoreboard"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
@@ -99,8 +106,6 @@ const Navbar = () => {
           {isLoggedIn ? (
             // If user is logged in, show Profile and Logout button
             <>
-              
-
               <button
                 onClick={handleLogout}
                 className="bg-red-600 w-20 h-10 text-white rounded ml-5"
@@ -133,6 +138,99 @@ const Navbar = () => {
           </button>
         </div>
       </nav>
+
+      {/* Mobile Navigation Drawer */}
+      {navDrawerOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
+          <div className="bg-white h-full w-64 p-5 shadow-lg transform transition-transform duration-300">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold">Menu</h3>
+              <button onClick={toggleNavDrawer}>
+                <IoMdClose className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <div className="flex flex-col space-y-4">
+              <Link
+                to="/auctions"
+                className="text-gray-700 hover:text-black text-sm font-medium uppercase py-2 border-b"
+                onClick={toggleNavDrawer}
+              >
+                Auctions
+              </Link>
+              <Link
+                to="/register-vehicle"
+                className="text-gray-700 hover:text-black text-sm font-medium uppercase py-2 border-b"
+                onClick={toggleNavDrawer}
+              >
+                Submit a Vehicle
+              </Link>
+              <Link
+                to="/register-transportation"
+                className="text-gray-700 hover:text-black text-sm font-medium uppercase py-2 border-b flex items-center"
+                onClick={toggleNavDrawer}
+              >
+                <FaTruck className="mr-2" /> Transportation
+              </Link>
+              <Link
+                to="/scoreboard"
+                className="text-gray-700 hover:text-black text-sm font-medium uppercase py-2 border-b"
+                onClick={toggleNavDrawer}
+              >
+                Scoreboard
+              </Link>
+              <Link
+                to="/about"
+                className="text-gray-700 hover:text-black text-sm font-medium uppercase py-2 border-b"
+                onClick={toggleNavDrawer}
+              >
+                About Us
+              </Link>
+              <Link
+                to="/contact"
+                className="text-gray-700 hover:text-black text-sm font-medium uppercase py-2 border-b"
+                onClick={toggleNavDrawer}
+              >
+                Contact Us
+              </Link>
+              
+              {isLoggedIn ? (
+                <>
+                  <Link 
+                    to="/profile"
+                    className="text-gray-700 hover:text-black text-sm font-medium uppercase py-2 border-b"
+                    onClick={toggleNavDrawer}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      toggleNavDrawer();
+                    }}
+                    className="bg-red-600 w-full py-2 text-white rounded"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <div className="flex flex-col space-y-3 mt-4">
+                  <Link to="/login" onClick={toggleNavDrawer}>
+                    <button className="bg-blue-700 w-full py-2 text-white rounded">
+                      Login
+                    </button>
+                  </Link>
+                  <Link to="/signup" onClick={toggleNavDrawer}>
+                    <button className="bg-blue-700 w-full py-2 text-white rounded">
+                      Sign Up
+                    </button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Scoreboard Popup */}
       {scoreboardPopupOpen && (

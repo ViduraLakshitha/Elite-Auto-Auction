@@ -20,6 +20,8 @@ import Dashboard from "./pages/Dashboard.jsx";
 import VehicleForm from "./pages/VehicleForm.jsx"; 
 import VehicleList from "./component/user/VehicleList.jsx"; //Import VehicleList
 import PaymentForm from "./pages/PaymentForm.jsx";
+import TransportationRegistration from "./pages/TransportationRegistration.jsx"; // Import TransportationRegistration
+import TransportationManagementPage from "./pages/TransportationManagement.jsx"; // Import Transportation Management
 
 const ProtectedAdminRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("isAdminLoggedIn") === "true";
@@ -52,7 +54,8 @@ function App  ()  {
         <Route path="/register-vehicle" element={<VehicleForm />} />
         <Route path="/vehicles" element={<VehicleList />} />
 
-        
+        {/* Transportation Related Routes */}
+        <Route path="/register-transportation" element={<TransportationRegistration />} />
 
         {/* Scoreboards */}
         {/* <Route path="/scoreboard" element={<ScoreboardPopup />} /> */}
@@ -64,6 +67,7 @@ function App  ()  {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/settings" element={<Settings />} />
         <Route path="/admin/chart" element={<ChartAdmin />} />
+        <Route path="/admin/transportation" element={<TransportationManagementPage />} />
 
         {/* Payments */}
         <Route path="/payment" element={<PaymentForm />} />
@@ -108,6 +112,11 @@ function App  ()  {
         <Route path="/admin/chart" element={
           <ProtectedAdminRoute>
             <ChartAdmin />
+          </ProtectedAdminRoute>
+        } />
+        <Route path="/admin/transportation" element={
+          <ProtectedAdminRoute>
+            <TransportationManagementPage />
           </ProtectedAdminRoute>
         } />
         

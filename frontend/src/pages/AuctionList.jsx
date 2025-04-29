@@ -21,7 +21,7 @@ const Home = () => {
 //-----------------------------------------------------------------------------------------------------------------------//
 
 //    const handleAuctionCardClick = async (auctionId, vehicleId) => {
-    navigate(`/auction-details/${auctionId}`);
+//     navigate(`/auction-details/${auctionId}`);
 
     // const userId = localStorage.getItem("userId"); // Retrieve logged-in user ID
     //const userId = "67d46f4c21cd657bcb7dbb87";

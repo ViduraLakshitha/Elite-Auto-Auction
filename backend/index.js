@@ -19,6 +19,8 @@ import buyerScoreboardRoutes from './routes/buyerScoreboardRoutes.js';
 import commentRoute from "./routes/commentRoute.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import transportationRoute from "./routes/transportationRoute.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 // Config imports
 import { mongoDBURL, PORT } from "./config.js";
@@ -58,6 +60,8 @@ app.use("/api", auctionRoute);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoute);
+app.use('/api/transportation', transportationRoute);
+app.use('/api/contact', contactRoutes);
 
 // Socket.io events
 io.on("connection", (socket) => {
