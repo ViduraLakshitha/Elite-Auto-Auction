@@ -52,6 +52,11 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
+            <Link to="/admin/notifications" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
+              <FaCog className="mr-3 text-xl" /> Notification Setting
+            </Link>
+          </li>
+          <li>
             <Link to="/admin/settings" className="flex items-center p-3 hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-600 rounded-lg transition duration-300">
               <FaCog className="mr-3 text-xl" /> Settings
             </Link>
