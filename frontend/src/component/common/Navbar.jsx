@@ -73,13 +73,13 @@ const Navbar = () => {
         </div>
 
             {/* Login button */}
-        <button className="bg-blue-700 w-20 h-10 text-white border: rounded ml-10">
-            Loogin
+        <button className="bg-black w-20 h-10 text-white border: rounded ml-10">
+            Login
           </button>
 
           {/* signin button */}
-        <button className="bg-blue-700 w-20 h-10 text-white border: rounded ml-5">
-            Signin
+        <button className="bg-amber-500 w-20 h-10 text-white border: rounded ml-5">
+            Sign up
           </button>
 
       </nav>

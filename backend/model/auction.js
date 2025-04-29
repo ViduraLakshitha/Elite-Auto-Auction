@@ -63,7 +63,11 @@ const auctionSchema = new mongoose.Schema(
                   default: "pending",
             },
 
-            
+            finalWinnerUserId:{
+                  type:mongoose.Schema.Types.ObjectId,
+                  ref:"User",
+                  default:null,
+            },
 
             winningBid: {
                   type: Number,

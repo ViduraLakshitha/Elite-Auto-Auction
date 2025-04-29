@@ -53,7 +53,12 @@ mongoose
 // Listen for new updates
 io.on("connection", (socket) => {
     console.log("A user connected", socket?.id);
-
+//==================
+    socket.on('joinUserRoom', (userId) => {
+        console.log(`User joined room: ${userId}`);
+        socket.join(userId); // join user-specific room
+      });
+//=======================added 28th april
     socket.on("disconnect", () => {
         console.log("A user disconnected");
     });

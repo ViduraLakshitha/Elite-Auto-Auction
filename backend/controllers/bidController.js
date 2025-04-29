@@ -45,6 +45,7 @@ const handleBidPlacement = async (auction, userId, bidAmount) => {
     }
         auction.currentBid = bidAmount;   
         auction.winningBid = bidAmount;
+        auction.finalWinnerUserId = userId;       //added on 28th april
         auction.bidCount++;
     
     await auction.save();

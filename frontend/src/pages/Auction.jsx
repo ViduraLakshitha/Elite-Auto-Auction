@@ -10,6 +10,8 @@ import Gallery from '../component/auction/Gallery';
 import LiveBidHistory from '../component/auction/LiveBidHistory';
 import AuctionCommentSection from '../component/auction/AuctionCommentSection';
 
+
+
 const Auction = () => {
   const{id} = useParams();
   const[auction, setAuction] = useState(null);
@@ -37,6 +39,7 @@ const Auction = () => {
     fetchAuction();
 
     const socket = io("http://localhost:5555"); // move socket inside effect
+
   socket.on('bidUpdated', (data) => {
     if (data.auctionId === id) {
       setAuction((prevAuction) => ({
@@ -71,7 +74,7 @@ const Auction = () => {
                   <div className='flex mb-5'>
                     <span className='ml-26 mt-0.5'>Current Bid</span>
                     <CurrentBid auction={auction} className={'ml-2 mr-6 text-lg'}/>
-                    <RemainingTime auction={auction} className={'ml-0'}/>
+                    <RemainingTime auction={auction} className={'ml-0'} userId={userId}/>
                   </div>
                   <div className='container mx-auto iterms-center  py-6 px-6 w-240'>
                     <img src={imageUrl} alt="Car" className='w-full h-auto object-cover' onError={(e) => e.target.src = '/default-car.jpg'} />

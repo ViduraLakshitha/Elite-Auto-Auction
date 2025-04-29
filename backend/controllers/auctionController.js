@@ -72,7 +72,20 @@ export const updateAuctionStatuses = async () => {
             },
             { $set: { auctionStatus: "ended" } }
         );
+
+        const endedAuctions = await Auction.find({ endDateTime: { $lte: localDate }, auctionStatus: "ended", finalWinnerUserId: { $ne:null } });
+        console.log(`eeeeeeeeeeee${endedAuctions}`);
         
+        
+        // Emit to the clients (assuming you have access to io)
+        endedAuctions.forEach(auction => {
+            console.log(`Auction: ${auction._id}, finalWinnerUserId: ${auction.finalWinnerUserId}`);
+
+            if (!auction.finalWinnerUserId) 
+                console.error(`❗ Auction ${auction._id} has no winner!`);
+            io.to(auction.finalWinnerUserId).emit('auctionEnded', auction);
+        });
+
         //console.log("Auction statuses updated successfully!");
     } catch (error) {
         console.error("Error updating auction statuses:", error.message);
