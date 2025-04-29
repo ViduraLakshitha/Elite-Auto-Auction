@@ -26,7 +26,7 @@ const UserProfile = () => {
 
         if (!userId || !token) {
           console.error("Authentication required");
-          navigate("/login"); // Redirect to login if not authenticated
+          navigate("/login");
           return;
         }
 
@@ -36,9 +36,8 @@ const UserProfile = () => {
           }
         };
 
-        // Fetch user details
         const response = await axios.get(`http://localhost:5555/user/${userId}`, config);
-        
+
         if (response.data) {
           setUser(response.data);
           setFormData({
@@ -50,17 +49,15 @@ const UserProfile = () => {
             mobileNo: response.data.mobileNo || "",
           });
 
-          // Fetch payment history
           const paymentResponse = await axios.get(`http://localhost:5555/user/${userId}/payments`, config);
           setPaymentHistory(paymentResponse.data);
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
         if (error.response && error.response.status === 401) {
-          // Handle unauthorized access
           localStorage.removeItem("userId");
           localStorage.removeItem("token");
-          navigate("/login"); // Redirect to login on authentication error
+          navigate("/login");
         }
       } finally {
         setLoading(false);
@@ -75,8 +72,23 @@ const UserProfile = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.fname.trim()) newErrors.fname = "First name is required";
+    if (!formData.lname.trim()) newErrors.lname = "Last name is required";
+    if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (!formData.country.trim()) newErrors.country = "Country is required";
+    if (!/^\+?\d{10,15}$/.test(formData.mobileNo)) newErrors.mobileNo = "Enter valid Mobile No (with optional + and 10-15 digits)";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       const token = localStorage.getItem("token");
@@ -88,7 +100,7 @@ const UserProfile = () => {
 
       const response = await axios.put(`http://localhost:5555/user/${user._id}`, formData, config);
       setUser(response.data);
-      setShowDetails(true); // Switch back to view mode after successful update
+      setShowDetails(true);
       alert("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -109,7 +121,7 @@ const UserProfile = () => {
       <div className="container mx-auto p-6">
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           <p>Please log in to view your profile.</p>
-          <button 
+          <button
             onClick={() => navigate("/login")}
             className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
           >
@@ -122,62 +134,46 @@ const UserProfile = () => {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <div className="bg-white shadow-xl rounded-lg overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+      <div className="bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200">
+        <div className="bg-gradient-to-r from-blue-700 to-blue-900 px-6 py-4">
           <h2 className="text-2xl font-bold text-white">User Profile</h2>
         </div>
 
         {/* Toggle View / Edit */}
-        <div className="flex gap-2 p-4 bg-gray-50">
+        <div className="flex gap-2 p-4 bg-gray-100 border-b border-gray-200">
           <button
             onClick={() => setShowDetails(true)}
-            className={`px-4 py-2 rounded transition-colors ${
-              showDetails 
-                ? "bg-blue-500 text-white" 
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+              showDetails
+                ? "bg-blue-600 text-white"
+                : "bg-gray-300 text-gray-700 hover:bg-gray-400"
             }`}
           >
             View Details
           </button>
           <button
             onClick={() => setShowDetails(false)}
-            className={`px-4 py-2 rounded transition-colors ${
-              !showDetails 
-                ? "bg-blue-500 text-white" 
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+              !showDetails
+                ? "bg-blue-600 text-white"
+                : "bg-gray-300 text-gray-700 hover:bg-gray-400"
             }`}
           >
             Edit Profile
           </button>
+          
         </div>
 
         {showDetails ? (
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">First Name</p>
-                <p className="font-semibold">{user.fname}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">Last Name</p>
-                <p className="font-semibold">{user.lname}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">Email</p>
-                <p className="font-semibold">{user.email}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">Mobile No</p>
-                <p className="font-semibold">{user.mobileNo}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">Address</p>
-                <p className="font-semibold">{user.address}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">Country</p>
-                <p className="font-semibold">{user.country}</p>
-              </div>
+              {/* View Details */}
+              <InfoBlock label="First Name" value={user.fname} />
+              <InfoBlock label="Last Name" value={user.lname} />
+              <InfoBlock label="Email" value={user.email} />
+              <InfoBlock label="Mobile No" value={user.mobileNo} />
+              <InfoBlock label="Address" value={user.address} />
+              <InfoBlock label="Country" value={user.country} />
             </div>
 
             {/* Payment History */}
@@ -187,7 +183,7 @@ const UserProfile = () => {
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse">
                     <thead>
-                      <tr className="bg-gray-100">
+                      <tr className="bg-gray-100 text-gray-700">
                         <th className="p-3 text-left">Auction ID</th>
                         <th className="p-3 text-left">Amount</th>
                         <th className="p-3 text-left">Date</th>
@@ -224,78 +220,58 @@ const UserProfile = () => {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  name="fname"
-                  value={formData.fname}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  name="lname"
-                  value={formData.lname}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Address
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Country
-                </label>
-                <input
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Mobile No
-                </label>
-                <input
-                  type="text"
-                  name="mobileNo"
-                  value={formData.mobileNo}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Edit Form */}
+              {/** Disabled Email Field */}
+              <InputField
+                label="Email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                disabled
+              />
+              <InputField
+                label="First Name"
+                name="fname"
+                value={formData.fname}
+                onChange={handleInputChange}
+                error={errors.fname}
+              />
+              <InputField
+                label="Last Name"
+                name="lname"
+                value={formData.lname}
+                onChange={handleInputChange}
+                error={errors.lname}
+              />
+              <InputField
+                label="Address"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                error={errors.address}
+              />
+              <InputField
+                label="Country"
+                name="country"
+                value={formData.country}
+                onChange={handleInputChange}
+                error={errors.country}
+              />
+              <InputField
+                label="Mobile No"
+                name="mobileNo"
+                value={formData.mobileNo}
+                onChange={handleInputChange}
+                error={errors.mobileNo}
+              />
             </div>
-            <div className="flex justify-end mt-6">
+
+            <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                className="bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-800 transition-colors"
               >
                 Save Changes
               </button>
@@ -306,5 +282,31 @@ const UserProfile = () => {
     </div>
   );
 };
+
+// Reusable Component - InfoBlock
+const InfoBlock = ({ label, value }) => (
+  <div className="bg-gray-50 p-4 rounded-lg">
+    <p className="text-gray-600">{label}</p>
+    <p className="font-semibold text-gray-900">{value}</p>
+  </div>
+);
+
+// Reusable Component - InputField
+const InputField = ({ label, name, value, onChange, disabled, error }) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <input
+      type="text"
+      name={name}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      className={`w-full p-2 border rounded-lg focus:ring-2 ${
+        error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-blue-500"
+      } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}`}
+    />
+    {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+  </div>
+);
 
 export default UserProfile;

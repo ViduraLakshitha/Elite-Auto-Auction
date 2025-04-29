@@ -1,8 +1,8 @@
-import Auction from '../model/auction.js'; // ✅ Corrected default import
-import { io } from "../index.js"; // ✅
-import Vehicle from "../model/vehicle.js"; // ✅
-import { Bid } from "../model/bid.js"; // ✅
-import User from '../model/userModel.js'; // ✅
+import Auction from '../model/auction.js'; //  Corrected default import
+import { io } from "../index.js"; // 
+import Vehicle from "../model/vehicle.js"; // 
+import { Bid } from "../model/bid.js"; // 
+import User from '../model/userModel.js'; // 
 import { UserInteractions } from '../model/userInteractions.js';
 
 // Create Auction
@@ -64,7 +64,7 @@ export const updateAuctionStatuses = async () => {
     for (const auction of completedAuctions) {
       auction.auctionStates = "completed";
       await auction.save();
-      await updateUserStats(auction); // ✅ Update user stats when auction is completed
+      await updateUserStats(auction); // Update user stats when auction is completed
     }
 
     console.log("Auction statuses updated successfully!");
