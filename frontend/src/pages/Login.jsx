@@ -1,19 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { FaUser, FaLock } from "react-icons/fa";
 
-// Function to save user data
 const saveUserData = (token, userId) => {
   localStorage.setItem("token", token);
   localStorage.setItem("userId", userId);
 };
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -24,41 +20,27 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");  // Reset any previous error message
-    setLoading(true);  // Set loading state to true
+    setError("");
+    setLoading(true);
 
     try {
       const res = await axios.post("http://localhost:5555/api/auth/login", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
-      console.log("Full login response:", res.data); // Debug log
-
-      // Check for token in response
       if (res.data?.token) {
-        // Try to get userId from different possible locations in the response
-        const userId = res.data.user?._id || 
-                      res.data.userId || 
-                      res.data.user?.id || 
-                      res.data.id;
-
-        console.log("Extracted userId:", userId); // Debug log
+        const userId = res.data.user?._id || res.data.userId || res.data.user?.id || res.data.id;
 
         if (userId) {
           saveUserData(res.data.token, userId);
-        navigate("/");  // Redirect to dashboard after login
+          navigate("/");
         } else {
-          // If we can't find userId, try to decode the token
           try {
-            const tokenParts = res.data.token.split('.');
+            const tokenParts = res.data.token.split(".");
             if (tokenParts.length === 3) {
               const payload = JSON.parse(atob(tokenParts[1]));
-              console.log("Token payload:", payload); // Debug log
-              
-              if (payload.id || payload.userId || payload._id) {
-                const userIdFromToken = payload.id || payload.userId || payload._id;
+              const userIdFromToken = payload.id || payload.userId || payload._id;
+              if (userIdFromToken) {
                 saveUserData(res.data.token, userIdFromToken);
                 navigate("/");
                 return;
@@ -67,70 +49,92 @@ const Login = () => {
           } catch (tokenError) {
             console.error("Error decoding token:", tokenError);
           }
-
-          console.error("No userId found in response or token:", res.data);
           setError("Login failed: User ID not found in response");
         }
       } else {
-        console.error("No token found in response:", res.data);
         setError("Login failed: No authentication token received");
       }
     } catch (err) {
-      console.error("Login error:", err); // Debug log
-      let errorMessage = "Something went wrong"; // Default error message
-
-      if (err.response) {
-        // If the server responded with an error
-        errorMessage = err.response.data?.message || errorMessage;
-        console.error("Server error response:", err.response.data); // Debug log
-      } else if (err.request) {
-        // If there was no response from the server
-        errorMessage = "Network error: Could not connect to the server.";
-        console.error("No server response:", err.request); // Debug log
-      }
-
-      setError(errorMessage);  // Set the error message to be displayed
+      let errorMessage = "Something went wrong";
+      if (err.response) errorMessage = err.response.data?.message || errorMessage;
+      else if (err.request) errorMessage = "Network error: Could not connect to the server.";
+      setError(errorMessage);
     } finally {
-      setLoading(false);  // Set loading state to false
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800">
+      <div className="bg-opacity-80 bg-gray-900 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-yellow-600">
+        <h1 className="text-3xl font-serif font-bold text-center mb-4 text-yellow-500">
+          Elite Auto Auction Login
+        </h1>
+        <p className="text-center text-sm text-gray-400 mb-6 italic">
+          Access Your Account • Classical Elegance
+        </p>
 
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        {error && (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded text-sm">
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-            onChange={handleChange}
-            required
-          />
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+              Email
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaUser className="text-yellow-400" />
+              </div>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                required
+                className="pl-10 w-full p-2 bg-gray-800 border border-yellow-500 text-white rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
+              Password
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaLock className="text-yellow-400" />
+              </div>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+                className="pl-10 w-full p-2 bg-gray-800 border border-yellow-500 text-white rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+          </div>
+
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
             disabled={loading}
+            className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300 transition-colors"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center mt-4 text-gray-400">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-blue-600">
+          <Link to="/signup" className="text-yellow-500 hover:underline">
             Sign Up
           </Link>
         </p>

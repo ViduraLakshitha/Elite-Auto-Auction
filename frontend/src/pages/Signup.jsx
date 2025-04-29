@@ -29,21 +29,20 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      console.log("Sending registration request:", formData); // Debugging log
+      console.log("Sending registration request:", formData);
 
       const res = await axios.post("http://localhost:5555/api/auth/signup", formData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      
-      console.log("Registration response:", res.data); // Debugging log
 
-      // Check if registration was successful and email verification is needed
+      console.log("Registration response:", res.data);
+
       if (res.data?.message) {
-        setSuccessMessage(res.data.message); // Show success message
+        setSuccessMessage(res.data.message);
         setTimeout(() => {
-          navigate("/login"); // Redirect after a short delay
+          navigate("/login");
         }, 2000);
       }
     } catch (err) {
@@ -61,21 +60,21 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-50 to-blue-100">
+      <div className="bg-white p-10 rounded-xl shadow-2xl w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">Create Account</h2>
 
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        {successMessage && <p className="text-green-500 text-sm text-center">{successMessage}</p>}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
         {!successMessage && (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex gap-4">
               <input
                 type="text"
                 name="fname"
                 placeholder="First Name"
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-1/2 p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
                 onChange={handleChange}
                 required
               />
@@ -83,7 +82,7 @@ const Signup = () => {
                 type="text"
                 name="lname"
                 placeholder="Last Name"
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-1/2 p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
                 onChange={handleChange}
                 required
               />
@@ -92,7 +91,7 @@ const Signup = () => {
               type="text"
               name="address"
               placeholder="Address"
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}
               required
             />
@@ -100,7 +99,7 @@ const Signup = () => {
               type="text"
               name="country"
               placeholder="Country"
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}
               required
             />
@@ -108,7 +107,7 @@ const Signup = () => {
               type="email"
               name="email"
               placeholder="Email"
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}
               required
             />
@@ -116,7 +115,7 @@ const Signup = () => {
               type="text"
               name="mobileNo"
               placeholder="Mobile Number"
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}
               required
             />
@@ -124,23 +123,22 @@ const Signup = () => {
               type="password"
               name="password"
               placeholder="Password"
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}
               required
             />
-
             <input
               type="password"
               name="confirmPassword"
               placeholder="Confirm Password"
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}
               required
             />
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
               disabled={loading}
             >
               {loading ? "Signing Up..." : "Sign Up"}
@@ -148,9 +146,9 @@ const Signup = () => {
           </form>
         )}
 
-        <p className="text-sm text-center mt-4">
+        <p className="text-center text-gray-600 text-sm mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600">
+          <Link to="/login" className="text-blue-600 hover:underline font-semibold">
             Login
           </Link>
         </p>
@@ -159,4 +157,4 @@ const Signup = () => {
   );
 };
 
-export default Signup; 
+export default Signup;
