@@ -50,27 +50,38 @@ export const updateAuctionStatuses = async () => {
       { $set: { auctionStates: "pending" } }
     );
 
-    await Auction.updateMany(
-      { startDateTime: { $lte: now }, endDateTime: { $gt: now } },
-      { $set: { auctionStates: "active" } }
-    );
+        await Auction.updateMany(
+                { 
+                    startDateTime: { $lte: localDate },  
+                    endDateTime: { $gt: localDate }      
+                },
+                { $set: { auctionStatus: "active" } }
+            );
 
-    // Find completed auctions
-    const completedAuctions = await Auction.find({
-      endDateTime: { $lte: now },
-      auctionStates: { $ne: "completed" }
-    });
+        await Auction.updateMany(
+            { 
+                endDateTime: { $lte: localDate }
+            },
+            { $set: { auctionStatus: "ended" } }
+        );
 
-    for (const auction of completedAuctions) {
-      auction.auctionStates = "completed";
-      await auction.save();
-      await updateUserStats(auction); // Update user stats when auction is completed
+        const endedAuctions = await Auction.find({ endDateTime: { $lte: localDate }, auctionStatus: "ended", finalWinnerUserId: { $ne:null } });
+        console.log(`eeeeeeeeeeee${endedAuctions}`);
+        
+        
+        // Emit to the clients (assuming you have access to io)
+        endedAuctions.forEach(auction => {
+            console.log(`Auction: ${auction._id}, finalWinnerUserId: ${auction.finalWinnerUserId}`);
+
+            if (!auction.finalWinnerUserId) 
+                console.error(`❗ Auction ${auction._id} has no winner!`);
+            io.to(auction.finalWinnerUserId).emit('auctionEnded', auction);
+        });
+
+        //console.log("Auction statuses updated successfully!");
+    } catch (error) {
+        console.error("Error updating auction statuses:", error.message);
     }
-
-    console.log("Auction statuses updated successfully!");
-  } catch (error) {
-    console.error("Error updating auction statuses:", error.message);
-  }
 };
 
 // Update Remaining Time

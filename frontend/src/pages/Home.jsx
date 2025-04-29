@@ -4,7 +4,8 @@ import Footer from "../component/common/Footer";
 import AuctionCard from "../component/auction/AuctionCard";
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router";
-import AuctionSlider from "../component/common/AuctionSlider"; // ✅ Only once
+import AuctionSlider from "../component/common/AuctionSlider";
+import io from 'socket.io-client';
 
 const Home = () => {
   const [auctions, setAuctions] = useState([]);
@@ -52,6 +53,22 @@ const Home = () => {
     };
 
     fetchAuctions();
+
+        const socket = io('http://localhost:5555');
+        socket.on('bidUpdated', (data) => {
+            setAuctions(prevAuctions => 
+              prevAuctions.map(auction => 
+                auction._id === data.auctionId
+                  ? { ...auction, currentBid: data.currentBid }
+                  : auction
+              )
+            );
+          });
+      
+          return () => {
+            socket.disconnect();
+          };
+
     fetchRecommendedAuctions();
   }, [userId]);
 

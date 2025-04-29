@@ -1,26 +1,30 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import cron from "node-cron";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
+import path from "path";
+import cron from "node-cron"; // ✅ keep only one instance
 import { Server } from "socket.io";
 import http from "http";
-import path from "path";
 
-// Import your files
-import { mongoDBURL, PORT } from "./config.js";
-import { connectDB } from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
+// Route imports
+import adminRoute from "./routes/adminRoute.js";
+import userRoute from "./routes/userRoute.js";
 import vehicleRoute from "./routes/vehicleRoute.js";
 import auctionRoute from "./routes/auctionRoute.js";
 import bidRoute from "./routes/bidRoute.js";
-import sellerScoreboardRoutes from "./routes/sellerScoreboardRoutes.js";
-import buyerScoreboardRoutes from "./routes/buyerScoreboardRoutes.js";
+import sellerScoreboardRoutes from './routes/sellerScoreboardRoutes.js';
+import buyerScoreboardRoutes from './routes/buyerScoreboardRoutes.js';
+import commentRoute from "./routes/commentRoute.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
-import userRoute from "./routes/userRoute.js";
-import adminRoute from "./routes/adminRoute.js";
+import authRoutes from "./routes/authRoutes.js";
+
+// Config imports
+import { mongoDBURL, PORT } from "./config.js";
+import { connectDB } from "./config/db.js";
 import { updateAuctionStatuses, updateRemainingTime } from "./controllers/auctionController.js";
+
 
 // Load environment variables
 dotenv.config();
@@ -48,6 +52,7 @@ app.use('/auction', auctionRoute);
 app.use('/sellers', sellerScoreboardRoutes);
 app.use('/buyers', buyerScoreboardRoutes);
 app.use('/bid', bidRoute);
+app.use('/comment',commentRoute);
 app.use('/payments', paymentRoutes);
 app.use("/api", auctionRoute);
 
@@ -56,8 +61,13 @@ app.use('/api/vehicles', vehicleRoute);
 
 // Socket.io events
 io.on("connection", (socket) => {
-    console.log("A user connected:", socket?.id);
-
+    console.log("A user connected", socket?.id);
+//==================
+    socket.on('joinUserRoom', (userId) => {
+        console.log(`User joined room: ${userId}`);
+        socket.join(userId); // join user-specific room
+      });
+//=======================added 28th april
     socket.on("disconnect", () => {
         console.log("A user disconnected:", socket?.id);
     });

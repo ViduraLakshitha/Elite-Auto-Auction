@@ -64,6 +64,14 @@ const auctionSchema = new mongoose.Schema(
                   required: true,
             },
 
+            
+
+            finalWinnerUserId:{
+                  type:mongoose.Schema.Types.ObjectId,
+                  ref:"User",
+                  default:null,
+            },
+
             remainingTime: {  
                   type: Number,
                   default: 0,
@@ -78,6 +86,11 @@ const auctionSchema = new mongoose.Schema(
                   type: Number,
                   default: 0,
          },
+
+            bidCount: {
+                  type: Number,
+                  default: 0,
+            }
       },
       { timestamps: true } // Adds createdAt and updatedAt fields
 );

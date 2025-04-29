@@ -10,33 +10,35 @@ const Home = () => {
   const [auctions, setAuctions] = useState([]);
   const [recommendedAuctions, setRecommendedAuctions] = useState([]);
   const navigate = useNavigate();
-  const userId = "67d46f4c21cd657bcb7dbb87";
-  //const userId = localStorage.getItem("userId"); // Retrieve logged-in user ID
+//   const userId = "67d46f4c21cd657bcb7dbb87";
+  const userId = localStorage.getItem("userId"); // Retrieve logged-in user ID
   
-//   const handleAuctionCardClick = (auctionId) => {
-//         navigate(`/auction-details/${auctionId}`);
-//         console.log(auctionId);
-//    }
+  const handleAuctionCardClick = (auctionId) => {
+        navigate(`/auction-details/${auctionId}`);
+        console.log(auctionId);
+   }
 
 //-----------------------------------------------------------------------------------------------------------------------//
 
-   const handleAuctionCardClick = async (auctionId, vehicleId) => {
+//    const handleAuctionCardClick = async (auctionId, vehicleId) => {
     navigate(`/auction-details/${auctionId}`);
 
-    //const userId = localStorage.getItem("userId"); // Retrieve logged-in user ID
+    // const userId = localStorage.getItem("userId"); // Retrieve logged-in user ID
     //const userId = "67d46f4c21cd657bcb7dbb87";
     if (!userId) return;
 
-    try {
-        await fetch('http://localhost:5555/auction/track-click', {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId, vehicleId })
-        });
-    } catch (error) {
-        console.error("Error tracking click:", error);
-    }
-};
+    const trackClick = async (userId, vehicleId) => {
+        try {
+            await fetch('http://localhost:5555/auction/track-click', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, vehicleId })
+            });
+        } catch (error) {
+            console.error("Error tracking click:", error);
+        }
+    };
+    
 
 //----------------------------------------------------------------------------------------------------------------------//
 
@@ -94,10 +96,11 @@ const Home = () => {
             )}
             </div>
             </div>
-      </div>
-            )}
-
             <Footer />
 
+      </div>
+            )
+        }
 
-export default Home;
+
+export default Home
