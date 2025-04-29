@@ -4,6 +4,17 @@ import cors from "cors";
 import cron from "node-cron";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
+import adminRoute from "./routes/adminRoute.js";
+import userRoute from "./routes/userRoute.js";
+import vehicleRoute from "./routes/vehicleRoute.js";
+import auctionRoute from "./routes/auctionRoute.js";
+import bidRoute from "./routes/bidRoute.js";
+import cron from "node-cron";
+import { updateAuctionStatuses } from "./controllers/auctionController.js"; 
+import cors from 'cors';
+import sellerScoreboardRoutes from './routes/sellerScoreboardRoutes.js';
+import buyerScoreboardRoutes from './routes/buyerScoreboardRoutes.js';
+import commentRoute from"./routes/commentRoute.js";
 import { Server } from "socket.io";
 import http from "http";
 import path from "path";
@@ -48,6 +59,7 @@ app.use('/auction', auctionRoute);
 app.use('/sellers', sellerScoreboardRoutes);
 app.use('/buyers', buyerScoreboardRoutes);
 app.use('/bid', bidRoute);
+app.use('/comment',commentRoute);
 app.use('/payments', paymentRoutes);
 app.use("/api", auctionRoute);
 
@@ -56,8 +68,13 @@ app.use('/api/vehicles', vehicleRoute);
 
 // Socket.io events
 io.on("connection", (socket) => {
-    console.log("A user connected:", socket?.id);
-
+    console.log("A user connected", socket?.id);
+//==================
+    socket.on('joinUserRoom', (userId) => {
+        console.log(`User joined room: ${userId}`);
+        socket.join(userId); // join user-specific room
+      });
+//=======================added 28th april
     socket.on("disconnect", () => {
         console.log("A user disconnected:", socket?.id);
     });

@@ -18,13 +18,13 @@ const bidSchema = new mongoose.Schema(
                   type: Number,
                   required: true,
                   min: [1, "Bid amount must be greater than zero"], // Prevents negative bids
-                  validate: {
-                        validator: async function (value) {
-                              const auction = await mongoose.model("Auction").findById(this.auctionId);
-                              return auction ? value > auction.currentBid : false;
-                        },
-                        message: "Bid must be higher than the current bid",
-                  },
+                  // validate: {
+                  //       validator: async function (value) {
+                  //             const auction = await mongoose.model("Auction").findById(this.auctionId);
+                  //             return auction ? value > auction.currentBid : false;
+                  //       },
+                  //       message: "Bid must be higher than the current bid",
+                  // },
             },
 
             time: {
