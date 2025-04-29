@@ -164,7 +164,7 @@ const updateUserStats = async (auction) => {
 export const getScoreboard = async (req, res) => {
   try {
     const scoreboard = await Auction.find({
-      auctionStates: { $in: ["completed"] },
+      auctionStatus: { $in: ["ended"] },
     })
       .populate("vehicleId", "vehicleName model") // only get name and model of vehicle
       .populate("finalWinnerUserId", "name email") // only get name and email of winner

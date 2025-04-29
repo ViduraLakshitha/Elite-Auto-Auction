@@ -1,9 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home.jsx";
-import SellerScoreboard from "./component/scoreboard/SellerScoreboard.jsx";
-import BuyerScoreboard from "./component/scoreboard/BuyerScoreboard.jsx";
-import ScoreboardPopup from "./component/scoreboard/ScoreboardPopup.jsx";
+import Home from "./pages/Home.jsx";;
 import UserProfile from "./component/user/UserProfile.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import Settings from "./component/admin/Settings.jsx";
@@ -60,8 +57,6 @@ function App  ()  {
         {/* Scoreboards */}
         {/* <Route path="/scoreboard" element={<ScoreboardPopup />} /> */}
         
-        <Route path="/admin/sellers" element={<SellerScoreboard />} />
-        <Route path="/admin/buyers" element={<BuyerScoreboard />} />
 
         {/* Admin Dashboard */}
         <Route path="/admin" element={<AdminDashboard />} />
@@ -82,16 +77,6 @@ function App  ()  {
         <Route path="/admin/" element={
           <ProtectedAdminRoute>
             <AdminDashboard />
-          </ProtectedAdminRoute>
-        } />
-        <Route path="/admin/sellers" element={
-          <ProtectedAdminRoute>
-            <SellerScoreboard />
-          </ProtectedAdminRoute>
-        } />
-        <Route path="/admin/buyers" element={
-          <ProtectedAdminRoute>
-            <BuyerScoreboard />
           </ProtectedAdminRoute>
         } />
         <Route path="/admin/settings" element={

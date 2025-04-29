@@ -5,7 +5,6 @@ import { IoMdClose } from "react-icons/io";
 import { FaCrown } from "react-icons/fa"; // New crown icon for premium feel
 import { FaTruck } from "react-icons/fa";
 import SearchBar from "./SearchBar.jsx";
-import ScoreboardPopup from "../scoreboard/ScoreboardPopup.jsx";
 
 const Navbar = () => {
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);

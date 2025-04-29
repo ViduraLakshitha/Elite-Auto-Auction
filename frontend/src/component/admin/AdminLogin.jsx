@@ -30,7 +30,7 @@ const AdminLogin = () => {
         email: adminCredentials.email
       }));
        // Pass the admin name as state when navigating
-    navigate("/admin/admin", { 
+    navigate("/admin/chart", { 
       state: { 
         welcomeMessage: `Welcome, ${adminCredentials.name}!`,
         showWelcome: true 
