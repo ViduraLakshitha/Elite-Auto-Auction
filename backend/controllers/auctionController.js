@@ -108,7 +108,7 @@ export const updateRemainingTime = async () => {
 // Get All Active Auctions
 export const getAllAuctions = async (req, res) => {
   try {
-    const auctions = await Auction.find({ auctionStates: "active" })
+    const auctions = await Auction.find({ auctionStatus: "active" })
       .populate({ path: "vehicleId" })
       .exec();
 
