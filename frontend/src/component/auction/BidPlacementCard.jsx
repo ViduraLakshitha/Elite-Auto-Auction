@@ -119,57 +119,17 @@ export default function BidPlacementCard({auction, userId}){
     }
 
     const handleProceedToPayment = () => {
-        //navigate(`/payment/${id}`);
         console.log("inside handle proceed payment func");
+        navigate('/payment', {
+            state: {
+              auctionId: auction._id,
+              userId: userId,
+              winningBid: auction.winningBid,
+              // Include any other needed data
+            }
+          });
         
     }
-
-    // return(
-    //     <div>
-    //         <div className="bg-gray-100 p-6 rounded-lg shadow-md my-11">
-    //         <h2 className="font-bold text-lg mb-4">Bid on This Listing</h2>
-    //         <div className="space-y-2">
-    //             <div className="flex gap-32">
-    //                 <span className="text-gray-600">Current Bid</span>
-    //                 <CurrentBid auction={auction}/>
-    //             </div>
-    //             <div className="flex gap-36">
-    //                 <span className="text-gray-600">Time Left</span>
-    //                 <RemainingTime auction={auction}/>
-    //             </div>
-    //             <div className="flex gap-39.5">
-    //                 <span className="text-gray-600">Closing</span>
-    //                 <EndDate auction={auction}/>
-    //             </div>
-    //             <div className="flex gap-45">
-    //                 <span className="text-gray-600">Bids</span>
-    //                 <span className="font-semibold">{bidCount}</span>
-    //             </div>
-    //         </div>
-            
-    //         <div className="mt-4 flex">
-    //             <label className="font-semibold block mb-2 mr-7 pt-2">Place Bid</label>
-    //             <div className="flex items-center gap-3">
-    //                 <span className="font-semibold">USD $</span>
-    //                 <input
-    //                     type="number"
-    //                     className="border p-2 rounded w-2/4"
-    //                     placeholder={`Enter USD $...`}
-    //                     value={bidAmount}
-    //                     onChange={handleBidChange}
-    //                 />
-    //                 <button 
-    //                     className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
-    //                     onClick={handlePlaceBid}
-    //                 >
-    //                     Place Bid
-    //                 </button>
-    //             </div>
-    //         </div>
-    //     </div>
-    //     </div>
-    // )
-
 
 
     return (
@@ -220,12 +180,6 @@ export default function BidPlacementCard({auction, userId}){
                     </div>
                 ) : (
                     <div className="mt-6 text-center">
-                        {/* <button 
-                            onClick={handleProceedToPayment}
-                            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
-                        >
-                            Proceed to Payment
-                        </button> */}
                         <p className="text-sm text-gray-600">
                             {auction.finalWinnerUserId === userId 
                                 ? (

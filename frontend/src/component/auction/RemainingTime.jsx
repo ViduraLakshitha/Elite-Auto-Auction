@@ -108,6 +108,7 @@ export default function RemainingTime({ auction, className, userId }) {
             <WinPopUp 
                 open={showWinPopup} 
                 onClose={() => setShowWinPopup(false)}
+                auction={auction}
                 auctionTitle={auction.auctionTitle}
             />
         </div>
