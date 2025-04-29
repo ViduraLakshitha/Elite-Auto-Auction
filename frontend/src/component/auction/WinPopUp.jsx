@@ -83,7 +83,7 @@ const WinPopUp = ({ open, onClose, auction, auctionTitle, userId }) => {
     const navigate = useNavigate();
 
     const handleProceedToPayment = () => {
-        navigate('/payment', {
+        navigate('/payment-final', {
             state: {
                 auctionId: auction._id,
                 userId: userId,

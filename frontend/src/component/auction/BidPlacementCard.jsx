@@ -120,7 +120,7 @@ export default function BidPlacementCard({auction, userId}){
 
     const handleProceedToPayment = () => {
         console.log("inside handle proceed payment func");
-        navigate('/payment', {
+        navigate('/payment-final', {
             state: {
               auctionId: auction._id,
               userId: userId,

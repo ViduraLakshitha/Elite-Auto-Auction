@@ -110,7 +110,7 @@ function App  ()  {
         {/* Catch-all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/auction-details/:id" element={<Auction/>}/>
-        <Route path="/payment" element={<PaymentPortal />} />
+        <Route path="/payment-final" element={<PaymentPortal />} />
         <Route path="/auctions-all" element={<AuctionsAll/>}/>
         <Route path="/auctions" element={<AuctionList />} /> 
         <Route path="/contact" element={<ContactUs />} />
