@@ -17,10 +17,10 @@ const auctionSchema = new mongoose.Schema(
                   required: true,
             },
 
-            auctionTitle: {
-                  type: String,
-                  required: true,
-            },
+            // auctionTitle: {
+            //       type: String,
+            //       required: true,
+            // },
 
 
             startDateTime: {

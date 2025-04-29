@@ -101,3 +101,118 @@ export const getAuctionById = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+
+
+// import { Auction } from '../model/auction.js';
+// import { io } from "../index.js"; // Import Socket.IO instance
+
+// export const createAuction = async (req, res) => {
+//     try {
+//         const { userId, vehicleId, auctionTitle, startDateTime, endDateTime, initialVehiclePrice } = req.body;
+
+//         if (!userId || !vehicleId || !auctionTitle || !endDateTime || !initialVehiclePrice) {
+//             return res.status(400).send({ message: "Send all required fields!" });
+//         }
+
+//         const newAuction = {
+//             userId,
+//             vehicleId,
+//             auctionTitle,
+//             startDateTime,
+//             endDateTime,
+//             initialVehiclePrice,
+//         };
+
+//         const auction = await Auction.create(newAuction);
+//         console.log("New auction created:", auction);
+
+//         io.emit("newAuctionCreated", auction);
+
+//         console.log(`New auction notification sent for Auction ${auction._id}`);
+//         return res.status(201).json({ message: 'Auction Created Successfully', subject: auction });
+
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
+
+// export const updateAuctionStatuses = async () => {
+//     try {
+//         const currentDate = new Date();
+
+//         const localOffset = currentDate.getTimezoneOffset() * 60000;
+//         const localDate = new Date(currentDate.getTime() - localOffset);
+
+//         // Update status to "scheduled"
+//         await Auction.updateMany(
+//             { startDateTime: { $gt: localDate } },
+//             { $set: { auctionStatus: "scheduled" } }
+//         );
+//         io.emit("auctionStatusUpdated", { status: "scheduled" });
+
+//         // Update status to "active"
+//         await Auction.updateMany(
+//             { startDateTime: { $lte: localDate }, endDateTime: { $gt: localDate } },
+//             { $set: { auctionStatus: "active" } }
+//         );
+//         io.emit("auctionStatusUpdated", { status: "active" });
+
+//         // Update status to "ended"
+//         await Auction.updateMany(
+//             { endDateTime: { $lte: localDate } },
+//             { $set: { auctionStatus: "ended" } }
+//         );
+//         io.emit("auctionStatusUpdated", { status: "ended" });
+
+//     } catch (error) {
+//         console.error("Error updating auction statuses:", error.message);
+//     }
+// }
+
+// export const getAllAuctions = async (req, res) => {
+//     try {
+//         const auctions = await Auction.find({ auctionStatus: "active" });
+//         return res.status(200).json({ auctions });
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
+
+// export const getAuctionById = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const auction = await Auction.findById(id);
+//         if (!auction) {
+//             return res.status(404).json({ message: "Auction not found" });
+//         }
+//         return res.status(200).json(auction);
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
+
+// export const approveListing = async (req, res) => {
+//     try {
+//         const { auctionId } = req.body;
+//         const auction = await Auction.findById(auctionId);
+
+//         if (!auction) return res.status(404).json({ message: "Auction not found" });
+
+//         auction.auctionStatus = "approved";
+//         await auction.save();
+
+//         io.emit("listingApproved", {
+//             auctionId: auction._id,
+//             sellerId: auction.userId,
+//             message: `Listing approved for Auction "${auction.auctionTitle}"`,
+//         });
+
+//         console.log(`Listing approval notification sent to User ${auction.userId}`);
+
+//         return res.status(200).json({ message: "Listing approved" });
+
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
