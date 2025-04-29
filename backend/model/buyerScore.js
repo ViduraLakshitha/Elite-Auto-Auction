@@ -1,40 +1,39 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-const buyerScoreSchema = new mongoose.Schema(
-      {
-            userId: {
-                  type: mongoose.Schema.Types.ObjectId,
-                  ref: "User", // Reference to the User collection
-                  required: true,
-            },
+// const buyerScoreSchema = new mongoose.Schema(
+//       {
+//             userId: {
+//                   type: mongoose.Schema.Types.ObjectId,
+//                   ref: "User", // Reference to the User collection
+//                   required: true,
+//             },
 
-            fullName: {
-                  type: String,
-                  required: true,
-                  trim: true,
-            },
+//             fullName: {
+//                   type: String,
+//                   required: true,
+//                   trim: true,
+//             },
 
-            winningBids: {
-                  type: Number,
-                  required: true,
-                  min: [0, "Number of wins cannot be negative"],
-            },
+//             noOfWins: {
+//                   type: Number,
+//                   required: true,
+//                   min: [0, "Number of wins cannot be negative"],
+//             },
 
-            rank: {
-                  type: Number,
-                  default: function () {
-                        return Math.max(1, Math.floor(this.noOfWins / 5)); // Example rank logic
-                  },
-            },
+//             rank: {
+//                   type: Number,
+//                   default: function () {
+//                         return Math.max(1, Math.floor(this.noOfWins / 5)); // Example rank logic
+//                   },
+//             },
 
-            award: {
-                  type: String,
-                  enum: ["Gold", "Silver", "Bronze", "None"], // Restrict award types
-                  default: "None",
-            },
-      },
-      { timestamps: true }
-);
+//             award: {
+//                   type: String,
+//                   enum: ["Gold", "Silver", "Bronze", "None"], // Restrict award types
+//                   default: "None",
+//             },
+//       },
+//       { timestamps: true }
+// );
 
-const BuyerScore = mongoose.model('BuyerScore', buyerScoreSchema);
-export default BuyerScore;
+// export const BuyerScore = mongoose.model("BuyerScore", buyerScoreSchema);
