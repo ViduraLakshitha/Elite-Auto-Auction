@@ -117,7 +117,7 @@ const AdminDashboard = () => {
     <div className="flex min-h-screen">
       <Sidebar />
 
-      <div className="flex-1 p-6 bg-gradient-to-br from-gray-100 to-blue-200">
+      <div className="flex-1 p-6 bg-gradient-to-brflex min-h-screen bg-gray-100 from-gray-800 to-gray-900 text-gray-900 font-bold ">
 
         {/* Welcome Message */}
         {showWelcome && (
@@ -134,7 +134,7 @@ const AdminDashboard = () => {
           <input
             type="text"
             placeholder="🔎 Search users..."
-            className="w-1/2 p-3 border-2 border-yellow-400 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            className="w-1/2 p-3 border-2 border-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -147,8 +147,8 @@ const AdminDashboard = () => {
         </div>
 
         {/* User Table */}
-        <div className="overflow-x-auto shadow-lg rounded-lg">
-          <table className="min-w-full bg-white rounded-lg overflow-hidden">
+        <div className="overflow-x-auto rounded-xl shadow-2xl border border-gray-700">
+          <table className="min-w-full bg-gray-50 rounded-xl overflow-hidden">
             <thead className="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
               <tr>
                 <th className="py-3 px-6 text-left">#</th>
@@ -161,7 +161,7 @@ const AdminDashboard = () => {
                 <th className="py-3 px-6 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-gray-700 text-sm font-light">
+            <tbody className="text-gray-950 text-sm font-light">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user, index) => (
                   <tr key={user._id} className="border-b hover:bg-gray-100">

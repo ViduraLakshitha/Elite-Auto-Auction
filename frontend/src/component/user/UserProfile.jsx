@@ -122,8 +122,8 @@ const UserProfile = () => {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-t-gold border-b-gray-300 border-l-gray-300 border-r-gray-300 rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-lg font-medium text-gray-700">
+          <div className="w-16 h-16 border-4 border-amber-500 border-b-gray-300 border-l-gray-300 border-r-gray-300 rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-lg font-medium text-gray-700 font-serif">
             Loading your premium profile...
           </p>
         </div>
@@ -133,18 +133,17 @@ const UserProfile = () => {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 p-6">
-        <div className="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
-          <div className="bg-black p-6">
-            <h3 className="text-xl font-bold text-gold">Exclusive Access Required</h3>
-          </div>
-          <div className="p-6">
-            <p className="text-gray-700 mb-6">
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <div className="container mx-auto px-6 py-16 flex-grow flex items-center justify-center">
+          <div className="max-w-md w-full bg-white p-10 rounded-lg shadow-sm border border-gray-100 text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 font-serif">Exclusive Access Required</h3>
+            <div className="h-1 w-16 bg-amber-500 mx-auto mb-6"></div>
+            <p className="text-gray-600 mb-8">
               Please authenticate to access your premium account.
             </p>
             <button
               onClick={() => navigate("/login")}
-              className="w-full bg-gold hover:bg-gold-dark text-black font-bold py-3 px-4 rounded-lg transition duration-300"
+              className="bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-8 rounded transition duration-300"
             >
               Sign In to Your Account
             </button>
@@ -155,96 +154,85 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-gray-900 to-gray-800 shadow-lg">
+      <div className="container mx-auto px-6 py-16 flex-grow">
         {/* Profile Header */}
-        <div className="bg-black rounded-t-xl overflow-hidden shadow-xl">
-          <div className="flex flex-col md:flex-row items-center justify-between p-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gold mb-2">
-                {user.fname}'s Premium Profile
-              </h1>
-              <p className="text-gray-300">
-                Elite Auto Auctions Member Since {new Date(user.createdAt).getFullYear()}
-              </p>
-            </div>
-            <div className="mt-4 md:mt-0">
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => setShowDetails(true)}
-                  className={`px-6 py-3 rounded-lg font-bold transition-all duration-300 ${
-                    showDetails
-                      ? "bg-gold text-black shadow-lg"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                  }`}
-                >
-                  Profile Overview
-                </button>
-                <button
-                  onClick={() => setShowDetails(false)}
-                  className={`px-6 py-3 rounded-lg font-bold transition-all duration-300 ${
-                    !showDetails
-                      ? "bg-gold text-black shadow-lg"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                  }`}
-                >
-                  Edit Profile
-                </button>
-              </div>
-            </div>
+        <div className="max-w-6xl mx-auto text-center mb-12">
+          <h1 className="text-4xl font-bold text-white mb-6 font-serif tracking-tight">
+            {user.fname}'s Profile
+          </h1>
+          <div className="h-1 w-24 bg-amber-500 mx-auto mb-8"></div>
+          <p className="text-lg text-gray-300">
+            Elite Auto Auctions Member Since {new Date(user.createdAt).getFullYear()}
+          </p>
+        </div>
+
+        {/* Profile Navigation */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex rounded-md shadow-sm">
+            <button
+              onClick={() => setShowDetails(true)}
+              className={`px-8 py-3 text-sm font-medium rounded-l-lg ${
+                showDetails
+                  ? "bg-amber-500 text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+              }`}
+            >
+              Profile Overview
+            </button>
+            <button
+              onClick={() => setShowDetails(false)}
+              className={`px-8 py-3 text-sm font-medium rounded-r-lg ${
+                !showDetails
+                  ? "bg-amber-500 text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+              }`}
+            >
+              Edit Profile
+            </button>
           </div>
         </div>
 
         {/* Profile Content */}
-        <div className="bg-white rounded-b-xl shadow-xl overflow-hidden">
+        <div className="max-w-6xl mx-auto">
           {showDetails ? (
-            <div className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <InfoBlock label="First Name" value={user.fname} icon="user" />
-                <InfoBlock label="Last Name" value={user.lname} icon="user" />
-                <InfoBlock label="Email" value={user.email} icon="envelope" />
-                <InfoBlock label="Mobile No" value={user.mobileNo} icon="phone" />
-                <InfoBlock label="Address" value={user.address} icon="map-marker" />
-                <InfoBlock label="Country" value={user.country} icon="globe" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-semibold mb-6 text-gray-800 font-serif">Personal Information</h2>
+                <div className="h-1 w-16 bg-amber-500 mb-6"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <InfoBlock label="First Name" value={user.fname} icon="user" />
+                  <InfoBlock label="Last Name" value={user.lname} icon="user" />
+                  <InfoBlock label="Email" value={user.email} icon="envelope" />
+                  <InfoBlock label="Mobile No" value={user.mobileNo} icon="phone" />
+                  <InfoBlock label="Address" value={user.address} icon="map-marker" />
+                  <InfoBlock label="Country" value={user.country} icon="globe" />
+                </div>
               </div>
 
               {/* Payment History Section */}
-              <div className="mt-12 border-t border-gray-200 pt-8">
-                <h4 className="text-2xl font-bold text-black mb-6 flex items-center">
-                  <svg
-                    className="w-6 h-6 mr-2 text-gold"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Bidding & Payment History
-                </h4>
+              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-semibold mb-6 text-gray-800 font-serif">Bidding & Payment History</h2>
+                <div className="h-1 w-16 bg-amber-500 mb-6"></div>
                 
                 {paymentHistory.length > 0 ? (
                   <div className="overflow-hidden rounded-lg border border-gray-200">
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-800">
+                      <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gold uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Auction ID
                           </th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gold uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Vehicle
                           </th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gold uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Amount
                           </th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gold uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Date
                           </th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gold uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Status
                           </th>
                         </tr>
@@ -311,7 +299,7 @@ const UserProfile = () => {
                     </p>
                     <button
                       onClick={() => navigate("/auctions")}
-                      className="mt-6 bg-gold hover:bg-gold-dark text-black font-bold py-2 px-6 rounded-lg transition duration-300"
+                      className="mt-6 bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-6 rounded transition duration-300"
                     >
                       Browse Exclusive Auctions
                     </button>
@@ -320,74 +308,78 @@ const UserProfile = () => {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <InputField
-                  label="Email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  disabled
-                  icon="envelope"
-                />
-                <InputField
-                  label="First Name"
-                  name="fname"
-                  value={formData.fname}
-                  onChange={handleInputChange}
-                  error={errors.fname}
-                  icon="user"
-                />
-                <InputField
-                  label="Last Name"
-                  name="lname"
-                  value={formData.lname}
-                  onChange={handleInputChange}
-                  error={errors.lname}
-                  icon="user"
-                />
-                <InputField
-                  label="Address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  error={errors.address}
-                  icon="map-marker"
-                />
-                <InputField
-                  label="Country"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
-                  error={errors.country}
-                  icon="globe"
-                />
-                <InputField
-                  label="Mobile No"
-                  name="mobileNo"
-                  value={formData.mobileNo}
-                  onChange={handleInputChange}
-                  error={errors.mobileNo}
-                  icon="phone"
-                />
-              </div>
+            <div className="bg-white p-10 rounded-lg shadow-sm border border-gray-100 max-w-4xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800 font-serif">Edit Profile</h2>
+              <div className="h-1 w-16 bg-amber-500 mb-8"></div>
+              <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                  <InputField
+                    label="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    disabled
+                    icon="envelope"
+                  />
+                  <InputField
+                    label="First Name"
+                    name="fname"
+                    value={formData.fname}
+                    onChange={handleInputChange}
+                    error={errors.fname}
+                    icon="user"
+                  />
+                  <InputField
+                    label="Last Name"
+                    name="lname"
+                    value={formData.lname}
+                    onChange={handleInputChange}
+                    error={errors.lname}
+                    icon="user"
+                  />
+                  <InputField
+                    label="Address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    error={errors.address}
+                    icon="map-marker"
+                  />
+                  <InputField
+                    label="Country"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    error={errors.country}
+                    icon="globe"
+                  />
+                  <InputField
+                    label="Mobile No"
+                    name="mobileNo"
+                    value={formData.mobileNo}
+                    onChange={handleInputChange}
+                    error={errors.mobileNo}
+                    icon="phone"
+                  />
+                </div>
 
-              <div className="mt-10 flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={() => setShowDetails(true)}
-                  className="px-6 py-3 border border-gray-300 rounded-lg font-bold text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-8 py-3 bg-gold hover:bg-gold-dark text-black font-bold rounded-lg shadow-md transition-all duration-300 hover:shadow-lg"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
+                <div className="flex justify-end space-x-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowDetails(true)}
+                    className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-lg transition duration-300"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
           )}
         </div>
       </div>
@@ -396,10 +388,10 @@ const UserProfile = () => {
 };
 
 const InfoBlock = ({ label, value, icon }) => (
-  <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gold transition-colors">
+  <div className="mb-6">
     <div className="flex items-center mb-2">
       {icon && (
-        <svg className="w-5 h-5 mr-2 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 mr-2 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           {getIconPath(icon)}
         </svg>
       )}
@@ -407,17 +399,17 @@ const InfoBlock = ({ label, value, icon }) => (
         {label}
       </p>
     </div>
-    <p className="text-lg font-semibold text-gray-900">
+    <p className="text-lg font-medium text-gray-900">
       {value || <span className="text-gray-400">Not provided</span>}
     </p>
   </div>
 );
 
 const InputField = ({ label, name, value, onChange, disabled, error, icon }) => (
-  <div className="mb-4">
+  <div>
     <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
       {icon && (
-        <svg className="w-4 h-4 mr-2 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 mr-2 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           {getIconPath(icon)}
         </svg>
       )}
@@ -432,7 +424,7 @@ const InputField = ({ label, name, value, onChange, disabled, error, icon }) => 
       className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:outline-none transition-colors ${
         error
           ? "border-red-500 focus:ring-red-200"
-          : "border-gray-300 focus:border-gold focus:ring-gold-light"
+          : "border-gray-300 focus:border-amber-500 focus:ring-amber-200"
       } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}`}
     />
     {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
