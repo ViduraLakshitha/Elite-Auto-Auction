@@ -12,7 +12,7 @@ const Home = () => {
   const [auctions, setAuctions] = useState([]);
   const [recommendedAuctions, setRecommendedAuctions] = useState([]);
   const navigate = useNavigate();
-  const userId = "67d46f4c21cd657bcb7dbb87"; 
+  const userId = "680fcdd1319cd5cad595cf56"; 
 
   const handleAuctionCardClick = async (auctionId, vehicleId) => {
     navigate(`/auction-details/${auctionId}`);
