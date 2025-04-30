@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaEdit, FaTrash, FaPlus, FaSearch, FaFilter } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaSearch, FaFilter, FaFileCsv, FaSpinner } from 'react-icons/fa';
 import Sidebar from '../component/admin/Sidebar';
+import Papa from 'papaparse';
 
 const NotificationManagement = () => {
   // State for notifications
@@ -11,6 +12,7 @@ const NotificationManagement = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [exportingCSV, setExportingCSV] = useState(false);
 
   // State for filters and search
   const [search, setSearch] = useState('');
@@ -72,6 +74,49 @@ const NotificationManagement = () => {
       console.error('Error fetching notifications:', err);
       setError('Failed to load notifications. Please try again.');
       setLoading(false);
+    }
+  };
+
+  // Generate CSV Report
+  const generateCSVReport = () => {
+    if (notifications.length === 0) {
+      alert("No notifications to export");
+      return;
+    }
+    
+    setExportingCSV(true);
+    
+    try {
+      // Prepare data
+      const csvData = notifications.map(notification => ({
+        ID: notification._id,
+        Title: notification.title,
+        Message: notification.message,
+        Type: notification.type,
+        Priority: notification.priority,
+        Status: notification.isGlobal ? 'Global' : 'User Specific',
+        Created: formatDate(notification.createdAt),
+        ExpiresAt: notification.expiresAt ? formatDate(notification.expiresAt) : 'Never',
+        ActionURL: notification.actionUrl || 'N/A'
+      }));
+      
+      // Convert to CSV
+      const csv = Papa.unparse(csvData);
+      
+      // Create download link
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `notifications_export_${new Date().getTime()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("CSV export error:", error);
+      alert("Failed to export CSV. Please try again.");
+    } finally {
+      setExportingCSV(false);
     }
   };
 
@@ -401,6 +446,23 @@ const NotificationManagement = () => {
           </div>
           
           <div className="flex space-x-4">
+            <button
+              onClick={generateCSVReport}
+              disabled={exportingCSV || notifications.length === 0}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {exportingCSV ? (
+                <>
+                  <FaSpinner className="mr-2 animate-spin" />
+                  Exporting...
+                </>
+              ) : (
+                <>
+                  <FaFileCsv className="mr-2" />
+                  Export CSV
+                </>
+              )}
+            </button>
             <button
               onClick={deleteExpiredNotifications}
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
