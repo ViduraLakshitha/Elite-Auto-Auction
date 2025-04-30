@@ -55,7 +55,7 @@ app.use('/bid', bidRoute);
 app.use('/comment',commentRoute);
 app.use('/payments', paymentRoutes);
 app.use('/notification', notificationRoutes);
-app.use("/api", auctionRoute);
+// app.use('/api', auctionRoute);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoute);
