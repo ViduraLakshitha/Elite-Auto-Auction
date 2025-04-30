@@ -48,10 +48,12 @@ app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
 // API Routes
 app.use('/admin', adminRoute);
 app.use('/user', userRoute);
+app.use('/vehicle',vehicleRoute);
 app.use('/auction', auctionRoute);
 app.use('/bid', bidRoute);
 app.use('/comment',commentRoute);
 app.use('/payments', paymentRoutes);
+
 app.use("/api", auctionRoute);
 
 app.use('/api/auth', authRoutes);
@@ -69,7 +71,7 @@ io.on("connection", (socket) => {
       });
 //=======================added 28th april
     socket.on("disconnect", () => {
-        console.log("A user disconnected:", socket?.id);
+        console.log("A user disconnected");
     });
 });
 
@@ -89,19 +91,37 @@ server.listen(PORT, () => {
 });
 
 // MongoDB Events
-mongoose.connection.once("open", () => {
-    console.log("Database connected successfully!");
+// mongoose.connect.once("open", () => {
+//     console.log("Database connected successfully!");
 
-    // Cron Jobs
-    cron.schedule("*/1 * * * *", async () => {
-        console.log("Running auction status update task...");
-        await updateAuctionStatuses();
-    });
+//     // Cron Jobs
+//     cron.schedule("*/1 * * * *", async () => {
+//         console.log("Running auction status update task...");
+//         await updateAuctionStatuses();
+//     });
 
-    // Update remaining time every minute
-    updateRemainingTime();
+//     // Update remaining time every minute
+//     updateRemainingTime();
+//     setInterval(updateRemainingTime, 60000);
+// });
+
+mongoose
+    .connect(mongoDBURL)
+    .then(()=>{
+        console.log("app connected to the database");
+
+        cron.schedule("* * * * * *", async () => {
+            await updateAuctionStatuses();
+        });
+
+        updateRemainingTime();
     setInterval(updateRemainingTime, 60000);
-});
+        
+    })
+    .catch((error)=>{
+        console.log(error);
+        
+    });
 
 // Handle MongoDB Errors
 mongoose.connection.on("error", (error) => {

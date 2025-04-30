@@ -43,29 +43,33 @@ export const createAuction = async (req, res) => {
 // Update Auction Statuses (pending, active, completed)
 export const updateAuctionStatuses = async () => {
   try {
-    const now = new Date();
+    // const now = new Date();
+    const currentDate = new Date();
+
+    const localOffset = currentDate.getTimezoneOffset() * 60000;
+    const localDate = new Date(currentDate.getTime() - localOffset);
 
     await Auction.updateMany(
-      { startDateTime: { $gt: now } },
-      { $set: { auctionStates: "pending" } }
+      { startDateTime: { $gt: localDate } },
+      { $set: { auctionStatus: "pending" } }
     );
 
     await Auction.updateMany(
       { 
-        startDateTime: { $lte: now },  
-        endDateTime: { $gt: now }      
+        startDateTime: { $lte: localDate },  
+        endDateTime: { $gt: localDate }      
       },
       { $set: { auctionStatus: "active" } }
     );
 
     await Auction.updateMany(
       { 
-        endDateTime: { $lte: now }
+        endDateTime: { $lte: localDate }
       },
       { $set: { auctionStatus: "ended" } }
     );
 
-    const endedAuctions = await Auction.find({ endDateTime: { $lte: now }, auctionStatus: "ended", finalWinnerUserId: { $ne:null } });
+    const endedAuctions = await Auction.find({ endDateTime: { $lte: localDate }, auctionStatus: "ended", finalWinnerUserId: { $ne:null } });
     console.log(`eeeeeeeeeeee${endedAuctions}`);
     
     
@@ -89,7 +93,7 @@ export const updateRemainingTime = async () => {
   try {
     const now = new Date();
 
-    const activeAuctions = await Auction.find({ auctionStates: "active" });
+    const activeAuctions = await Auction.find({ auctionStatus: "active" });
 
     const updates = activeAuctions.map(async (auction) => {
       const remaining = Math.max(0, Math.floor((new Date(auction.endDateTime) - now) / 1000));
