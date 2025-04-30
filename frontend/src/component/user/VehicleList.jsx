@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { FaSearch, FaTrash, FaSpinner } from "react-icons/fa";
+import { FaSearch, FaTrash, FaSpinner, FaFileCsv } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import Papa from "papaparse";
 
 function VehicleList() {
   const [vehicles, setVehicles] = useState([]);
@@ -9,16 +11,26 @@ function VehicleList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [exportingCSV, setExportingCSV] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axios.get("http://localhost:5555/api/vehicles/vehicle-details", {
+        const token = localStorage.getItem("token");
+        const config = {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           }
-        });
+        };
+        
+        // Add authentication token if available
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+
+        const response = await axios.get("http://localhost:5555/api/vehicles/vehicle-details", config);
 
         if (!response.data) {
           throw new Error("No data received from server");
@@ -49,17 +61,79 @@ function VehicleList() {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this vehicle?")) return;
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to delete vehicles");
+      navigate("/login");
+      return;
+    }
     
     setDeletingId(id);
     try {
-      await axios.delete(`http://localhost:5555/api/vehicles/${id}`);
-      setVehicles(vehicles.filter(vehicle => vehicle._id !== id));
-      setFilteredVehicles(filteredVehicles.filter(vehicle => vehicle._id !== id));
+      const response = await axios.delete(`http://localhost:5555/api/vehicles/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log("Delete success:", response.data);
+      setVehicles(prev => prev.filter(vehicle => vehicle._id !== id));
+      setFilteredVehicles(prev => prev.filter(vehicle => vehicle._id !== id));
     } catch (error) {
-      console.error("Error deleting vehicle:", error);
-      alert("Failed to delete vehicle. Please try again.");
+      console.error("Delete Error:", error.response?.data || error.message || error);
+      if (error.response?.status === 401) {
+        alert("Your session has expired. Please login again.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        navigate("/login");
+      } else {
+        alert("Failed to delete vehicle. Please try again.");
+      }
     } finally {
       setDeletingId(null);
+    }
+  };
+  
+  // Generate CSV Report
+  const generateCSVReport = () => {
+    if (filteredVehicles.length === 0) {
+      alert("No vehicles to export");
+      return;
+    }
+    
+    setExportingCSV(true);
+    
+    try {
+      // Prepare data
+      const csvData = filteredVehicles.map(vehicle => ({
+        ID: vehicle._id,
+        Brand: vehicle.brand,
+        Model: vehicle.model,
+        Year: vehicle.year,
+        Location: vehicle.currentLocation,
+        Type: vehicle.vehicleType,
+        Condition: vehicle.condition,
+        Description: vehicle.description || "N/A",
+        StartingPrice: vehicle.initialVehiclePrice || "N/A"
+      }));
+      
+      // Convert to CSV
+      const csv = Papa.unparse(csvData);
+      
+      // Create download link
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vehicle_inventory_${new Date().getTime()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("CSV export error:", error);
+      alert("Failed to export CSV. Please try again.");
+    } finally {
+      setExportingCSV(false);
     }
   };
 
@@ -95,9 +169,30 @@ function VehicleList() {
   return (
     <div className="min-h-screen bg-gradient-to-b bg-gray-100 p-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-800 mb-8">
-          Luxury and Classical Vehicle Collection
-        </h2>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-800">
+            Luxury and Classical Vehicle Collection
+          </h2>
+          
+          {/* CSV Export Button */}
+          <button 
+            onClick={generateCSVReport}
+            disabled={exportingCSV}
+            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-4 py-2 rounded-lg flex items-center shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50"
+          >
+            {exportingCSV ? (
+              <>
+                <FaSpinner className="mr-2 animate-spin" />
+                Exporting...
+              </>
+            ) : (
+              <>
+                <FaFileCsv className="mr-2" />
+                Export to CSV
+              </>
+            )}
+          </button>
+        </div>
         
         {/* Search Bar */}
         <div className="relative mb-8">

@@ -13,7 +13,7 @@ const Scoreboard = () => {
   useEffect(() => {
     const fetchScoreboard = async () => {
       try {
-        const response = await axios.get("http://localhost:5555/api/scoreboard");
+        const response = await axios.get("http://localhost:5555/auction/scoreboard");
         if (Array.isArray(response.data)) {
           setScoreboard(response.data);
         } else {
@@ -54,15 +54,15 @@ const Scoreboard = () => {
     
     const tableData = scoreboard.map((item, index) => [
       index + 1,
-      `${item?.vehicleId?.vehicleName || 'N/A'} (${item?.vehicleId?.model || 'N/A'})`,
-      item?.finalWinnerUserId?.name || "Unknown",
+      `${item?.vehicleId?.vehicleName || item?.vehicleId?.brand || 'Unknown'} ${item?.vehicleId?.model ? `(${item.vehicleId.model})` : ''}`,
+      (item?.finalWinnerUserId?.name) ? `${item.finalWinnerUserId.name}` : "Unknown Bidder",
       `$${(item?.winningBid || 0).toLocaleString('en-US', { 
         minimumFractionDigits: 2,
         maximumFractionDigits: 2 
       })}`,
       item?.auctionStatus ? 
         item.auctionStatus.charAt(0).toUpperCase() + item.auctionStatus.slice(1).toLowerCase() 
-        : 'N/A'
+        : 'Unknown'
     ]);
     
     autoTable(doc, {
@@ -219,24 +219,28 @@ const Scoreboard = () => {
                     {index + 1}
                   </td>
                   <td className="py-5 px-6">
-                    <div className="font-medium text-gray-100">{item?.vehicleId?.vehicleName || ''}</div>
-                    <div className="text-sm text-gray-400">{item?.vehicleId?.model || ''}</div>
+                    <div className="font-medium text-gray-100">
+                      {item?.vehicleId?.vehicleName || item?.vehicleId?.brand || 'Unknown Vehicle'}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {item?.vehicleId?.model ? `${item.vehicleId.model}${item?.vehicleId?.year ? ` (${item.vehicleId.year})` : ''}` : 'No model info'}
+                    </div>
                   </td>
                   <td className="py-5 px-6 text-gray-200">
-                    {item?.finalWinnerUserId?.name || "Unknown"}
+                    {(item?.finalWinnerUserId?.name) ? `${item.finalWinnerUserId.name}` : "Unknown Bidder"}
                   </td>
                   <td className="py-5 px-6 font-mono text-amber-300">
                     ${(item?.winningBid || 0).toLocaleString()}
                   </td>
                   <td className="py-5 px-6">
                     <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
-                      item?.auctionStatus === 'completed' 
+                      item?.auctionStatus === 'completed' || item?.auctionStatus === 'ended'
                         ? 'bg-green-900 text-green-300' 
                         : 'bg-blue-900 text-blue-300'
                     }`}>
-                      {item?.auctionStatus ? 
-                        item.auctionStatus.charAt(0).toUpperCase() + item.auctionStatus.slice(1).toLowerCase() 
-                        : 'N/A'}
+                      {item?.auctionStatus 
+                        ? item.auctionStatus.charAt(0).toUpperCase() + item.auctionStatus.slice(1).toLowerCase() 
+                        : 'Unknown'}
                     </span>
                   </td>
                 </tr>
