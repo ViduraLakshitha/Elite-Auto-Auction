@@ -117,7 +117,7 @@ const Home = () => {
                   <h2 className="text-3xl font-serif font-semibold text-gray-900">
                     Timeless Masterpieces
                   </h2>
-                  <p className="text-gray-500 mt-2">Recently completed and upcoming auctions</p>
+                  <p className="text-gray-500 mt-2">Active auctions awaiting your bid</p>
                 </div>
                 <button className="flex items-center text-amber-600 hover:text-amber-700 transition-colors">
                   <span className="font-medium">View All</span>
