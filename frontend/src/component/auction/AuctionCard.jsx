@@ -24,7 +24,7 @@ export default function AuctionCard({ auction, onClick }) {
         : '/default-car.jpg';
 
     return (
-        <div className="border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white w-120 mt-7 mb-7" onClick={onClick}>
+        <div className="border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white w-105 mt-7 mb-7" onClick={onClick}>
             <img src={imageUrl} alt="Car" className='w-full h-48 object-cover' onError={(e) => e.target.src = '/default-car.jpg'} />
             <div className='p-4'>
                 <h2 className='font-bold text-lg'>{auction.auctionTitle}</h2>
