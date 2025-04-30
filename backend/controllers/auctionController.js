@@ -26,7 +26,7 @@ export const createAuction = async (req, res) => {
     console.log("New auction created:", newAuction);
 
     if (!startDateTime) {
-      newAuction.auctionStates = "active";
+      newAuction.auctionStatus = "active";
       await newAuction.save();
     }
 
@@ -89,7 +89,7 @@ export const updateRemainingTime = async () => {
   try {
     const now = new Date();
 
-    const activeAuctions = await Auction.find({ auctionStates: "active" });
+    const activeAuctions = await Auction.find({ auctionStatus: "active" });
 
     const updates = activeAuctions.map(async (auction) => {
       const remaining = Math.max(0, Math.floor((new Date(auction.endDateTime) - now) / 1000));
@@ -108,8 +108,22 @@ export const updateRemainingTime = async () => {
 // Get All Active Auctions
 export const getAllAuctions = async (req, res) => {
   try {
-    const auctions = await Auction.find({ auctionStates: "active" })
+    const auctions = await Auction.find({ auctionStatus: "active" })
       .populate({ path: "vehicleId" })
+      .exec();
+
+    return res.status(200).json({ auctions });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// Get Auctions for Home Page (excluding active auctions)
+export const getHomePageAuctions = async (req, res) => {
+  try {
+    const auctions = await Auction.find({ auctionStatus: { $ne: "active" } })
+      .populate({ path: "vehicleId" })
+      .limit(6) // Limit to 6 auctions for the home page
       .exec();
 
     return res.status(200).json({ auctions });

@@ -23,8 +23,41 @@ export default function AuctionCard({ auction, onClick }) {
         `http://localhost:5555/${test[0]}`
         : '/default-car.jpg';
 
+    // Create a function to render status-specific content
+    const renderStatusContent = () => {
+        switch(auction.auctionStatus) {
+            case "active":
+                return (
+                    <React.Fragment key={auction._id}>
+                        <span className='flex text-gray-500'>Current Bid <CurrentBid auction={auction} className={'ml-2 text-black mb-2'}/></span>
+                        <RemainingTime auction={auction}/>
+                    </React.Fragment>
+                );
+            case "ended":
+                return (
+                    <div className="mt-2">
+                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full">Auction Ended</span>
+                        <p className='text-gray-600 text-sm mt-1'>Final Price: <span className='font-semibold'>${auction.winningBid || auction.currentBid || auction.initialVehiclePrice}</span></p>
+                    </div>
+                );
+            case "pending":
+                return (
+                    <div className="mt-2">
+                        <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Coming Soon</span>
+                        <p className='text-gray-600 text-sm mt-1'>Starting Price: <span className='font-semibold'>${auction.initialVehiclePrice}</span></p>
+                    </div>
+                );
+            default:
+                return (
+                    <div className="mt-2">
+                        <p className='text-gray-600 text-sm'>Starting Price: <span className='font-semibold'>${auction.initialVehiclePrice}</span></p>
+                    </div>
+                );
+        }
+    };
+
     return (
-        <div className="border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white w-120 mt-7 mb-7" onClick={onClick}>
+        <div className="border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white w-106 mt-7 mb-7 hover:cursor-pointer" onClick={onClick}>
             <img src={imageUrl} alt="Car" className='w-full h-48 object-cover' onError={(e) => e.target.src = '/default-car.jpg'} />
             <div className='p-4'>
                 <h2 className='font-bold text-lg'>{auction.auctionTitle}</h2>
@@ -34,12 +67,7 @@ export default function AuctionCard({ auction, onClick }) {
                 {/* <p className='text-gray-600 text-sm'>Initial price: <span className='font-semibold'> ${auction.initialVehiclePrice}</span></p> */}
                 {/* <p className='text-gray-500 text-xs'>Start date time: {auction.startDateTime}</p> */}
                 <EndDate auction={auction}/>
-                {auction.auctionStatus === "active" && (
-                    <React.Fragment key={auction._id}>
-                        <span className='flex text-gray-500'>Current Bid <CurrentBid auction={auction} className={'ml-2 text-black mb-2'}/></span>
-                        <RemainingTime auction={auction}/>
-                    </React.Fragment>
-                )}
+                {renderStatusContent()}
             </div>
         </div>
     );

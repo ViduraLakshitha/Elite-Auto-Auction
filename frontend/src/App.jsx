@@ -9,6 +9,7 @@ import ChartAdmin from "./component/admin/ChartAdmin.jsx";
 import UserDetailsPage from "./component/user/UserDetailsPage.jsx";
 import AdminLogin from "./component/admin/AdminLogin.jsx";
 import Scoreboard from "./pages/Scoreboard.jsx";
+import NotificationManagement from "./pages/NotificationManagement.jsx";
 
 // Import missing components
 import Signup from "./pages/Signup.jsx"; 
@@ -106,13 +107,18 @@ function App  ()  {
             <TransportationManagementPage />
           </ProtectedAdminRoute>
         } />
+        <Route path="/admin/notifications" element={
+          <ProtectedAdminRoute>
+            <NotificationManagement />
+          </ProtectedAdminRoute>
+        } />
         
         {/* Catch-all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/auction-details/:id" element={<Auction/>}/>
         <Route path="/payment-final" element={<PaymentPortal />} />
         <Route path="/auctions-all" element={<AuctionsAll/>}/>
-        <Route path="/auctions" element={<AuctionList />} /> 
+        <Route path="/auctions" element={<Navigate to="/auctions-all" replace />} /> 
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/about" element={<AboutUs />} />
       </Routes>

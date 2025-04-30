@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaCar, FaFileUpload, FaCalendarAlt, FaMoneyBillWave, FaInfoCircle } from "react-icons/fa";
+import Navbar from "../component/common/Navbar";
 
 const VehicleForm = () => {
   const [vehicleData, setVehicleData] = useState({
@@ -128,6 +129,8 @@ const VehicleForm = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-gradient-to-r from-yellow-900 via-black to-yellow-900 rounded-3xl shadow-2xl overflow-hidden border border-yellow-600">
@@ -464,6 +467,7 @@ const VehicleForm = () => {
         }
       `}</style>
     </div>
+    </>
   );
 };
 

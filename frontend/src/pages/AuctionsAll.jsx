@@ -53,16 +53,29 @@ const AuctionsAll = () => {
   return (
     <>
     <div><Header/></div>
-    <h1 className="font-bold text-2xl ml-45 mt-10 text-xl">Active Auctions</h1>
-                <div className="flex flex-row flex-wrap pl-44 space-x-16 pb-16">
-                    {auctions && auctions.length > 0 ? (
-                            auctions.map((auction) => (
-                                <AuctionCard key={auction._id} auction={auction} onClick={()=> handleAuctionCardClick(auction._id)} />  //added onclick attribute
-                            ))
-                        ) : (
-                            <p className="bg-green-300 p-3 rounded-md mt-20 mx-auto">No active auctions found!</p>
-                        )}
+    <div className="container mx-auto px-6 py-10">
+        <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Active Auctions</h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Browse our current live auctions and place your bids before time runs out
+            </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {auctions && auctions.length > 0 ? (
+                auctions.map((auction) => (
+                    <AuctionCard key={auction._id} auction={auction} onClick={()=> handleAuctionCardClick(auction._id)} />
+                ))
+            ) : (
+                <div className="col-span-3 text-center py-16">
+                    <div className="inline-block px-8 py-6 bg-amber-50 rounded-lg border border-amber-200">
+                        <p className="text-lg text-amber-800">No active auctions found at the moment</p>
+                        <p className="text-gray-600 mt-2">Please check back soon for new listings</p>
+                    </div>
                 </div>
+            )}
+        </div>
+    </div>
     <Footer/>
     </>
   )

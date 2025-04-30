@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router";
 import AuctionSlider from "../component/common/AuctionSlider";
 import io from 'socket.io-client';
-import { FaCrown, FaChevronRight } from "react-icons/fa";
+import { FaCrown, FaChevronRight, FaGavel } from "react-icons/fa";
 
 const Home = () => {
   const [auctions, setAuctions] = useState([]);
@@ -33,7 +33,7 @@ const Home = () => {
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
-        const response = await fetch('http://localhost:5555/auction/details');
+        const response = await fetch('http://localhost:5555/auction/home');
         const data = await response.json();
         setAuctions(data.auctions);
       } catch (error) {
@@ -83,6 +83,18 @@ const Home = () => {
 
         {/* Main Content Container */}
         <div className="container mx-auto px-6 pb-24">
+          {/* Active Auctions CTA Button */}
+          <div className="flex justify-center mb-16">
+            <button 
+              onClick={() => navigate('/auctions-all')}
+              className="flex items-center bg-amber-600 text-white px-8 py-4 rounded-lg shadow-lg hover:bg-amber-700 transition-colors"
+            >
+              <FaGavel className="mr-3 text-lg" />
+              <span className="text-lg font-semibold">View Active Auctions</span>
+              <FaChevronRight className="ml-3" />
+            </button>
+          </div>
+
           {/* Premium Showcase Section */}
           <section className="max-w-7xl mx-auto mb-28">
             <div className="text-center mb-16">
@@ -105,7 +117,7 @@ const Home = () => {
                   <h2 className="text-3xl font-serif font-semibold text-gray-900">
                     Timeless Masterpieces
                   </h2>
-                  <p className="text-gray-500 mt-2">Currently available for acquisition</p>
+                  <p className="text-gray-500 mt-2">Recently completed and upcoming auctions</p>
                 </div>
                 <button className="flex items-center text-amber-600 hover:text-amber-700 transition-colors">
                   <span className="font-medium">View All</span>
