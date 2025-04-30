@@ -36,7 +36,7 @@ export default function AuctionCard({ auction, onClick }) {
             case "ended":
                 return (
                     <div className="mt-2">
-                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full">Auction Ended</span>
+                        <span className=" text-amber-800 text-xs px-2 py-1 rounded-full"></span>
                         <p className='text-gray-600 text-sm mt-1'>Final Price: <span className='font-semibold'>${auction.winningBid || auction.currentBid || auction.initialVehiclePrice}</span></p>
                     </div>
                 );

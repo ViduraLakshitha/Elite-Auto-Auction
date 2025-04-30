@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const PaymentPortal = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { auctionId, userId, winningBid } = location.state || {};
 
   const [formData, setFormData] = useState({
@@ -31,9 +32,12 @@ const PaymentPortal = () => {
       userId,
       amount: winningBid
     });
-    // Submit to your backend
-    // Handle payment submission logic here
-    console.log('Payment submitted:', formData);
+
+    // Submit to your backend here (e.g. using fetch/axios)
+
+    // Navigate to home page after successful submission
+    alert("Payment is successfully!");
+    navigate('/');
   };
 
   
@@ -46,9 +50,9 @@ const PaymentPortal = () => {
         <h3 className="font-medium text-gray-700 mb-2 underline">Payment Summary</h3>
         <p className="text-gray-600 mt-2">Amount: ${winningBid}</p>
         <p className='text-sm text-red-500 mt-2'>(Additional 5% of this amount will be charged as a service fee)</p>
-        <p  className="text-gray-600 mt-2">Service Fee: ${((winningBid*5)/100)}</p>
+        <p className="text-gray-600 mt-2">Service Fee: ${((winningBid * 5) / 100)}</p>
       </div>
-      
+
       <div className="mb-6">
         <h3 className="text-sm font-medium text-gray-600 mb-2">Payment Method</h3>
         <div className="flex space-x-3">

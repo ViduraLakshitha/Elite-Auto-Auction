@@ -12,6 +12,9 @@ export const getAllNotifications = async (req, res) => {
     // Filter by type if provided
     if (req.query.type) {
       query.type = req.query.type;
+
+
+      
     }
     
     // Search by title or message
