@@ -1,5 +1,5 @@
 import express from 'express';
-import { createAuction, getAllAuctions, getAuctionById , getScoreboard } from '../controllers/auctionController.js';
+import { createAuction, getAllAuctions, getAuctionById, getScoreboard, getHomePageAuctions } from '../controllers/auctionController.js';
 import { trackUserClick, getRecommendedAuctions } from '../controllers/auctionController.js';
 import { searchAuctions } from "../controllers/auctionController.js";
 
@@ -10,6 +10,7 @@ router.post('/track-click', trackUserClick);
 router.get('/recommended/:userId', getRecommendedAuctions);
 router.post('/register',createAuction);
 router.get('/details', getAllAuctions);
+router.get('/home', getHomePageAuctions);
 router.get('/details/single-auction/:id',getAuctionById);
 router.get("/search", searchAuctions);
 router.get("/scoreboard", getScoreboard);

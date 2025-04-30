@@ -62,7 +62,7 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-8">
             <div className="flex space-x-8">
               <Link
-                to="/auctions"
+                to="/auctions-all"
                 className="text-gray-300 hover:text-amber-400 text-sm font-medium uppercase tracking-wider transition-colors duration-300"
               >
                 AUCTIONS
@@ -164,7 +164,7 @@ const Navbar = () => {
 
               <div className="mt-12 flex flex-col space-y-8">
                 <Link
-                  to="/auctions"
+                  to="/auctions-all"
                   className="text-gray-300 hover:text-amber-400 text-lg uppercase tracking-wider transition-colors duration-300"
                   onClick={toggleNavDrawer}
                 >
@@ -257,7 +257,7 @@ const Navbar = () => {
             
             <div className="flex flex-col space-y-4">
               <Link
-                to="/auctions"
+                to="/auctions-all"
                 className="text-gray-700 hover:text-black text-sm font-medium uppercase py-2 border-b"
                 onClick={toggleNavDrawer}
               >

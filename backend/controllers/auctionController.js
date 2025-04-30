@@ -26,7 +26,7 @@ export const createAuction = async (req, res) => {
     console.log("New auction created:", newAuction);
 
     if (!startDateTime) {
-      newAuction.auctionStates = "active";
+      newAuction.auctionStatus = "active";
       await newAuction.save();
     }
 
@@ -114,6 +114,20 @@ export const getAllAuctions = async (req, res) => {
   try {
     const auctions = await Auction.find({ auctionStatus: "active" })
       .populate({ path: "vehicleId" })
+      .exec();
+
+    return res.status(200).json({ auctions });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// Get Auctions for Home Page (excluding active auctions)
+export const getHomePageAuctions = async (req, res) => {
+  try {
+    const auctions = await Auction.find({ auctionStatus: { $ne: "active" } })
+      .populate({ path: "vehicleId" })
+      .limit(6) // Limit to 6 auctions for the home page
       .exec();
 
     return res.status(200).json({ auctions });

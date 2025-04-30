@@ -19,6 +19,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import transportationRoute from "./routes/transportationRoute.js";
 import contactRoutes from "./routes/contactRoutes.js";
+import notificationRoutes from "./routes/notification.js";
 
 // Config imports
 import { mongoDBURL, PORT } from "./config.js";
@@ -53,7 +54,7 @@ app.use('/auction', auctionRoute);
 app.use('/bid', bidRoute);
 app.use('/comment',commentRoute);
 app.use('/payments', paymentRoutes);
-
+app.use('/notification', notificationRoutes);
 app.use("/api", auctionRoute);
 
 app.use('/api/auth', authRoutes);
