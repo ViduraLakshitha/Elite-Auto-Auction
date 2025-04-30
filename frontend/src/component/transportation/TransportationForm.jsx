@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaTruck, FaBuilding, FaIdCard, FaFileAlt, FaGlobe, FaEnvelope, FaPhone, FaGlobeAmericas } from "react-icons/fa";
 import Navbar from "../common/Navbar";
+import Navbar from "../common/Navbar";
 
 const TransportationForm = () => {
   const [formData, setFormData] = useState({
