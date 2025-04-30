@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaCar, FaUserTie, FaDollarSign, FaFlagCheckered, FaChartBar, FaDownload, FaTimes } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import Navbar from "../component/common/Navbar";
 
 const Scoreboard = () => {
   const [scoreboard, setScoreboard] = useState([]);
@@ -54,7 +55,7 @@ const Scoreboard = () => {
     
     const tableData = scoreboard.map((item, index) => [
       index + 1,
-      `${item?.vehicleId?.vehicleName || 'N/A'} (${item?.vehicleId?.model || 'N/A'})`,
+      `${item?.vehicleId?.vehicleName || ''} (${item?.vehicleId?.model || 'N/A'})`,
       item?.finalWinnerUserId?.name || "Unknown",
       `$${(item?.winningBid || 0).toLocaleString('en-US', { 
         minimumFractionDigits: 2,
@@ -143,6 +144,8 @@ const Scoreboard = () => {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen flex flex-col bg-gradient-to-b bg-gray-50">
       <div className="container mx-auto px-6 py-16 flex-grow">
         {/* Header Section */}
@@ -251,6 +254,7 @@ const Scoreboard = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
